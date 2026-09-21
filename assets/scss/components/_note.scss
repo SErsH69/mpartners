@@ -1,0 +1,67 @@
+@use '../abstracts/variables' as *;
+@use '../abstracts/mixins' as *;
+
+// Инфо-плашка с иконкой: Figma — radius 5, pad 13/15, gap 12
+.note {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    padding: 13px 15px;
+    background-color: $c-surface;
+    border-radius: $r-sm;
+}
+
+.note__icon {
+    flex: 0 0 auto;
+    width: 17px;
+    height: 17px;
+    color: $c-dark;
+
+    svg {
+        width: 100%;
+        height: 100%;
+    }
+}
+
+.note__text {
+    color: $c-muted;
+    font-size: 14px;
+    font-weight: 400;
+    line-height: round(nearest, 1.1em, 1px);
+}
+
+// Вариант на тёмном фоне
+.note--dark {
+    background-color: rgba($c-white, 0.06);
+
+    .note__icon {
+        color: $c-page;
+    }
+
+    .note__text {
+        color: $c-muted-light;
+    }
+}
+
+// Плашка с иконкой-щитом (конфиденциальность): gap 17, иконка 17×20.
+// Текст внутри уже плашки — в макете он всегда 298px и занимает две строки.
+.note--shield {
+    gap: 17px;
+
+    .note__icon {
+        height: 20px;
+    }
+
+    .note__text {
+        max-width: 298px;
+    }
+}
+
+// На мобилке все инфо-плашки 12px. Figma ставит строки с шагом ровно 13px
+// (при заявленных 13.2), поэтому фиксируем 13px — иначе высоты плывут.
+@include mobile {
+    .note__text {
+        font-size: 12px;
+        line-height: 13px;
+    }
+}

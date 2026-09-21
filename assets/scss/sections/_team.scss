@@ -1,0 +1,258 @@
+@use '../abstracts/variables' as *;
+@use '../abstracts/mixins' as *;
+
+// 13. Команда — колонка с заголовком слева и лента карточек 284×395 справа.
+.team {
+    margin-top: 100px; // 7891 − 7791
+
+    @include tablet {
+        margin-top: 80px;
+    }
+
+    @include mobile {
+        margin-top: 50px;
+    }
+}
+
+.team__inner {
+    @include container;
+
+    display: flex;
+    gap: 50px;
+    align-items: center;
+
+    @include tablet {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 30px;
+        padding-right: 0;
+    }
+}
+
+.team__intro {
+    display: flex;
+    flex: 0 0 auto;
+    flex-direction: column;
+    gap: 20px;
+    width: 374px;
+
+    @include tablet {
+        width: 100%;
+        padding-right: $gutter-tablet;
+    }
+
+    @include mobile {
+        padding-right: $gutter-mobile;
+    }
+}
+
+.team__actions {
+    margin-top: 41px;
+
+    @include tablet {
+        margin-top: 0;
+    }
+
+    .btn {
+        flex: 1 1 auto;
+    }
+}
+
+.team__track {
+    @include hide-scrollbar;
+
+    display: flex;
+    gap: 15px;
+    // В макете лента шире контейнера и обрезается краем экрана.
+    margin-right: min(0px, calc(#{$container * 0.5} - 50vw));
+    overflow-x: auto;
+    cursor: grab;
+
+    &.is-dragging {
+        cursor: grabbing;
+        user-select: none;
+    }
+
+    @include tablet {
+        margin-right: 0;
+        padding-right: $gutter-tablet;
+    }
+
+    @include mobile {
+        padding-right: $gutter-mobile;
+    }
+}
+
+.member {
+    display: flex;
+    flex: 0 0 auto;
+    flex-direction: column;
+    gap: 15px;
+    width: 284px;
+    padding: 5px 5px 15px;
+    background-color: $c-surface;
+    border-radius: $r-sm;
+}
+
+.member__photo {
+    @include gradient-dark(129deg);
+
+    position: relative;
+    height: 243px;
+    overflow: hidden;
+    border-radius: $r-sm;
+}
+
+// Подсветка под портретом: в макете Vector 321 на 11,31 при карточке 284×395.
+.member__glow {
+    position: absolute;
+    top: 26px;
+    left: 6px;
+    width: 268px;
+    pointer-events: none;
+}
+
+.member__portrait {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.member__body {
+    display: flex;
+    flex: 1 1 auto;
+    flex-direction: column;
+    justify-content: space-between;
+    gap: 29px;
+    padding-inline: 10px;
+}
+
+.member__text {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.member__name {
+    color: $c-dark;
+    font-size: 18px;
+    font-weight: 600;
+    line-height: 1;
+}
+
+.member__bio {
+    color: $c-muted;
+    font-size: 14px;
+    font-weight: 500;
+    line-height: round(nearest, 1.1em, 1px);
+}
+
+.member__more {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    color: $c-muted;
+    font-size: 14px;
+    font-weight: 500;
+    line-height: round(nearest, 1.1em, 1px);
+
+    svg {
+        flex: 0 0 auto;
+        width: 9px;
+        height: 9px;
+        color: $c-dark;
+    }
+
+    &:hover {
+        color: $c-dark;
+    }
+}
+
+// ---------------------------------------------------------------
+// Планшет (640) и мобилка (375): блоки идут столбиком —
+// заголовок, плашка, лента, точки и кнопки внизу. Размеры из Figma.
+// ---------------------------------------------------------------
+@include tablet {
+    .team__inner {
+        display: flex;
+        flex-direction: column;
+        align-items: stretch;
+        gap: 0;
+    }
+
+    .team__intro {
+        display: contents;
+    }
+
+    .team__title {
+        order: 1;
+    }
+
+    .team__note {
+        order: 2;
+        margin-top: 15px;
+    }
+
+    .team__track {
+        order: 3;
+        margin-top: 30px;
+        margin-right: -$gutter-tablet;
+    }
+
+    .team__dots {
+        order: 4;
+        margin-top: 25px;
+    }
+
+    .team__actions {
+        order: 5;
+        margin-top: 30px;
+    }
+}
+
+@include mobile {
+    .team__note .note__text {
+        font-size: 12px;
+    }
+
+    .team__track {
+        gap: 5px;
+        margin-top: 20px;
+        margin-right: -$gutter-mobile;
+    }
+
+    .team__dots {
+        margin-top: 20px;
+    }
+
+    .team__actions {
+        margin-top: 20px;
+    }
+
+    .member {
+        width: 212px;
+    }
+
+    .member__photo {
+        height: 179px;
+    }
+
+    // В мобильном макете портрет крупнее рамки: 212×188 со сдвигом (−10, −4).
+    .member__portrait {
+        width: 212px;
+        max-width: none;
+        height: 188px;
+        margin: -4px 0 0 -10px;
+    }
+
+    .member__name {
+        font-size: 16px;
+    }
+
+    .member__bio,
+    .member__more {
+        font-size: 12px;
+    }
+}

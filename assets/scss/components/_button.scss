@@ -1,0 +1,82 @@
+@use '../abstracts/variables' as *;
+@use '../abstracts/mixins' as *;
+
+// Базовая кнопка: Figma — h39, radius 5, pad 10/25, Inter Tight 500 14/15.4
+.btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 15px;
+    min-height: 39px;
+    padding: 10px 25px;
+    color: $c-white;
+    font-size: 14px;
+    font-weight: 500;
+    line-height: round(nearest, 1.1em, 1px);
+    text-align: center;
+    background-color: $c-dark;
+    border-radius: $r-sm;
+    transition: opacity 0.2s ease, background-color 0.2s ease;
+
+    &:hover {
+        opacity: 0.85;
+    }
+}
+
+.btn--light {
+    color: $c-dark;
+    background-color: $c-page;
+}
+
+.btn--surface {
+    color: $c-dark;
+    background-color: $c-surface;
+}
+
+// Широкая кнопка-подвал секции (например «Посмотреть все дела»)
+.btn--block {
+    width: 100%;
+    min-height: 47px;
+    padding: 15px 10px;
+    line-height: 1.2;
+}
+
+// Квадратная кнопка-иконка 39×39
+.btn-icon {
+    display: inline-flex;
+    flex: 0 0 auto;
+    align-items: center;
+    justify-content: center;
+    width: 39px;
+    height: 39px;
+    color: $c-white;
+    background-color: $c-dark;
+    border-radius: $r-sm;
+    transition: opacity 0.2s ease;
+
+    svg {
+        width: 17px;
+        height: 17px;
+    }
+
+    &:hover {
+        opacity: 0.85;
+    }
+}
+
+.btn-icon--surface {
+    color: $c-dark;
+    background-color: $c-surface;
+
+    svg {
+        width: 19px;
+        height: 19px;
+    }
+}
+
+// Пара «кнопка + квадратная иконка» с зазором 5px, как в макете
+.btn-pair {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+}

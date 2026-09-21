@@ -1,0 +1,177 @@
+@use 'abstracts/variables' as *;
+@use 'abstracts/mixins' as *;
+
+// =============================================================
+// Размеры заголовков ровно по макету: ширина текстового блока и
+// количество строк для каждого из трёх разрешений (1920 / 640 / 375).
+// Таблица собрана из Figma, менять только вместе с макетом.
+// =============================================================
+
+.hero__title {
+    // В Figma бокс 923px, но строка «собственников и руководителей» чуть шире
+    // и переносится; в браузере она влезает на субпиксель — даём 920.
+    width: 920px;
+
+    --h-lines: 3;
+
+    @include tablet {
+        width: 100%;
+
+        --h-lines: 4;
+    }
+
+    @include mobile {
+        --h-lines: 4;
+    }
+}
+
+.help .section-head .h-section {
+    flex: 0 0 auto;
+    width: 594px;
+
+    --h-lines: 2;
+
+    @include tablet {
+        width: 100%;
+    }
+}
+
+.industries__title {
+    flex: 0 0 auto;
+    width: 607px;
+
+    --h-lines: 2;
+
+    @include tablet {
+        width: 100%;
+
+        --h-lines: 3;
+    }
+}
+
+.quiz__intro .h-section {
+    width: 515px;
+
+    --h-lines: 1;
+
+    @include tablet {
+        width: 100%;
+    }
+
+    @include mobile {
+        --h-lines: 2;
+    }
+}
+
+.awards__inner .h-section {
+    width: 652px;
+
+    --h-lines: 2;
+
+    @include tablet {
+        width: 100%;
+    }
+}
+
+.practice .section-head .h-section {
+    flex: 0 0 auto;
+    width: 594px;
+
+    --h-lines: 2;
+
+    @include tablet {
+        width: 100%;
+    }
+}
+
+.reviews__title {
+    flex: 0 0 auto;
+    width: 515px;
+
+    --h-lines: 1;
+
+    @include tablet {
+        width: 100%;
+    }
+
+    @include mobile {
+        --h-lines: 2;
+    }
+}
+
+.blog .section-head .h-section {
+    flex: 0 0 auto;
+    width: 594px;
+
+    --h-lines: 1;
+
+    @include tablet {
+        width: 100%;
+    }
+}
+
+.contact__title {
+    width: 536px;
+
+    --h-lines: 3;
+
+    @include tablet {
+        width: 100%;
+    }
+
+    @include mobile {
+        --h-lines: 4;
+    }
+}
+
+.team__title {
+    width: 374px;
+
+    --h-lines: 4;
+
+    @include tablet {
+        width: 100%;
+
+        --h-lines: 2;
+    }
+
+    @include mobile {
+        --h-lines: 3;
+    }
+}
+
+.geography__title {
+    width: 650px;
+
+    --h-lines: 3;
+
+    @include tablet {
+        width: 100%;
+
+        --h-lines: 4;
+    }
+
+    @include mobile {
+        --h-lines: 5;
+    }
+}
+
+// Цитата в «Опыте»: 33/29.7, на мобилке 30/27.
+.experience__quote {
+    width: 528px;
+    min-height: calc(var(--h-lines, 1) * 29.7px);
+
+    --h-lines: 5;
+
+    @include tablet {
+        width: 100%;
+    }
+
+    @include mobile {
+        font-size: 30px;
+        min-height: calc(var(--h-lines, 1) * 27px);
+
+        --h-lines: 7;
+    }
+}
+

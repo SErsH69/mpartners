@@ -1,0 +1,176 @@
+@use '../abstracts/variables' as *;
+@use '../abstracts/mixins' as *;
+
+// ---------------------------------------------------------------
+// Выпадающее меню на ПК (по мотивам flabbergast.agency):
+// панель выезжает из полосы «Меню» той же ширины, фон страницы под ней
+// размывается, пункты появляются лесенкой, бургер превращается в крестик.
+// ---------------------------------------------------------------
+$ease-out: cubic-bezier(0.215, 0.61, 0.355, 1);
+$ease-in: cubic-bezier(0.55, 0.055, 0.675, 0.19);
+
+.header__nav {
+    position: relative;
+}
+
+// Бургер из двух полосок (26×10) — вместо svg, чтобы полоски можно было анимировать.
+.burger {
+    position: relative;
+    display: block;
+    width: 26px;
+    height: 10px;
+
+    i {
+        position: absolute;
+        left: 0;
+        width: 100%;
+        height: 2.4px;
+        background-color: currentcolor;
+        border-radius: 2px;
+        transition: transform 0.45s $ease-out, top 0.45s $ease-out;
+    }
+
+    i:first-child {
+        top: 0;
+    }
+
+    i:last-child {
+        top: 7.6px;
+    }
+}
+
+.header__nav.is-open .burger {
+    i:first-child {
+        top: 3.8px;
+        transform: rotate(20deg);
+    }
+
+    i:last-child {
+        top: 3.8px;
+        transform: rotate(-20deg);
+    }
+}
+
+.nav-drop {
+    position: absolute;
+    z-index: 30;
+    top: 100%;
+    right: 0;
+    left: 0;
+    padding: 25px 20px 20px;
+    color: $c-dark;
+    background-color: rgba($c-surface, 0.82);
+    border-radius: $r-md;
+    box-shadow: 0 20px 40px -20px rgba(#000, 0.25);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    opacity: 0;
+    visibility: hidden;
+    clip-path: inset(0 0 100% 0 round #{$r-md});
+    transform: translateY(0);
+    transition:
+        clip-path 0.35s $ease-in,
+        transform 0.35s $ease-in,
+        opacity 0.2s linear 0.15s,
+        visibility 0s linear 0.35s;
+
+    .header__nav.is-open & {
+        opacity: 1;
+        visibility: visible;
+        clip-path: inset(0 0 0 0 round #{$r-md});
+        transform: translateY(16px);
+        transition:
+            clip-path 0.7s $ease-out,
+            transform 0.7s $ease-out,
+            opacity 0.2s linear,
+            visibility 0s;
+    }
+
+    @include tablet {
+        display: none;
+    }
+}
+
+.nav-drop__label {
+    margin-bottom: 12px;
+    color: $c-muted;
+    font-size: 12px;
+    font-weight: 500;
+    line-height: 13px;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+}
+
+.nav-drop__list {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+
+    a {
+        display: inline-block;
+        font-family: $font-display;
+        font-size: 26px;
+        line-height: 1.15;
+        transition: opacity 0.3s;
+    }
+
+    // Как у референса: при наведении остальные пункты приглушаются.
+    &:hover a {
+        opacity: 0.45;
+    }
+
+    & a:hover {
+        opacity: 1;
+    }
+}
+
+.nav-drop__divider {
+    height: 1px;
+    margin: 22px 0;
+    background-color: rgba($c-dark, 0.15);
+    border: 0;
+}
+
+.nav-drop__contacts {
+    display: flex;
+    gap: 30px;
+    margin-bottom: 22px;
+
+    a {
+        display: grid;
+        gap: 4px;
+        font-size: 14px;
+    }
+
+    span {
+        color: $c-muted;
+    }
+
+    b {
+        font-weight: 600;
+    }
+}
+
+// Пункты: лесенка сверху вниз при открытии, мгновенное исчезновение при закрытии.
+.nav-drop__item {
+    opacity: 0;
+    transform: translateY(-12px);
+    transition: opacity 0.15s linear, transform 0.15s linear;
+
+    .header__nav.is-open & {
+        opacity: 1;
+        transform: none;
+        transition:
+            opacity 0.6s $ease-out calc(0.12s + var(--i, 0) * 0.04s),
+            transform 0.6s $ease-out calc(0.12s + var(--i, 0) * 0.04s);
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .nav-drop,
+    .nav-drop__item,
+    .burger i {
+        transition-duration: 0.01ms !important;
+        transition-delay: 0s !important;
+    }
+}

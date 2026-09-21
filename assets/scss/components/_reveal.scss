@@ -1,0 +1,57 @@
+// ---------------------------------------------------------------
+// Появление текста из размытия (по мотивам verteal.com).
+// Заголовки делятся на слова, слова одной строки появляются вместе,
+// строки — друг за другом. Остальные блоки появляются целиком.
+// Классы расставляет assets/js/modules/reveal.js; без JS всё видно сразу.
+// ---------------------------------------------------------------
+$reveal-ease: cubic-bezier(0.16, 1, 0.3, 1);
+
+@keyframes mp-reveal-in {
+    0% {
+        opacity: 0;
+        filter: blur(14px);
+        transform: translateY(22px);
+    }
+
+    100% {
+        opacity: 1;
+        filter: blur(0);
+        transform: translateY(0);
+    }
+}
+
+.js-reveal-ready {
+    // Слово заголовка: inline-block, чтобы работал transform,
+    // перенос строк при этом остаётся естественным.
+    .rv-word {
+        display: inline-block;
+    }
+
+    [data-reveal]:not(.is-revealed) .rv-word,
+    [data-reveal-block]:not(.is-revealed) {
+        opacity: 0;
+        filter: blur(14px);
+        transform: translateY(22px);
+    }
+
+    [data-reveal].is-revealed .rv-word,
+    [data-reveal-block].is-revealed {
+        animation: mp-reveal-in 0.9s $reveal-ease var(--rv-delay, 0s) both;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .js-reveal-ready {
+        [data-reveal]:not(.is-revealed) .rv-word,
+        [data-reveal-block]:not(.is-revealed) {
+            opacity: 1;
+            filter: none;
+            transform: none;
+        }
+
+        [data-reveal].is-revealed .rv-word,
+        [data-reveal-block].is-revealed {
+            animation: none;
+        }
+    }
+}

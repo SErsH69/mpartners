@@ -1,0 +1,77 @@
+{
+    "$schema": "https://schemas.wp.org/trunk/theme.json",
+    "version": 3,
+    "settings": {
+        "color": {
+            "custom": true,
+            "customGradient": true,
+            "palette": [
+                {
+                    "slug": "page",
+                    "color": "#f3ede1",
+                    "name": "Фон страницы"
+                },
+                {
+                    "slug": "surface",
+                    "color": "#e8e2d6",
+                    "name": "Светлая плашка"
+                },
+                {
+                    "slug": "beige",
+                    "color": "#eadfcf",
+                    "name": "Бежевый"
+                },
+                {
+                    "slug": "dark",
+                    "color": "#342f2f",
+                    "name": "Тёмный"
+                },
+                {
+                    "slug": "cream",
+                    "color": "#ede6d6",
+                    "name": "Светлый текст"
+                },
+                {
+                    "slug": "muted",
+                    "color": "#777064",
+                    "name": "Вторичный текст"
+                }
+            ]
+        },
+        "layout": {
+            "contentSize": "1200px",
+            "wideSize": "1200px"
+        },
+        "typography": {
+            "fontFamilies": [
+                {
+                    "slug": "text",
+                    "name": "Inter Tight",
+                    "fontFamily": "'Inter Tight', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif"
+                },
+                {
+                    "slug": "display",
+                    "name": "AA Stetica",
+                    "fontFamily": "'AA Stetica', 'Inter Tight', sans-serif"
+                }
+            ]
+        }
+    },
+    "styles": {
+        "color": {
+            "background": "var(--wp--preset--color--page)",
+            "text": "var(--wp--preset--color--dark)"
+        },
+        "typography": {
+            "fontFamily": "var(--wp--preset--font-family--text)",
+            "lineHeight": "1.1"
+        },
+        "blocks": {
+            "core/button": {
+                "border": {
+                    "radius": "5px"
+                }
+            }
+        }
+    }
+}

@@ -1,0 +1,38 @@
+.spacer {
+    position: relative;
+}
+
+.spacer--surface {
+    background: #ffffff;
+}
+
+.spacer--surface-top {
+    background: #ffffff;
+    border-radius: 32px 32px 0 0;
+}
+
+.spacer--surface-bottom {
+    background: #ffffff;
+    border-radius: 0 0 32px 32px;
+}
+
+.spacer__preview-label {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    padding: 8px 12px;
+    color: #6b7280;
+    background: rgba(255, 255, 255, 0.92);
+    border: 1px dashed #cbd5e1;
+    border-radius: 999px;
+    transform: translate(-50%, -50%);
+}
+
+.spacer__grid {
+    position: absolute;
+    inset: 0;
+    background-image:
+        linear-gradient(to right, rgba(214, 93, 14, 0.14) 1px, transparent 1px),
+        linear-gradient(to bottom, rgba(214, 93, 14, 0.14) 1px, transparent 1px);
+    background-size: calc(100% / 6) 100%, 100% 24px;
+}

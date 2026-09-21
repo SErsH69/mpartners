@@ -1,0 +1,54 @@
+@use 'abstracts/variables' as *;
+@use 'abstracts/mixins' as *;
+
+.site {
+    overflow-x: clip;
+}
+
+// Контейнер 1200px. Используется там, где секция состоит из «панели»
+// со своими внутренними отступами (квиз, форма связи).
+.shell {
+    @include container;
+}
+
+// Заголовок секции + инфо-плашка справа (повторяется в 04, 09, 10, 11).
+.section-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 13px;
+
+    .h-section {
+        flex: 0 0 auto;
+    }
+
+    @include tablet {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 15px;
+    }
+}
+
+.section-head__note {
+    flex: 0 0 auto;
+    width: 593px;
+
+    @include tablet {
+        width: 100%;
+    }
+
+    @include mobile {
+        .note__text {
+            font-size: 12px;
+        }
+    }
+}
+
+// Перенос строки только на мобилке (где его ставит макет).
+.u-br-mobile {
+    display: none;
+
+    @include mobile {
+        display: inline;
+    }
+}

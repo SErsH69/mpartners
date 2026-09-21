@@ -1,0 +1,171 @@
+@use '../abstracts/variables' as *;
+@use '../abstracts/mixins' as *;
+
+// 03. Преимущества — 4 тёмные карточки 292×339 с зазором 11px.
+.advantages {
+    margin-top: 40px; // 663 − 623 (конец первого экрана)
+
+    @include tablet {
+        margin-top: 80px;
+    }
+
+    @include mobile {
+        margin-top: 50px;
+    }
+}
+
+.advantages__inner {
+    @include container;
+
+    display: flex;
+    flex-direction: column;
+    gap: 25px;
+}
+
+.advantages__note {
+    align-self: flex-end;
+    width: 593px;
+
+    @include tablet {
+        display: none; // на планшете плашка показана в первом экране
+    }
+}
+
+.advantages__grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 11px;
+
+    @include tablet {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 10px;
+    }
+
+    @include mobile {
+        grid-template-columns: 1fr;
+        gap: 5px;
+    }
+}
+
+.adv-card {
+    @include gradient-dark(137deg);
+
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    min-height: 339px;
+    padding: 30px;
+    overflow: hidden;
+    border-radius: $r-sm;
+
+    @include mobile {
+        gap: 15px;
+        min-height: 0;
+        padding: 20px;
+    }
+}
+
+// Декоративная «вспышка» внутри карточки — позиции взяты из макета.
+.adv-card__decor {
+    position: absolute;
+    z-index: 0;
+    pointer-events: none;
+}
+
+.adv-card:nth-child(1) .adv-card__decor {
+    top: -8px;
+    left: -21px;
+    width: 425px;
+    opacity: 0.45;
+}
+
+.adv-card:nth-child(2) .adv-card__decor {
+    top: 61px;
+    left: 81px;
+    width: 276px;
+}
+
+.adv-card:nth-child(3) .adv-card__decor {
+    top: 10px;
+    left: 89px;
+    width: 336px;
+}
+
+.adv-card:nth-child(4) .adv-card__decor {
+    top: 100px;
+    left: 103px;
+    width: 269px;
+}
+
+.adv-card__text,
+.adv-card__title,
+.adv-card__metric {
+    position: relative;
+    z-index: 1;
+}
+
+.adv-card__text {
+    max-width: 232px;
+    color: $c-muted-light;
+    font-size: 14px;
+    font-weight: 400;
+    line-height: round(nearest, 1.1em, 1px);
+
+    @include mobile {
+        // В мобильном макете под текст всегда зарезервировано 64px.
+        max-width: none;
+        min-height: 64px;
+    }
+}
+
+.adv-card__title {
+    max-width: 232px;
+    color: $c-cream;
+    font-size: 25px;
+    font-weight: 500;
+    line-height: round(nearest, 1.1em, 1px);
+
+    @include mobile {
+        max-width: none;
+        font-size: 18px;
+        line-height: round(nearest, 1.1em, 1px);
+    }
+}
+
+.adv-card__metric {
+    display: flex;
+    align-items: flex-end;
+    gap: 5px;
+
+    @include mobile {
+        // В мобильном макете блок с цифрой занимает ровно 31px.
+        height: 31px;
+    }
+}
+
+.adv-card__number {
+    color: $c-cream;
+    font-family: $font-display;
+    font-size: 60px;
+    font-weight: 400;
+    line-height: 0.9;
+
+    @include mobile {
+        font-size: 40px;
+        line-height: 31px;
+    }
+}
+
+.adv-card__unit {
+    width: 137px;
+    padding-bottom: 5px;
+    color: $c-cream;
+    font-size: 14px;
+    font-weight: 500;
+    line-height: round(nearest, 1.1em, 1px);
+
+    @include mobile {
+        width: 126px;
+    }
+}

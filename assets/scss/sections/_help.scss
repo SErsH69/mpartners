@@ -1,0 +1,336 @@
+@use '../abstracts/variables' as *;
+@use '../abstracts/mixins' as *;
+
+// 04. Помощь — три карточки 1200×347 с иллюстрацией слева и списком услуг.
+.help {
+    margin-top: 100px; // 1183 − 1083
+
+    @include tablet {
+        margin-top: 80px;
+    }
+
+    @include mobile {
+        margin-top: 50px;
+    }
+}
+
+.help__inner {
+    @include container;
+
+    display: flex;
+    flex-direction: column;
+    gap: 25px;
+}
+
+.help__list {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.help-card {
+    @include gradient-panel;
+
+    position: relative;
+    display: flex;
+    height: 347px;
+    padding: 30px;
+    overflow: hidden;
+    border-radius: $r-lg;
+
+    @include tablet {
+        flex-direction: column;
+        height: auto;
+        padding: 20px;
+    }
+}
+
+// Боксы иллюстраций заданы в макете отдельно для каждой карточки
+// (Figma STRETCH → object-fit: fill).
+.help-card__image {
+    position: absolute;
+    object-fit: fill;
+
+    @include tablet {
+        position: static;
+        width: 100% !important;
+        height: auto !important;
+        margin-bottom: 15px;
+        object-fit: cover;
+        border-radius: $r-sm;
+    }
+}
+
+.help-card:nth-child(1) .help-card__image {
+    top: 47px;
+    left: 0.75%; // 9 / 1200
+    width: 45.83%; // 550 / 1200
+    height: 301px;
+}
+
+.help-card:nth-child(2) .help-card__image {
+    top: 15px;
+    left: 1.75%; // 21 / 1200
+    width: 41.33%; // 496 / 1200
+    height: 332px;
+}
+
+.help-card:nth-child(3) .help-card__image {
+    top: 44px;
+    left: 0;
+    width: 46.25%; // 555 / 1200
+    height: 304px;
+    // В макете иллюстрация отражена по горизонтали относительно исходника.
+    transform: scaleX(-1);
+}
+
+.help-card__number {
+    position: relative;
+    z-index: 1;
+    // В макете номер и колонка услуг стоят в один ряд: текст начинается
+    // на 607px от левого края карточки (30 паддинга + 577).
+    flex: 0 0 577px;
+    color: $c-muted;
+    font-size: 14px;
+    font-weight: 400;
+    line-height: round(nearest, 1.1em, 1px);
+
+    @include tablet {
+        flex: 0 0 auto;
+    }
+}
+
+.help-card__body {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    flex: 0 1 auto;
+    flex-direction: column;
+    gap: 20px;
+
+    @include tablet {
+        width: 100%;
+        margin-top: 15px;
+    }
+}
+
+.help-card__title {
+    // Ширина заголовка в макете своя у каждой карточки: 378 / 269 / 269.
+    width: 378px;
+    color: $c-dark;
+    font-size: 18px;
+    font-weight: 500;
+    line-height: round(nearest, 1.1em, 1px);
+
+    @include tablet {
+        width: 100%;
+    }
+
+    @include mobile {
+        font-size: 16px;
+    }
+}
+
+.help-card:nth-child(2) .help-card__title,
+.help-card:nth-child(3) .help-card__title {
+    width: 269px;
+
+    @include tablet {
+        width: 100%;
+    }
+}
+
+.help-card .chip-list {
+    @include mobile {
+        align-self: stretch;
+
+        .chip-link {
+            width: 100%;
+            justify-content: space-between;
+            text-align: left;
+        }
+    }
+}
+
+// ---------------------------------------------------------------
+// Мобильный макет (375): текст сверху, иллюстрация прижата к низу
+// карточки и выходит за её края. Высоты и боксы картинок — из Figma.
+// ---------------------------------------------------------------
+@include mobile {
+    .help__inner {
+        gap: 20px;
+    }
+
+    .help .section-head {
+        gap: 15px;
+    }
+
+    .help__list {
+        gap: 10px;
+    }
+
+    .help-card {
+        display: block;
+        padding: 20px;
+    }
+
+    .help-card:nth-child(1) {
+        height: 448px;
+    }
+
+    .help-card:nth-child(2) {
+        height: 406px;
+    }
+
+    .help-card:nth-child(3) {
+        height: 496px;
+    }
+
+    .help-card__number {
+        display: none;
+    }
+
+    .help-card__body {
+        position: relative;
+        z-index: 1;
+        gap: 15px;
+        width: 100%;
+        margin-top: 0;
+    }
+
+    .help-card__title,
+    .help-card:nth-child(2) .help-card__title,
+    .help-card:nth-child(3) .help-card__title {
+        width: 100%;
+        font-size: 16px;
+    }
+
+    .help-card .chip-list {
+        align-self: stretch;
+    }
+
+    .help-card .chip-link {
+        justify-content: space-between;
+        width: 100%;
+        min-height: 29px;
+        padding: 8px;
+        font-size: 12px;
+        text-align: left;
+
+        span {
+            width: 255px;
+        }
+    }
+
+    .help-card .help-card__image {
+        position: absolute;
+        margin: 0;
+        border-radius: 0;
+        object-fit: fill;
+    }
+
+    .help-card:nth-child(1) .help-card__image {
+        top: 266px;
+        left: 3px;
+        width: 346px !important;
+        height: 189px !important;
+    }
+
+    // На мобилке окно кадра выше: y 0.057…0.897 (на десктопе 0…0.897).
+    .help-card:nth-child(2) .help-card__image {
+        top: 206px;
+        left: 0;
+        width: 319px !important;
+        height: 200px !important;
+        object-fit: cover;
+        object-position: 50% 100%;
+    }
+
+    .help-card:nth-child(3) .help-card__image {
+        top: 290px;
+        left: -21px;
+        width: 377px !important;
+        height: 206px !important;
+    }
+}
+
+// ---------------------------------------------------------------
+// Планшетный макет (640): текст сверху, иллюстрация прижата к низу
+// карточки. Высоты карточек и боксы картинок — из Figma.
+// ---------------------------------------------------------------
+@media (min-width: #{$bp-mobile + 1}) and (max-width: $bp-tablet) {
+    .help__inner {
+        gap: 30px;
+    }
+
+    .help .section-head {
+        gap: 15px;
+    }
+
+    .help-card {
+        display: block;
+        padding: 30px;
+    }
+
+    .help-card:nth-child(1) {
+        height: 590px;
+    }
+
+    .help-card:nth-child(2) {
+        height: 566px;
+    }
+
+    .help-card:nth-child(3) {
+        height: 599px;
+    }
+
+    .help-card__number {
+        display: none;
+    }
+
+    .help-card__body {
+        position: relative;
+        z-index: 1;
+        width: auto;
+        margin-top: 0;
+    }
+
+    .help-card__title {
+        width: 378px;
+    }
+
+    .help-card:nth-child(2) .help-card__title,
+    .help-card:nth-child(3) .help-card__title {
+        width: 269px;
+    }
+
+    .help-card .help-card__image {
+        position: absolute;
+        margin: 0;
+        border-radius: 0;
+        object-fit: fill;
+    }
+
+    .help-card:nth-child(1) .help-card__image {
+        top: 295px;
+        left: 15px;
+        width: 550px !important;
+        height: 301px !important;
+    }
+
+    .help-card:nth-child(2) .help-card__image {
+        top: 255px;
+        left: 0;
+        width: 496px !important;
+        height: 311px !important;
+        object-fit: cover;
+        object-position: 50% 100%;
+    }
+
+    .help-card:nth-child(3) .help-card__image {
+        top: 295px;
+        left: 0;
+        width: 555px !important;
+        height: 304px !important;
+    }
+}

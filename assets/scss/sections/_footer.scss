@@ -1,0 +1,485 @@
+@use '../abstracts/variables' as *;
+@use '../abstracts/mixins' as *;
+
+// 15. Подвал — 1920×636, тёмный градиент с узором и вотермаркой.
+.footer {
+    @include gradient-dark(107deg);
+
+    position: relative;
+    margin-top: 100px;
+    padding: 45px 0 0;
+    overflow: hidden;
+    color: $c-cream;
+
+    @include tablet {
+        margin-top: 60px;
+        padding-top: 40px;
+    }
+
+    @include mobile {
+        margin-top: 50px;
+        padding-top: 30px;
+    }
+}
+
+.footer__backdrop {
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    height: 416px;
+    pointer-events: none;
+
+    @include tablet {
+        height: 260px;
+    }
+}
+
+.footer__pattern {
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 89.84%;
+    height: auto;
+    opacity: 0.55;
+
+    @include tablet {
+        width: 140%;
+    }
+}
+
+// Крупная надпись «M-Partners» у нижней кромки.
+.footer__wordmark {
+    position: absolute;
+    bottom: 40px;
+    left: 50%;
+    display: block;
+    width: 1206px;
+    color: $grad-dark-from;
+    transform: translateX(-50%);
+
+    svg {
+        width: 100%;
+        height: auto;
+    }
+
+    path {
+        fill: currentcolor;
+        opacity: 0.55;
+    }
+
+    @include tablet {
+        bottom: 60px;
+        width: 120%;
+    }
+}
+
+.footer__inner {
+    @include container;
+
+    position: relative;
+    align-items: flex-start;
+    z-index: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 35px;
+}
+
+.footer__grid {
+    display: flex;
+    align-self: stretch;
+    gap: 60px;
+
+    @include tablet {
+        flex-direction: column;
+        gap: 40px;
+    }
+}
+
+.footer__left {
+    display: flex;
+    flex: 0 0 auto;
+    flex-direction: column;
+    gap: 30px;
+    width: 385px;
+
+    @include tablet {
+        width: 100%;
+    }
+}
+
+.footer__offices {
+    display: flex;
+    gap: 15px;
+
+    @include mobile {
+        flex-direction: column;
+    }
+}
+
+.office {
+    @include gradient-panel;
+
+    display: flex;
+    flex: 1 1 0;
+    flex-direction: column;
+    gap: 15px;
+    min-width: 0;
+    padding: 20px;
+    border-radius: $r-sm;
+    box-shadow: -10px 15px 11px -7px rgba(#000, 0.1);
+}
+
+.office__label {
+    font-size: 14px;
+    font-weight: 400;
+    line-height: 1;
+}
+
+.office__body {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.office__phone {
+    font-size: 14px;
+    font-weight: 600;
+    line-height: 1;
+}
+
+.office__address {
+    font-size: 12px;
+    font-weight: 400;
+    line-height: 1;
+    opacity: 0.5;
+}
+
+.footer__socials {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.footer__socials-label {
+    font-size: 14px;
+    font-weight: 500;
+    line-height: round(nearest, 1.1em, 1px);
+}
+
+.footer__col {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.footer__col--menu {
+    flex: 0 0 auto;
+    width: 102px;
+
+    @include tablet {
+        width: auto;
+    }
+}
+
+.footer__col--services {
+    flex: 1 1 auto;
+    min-width: 0;
+}
+
+.footer__col-title {
+    font-size: 18px;
+    font-weight: 600;
+    line-height: 1;
+}
+
+.footer__list {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    font-size: 14px;
+    line-height: 1;
+
+    a:hover {
+        opacity: 0.7;
+    }
+}
+
+// Услуги — две независимые колонки по 298px с зазором 17px.
+.footer__services {
+    display: flex;
+    gap: 17px;
+
+    .footer__list {
+        flex: 0 0 298px; // в макете колонки не сжимаются (и чуть выходят за контейнер)
+        min-width: 0;
+    }
+
+    @include tablet {
+        flex-direction: column;
+
+        .footer__list {
+            flex: 0 0 auto;
+        }
+    }
+
+    @include mobile {
+        flex-direction: row;
+
+        .footer__list {
+            flex: 1 1 0;
+            width: auto;
+        }
+    }
+}
+
+// В макете часть пунктов услуг уже колонки (282/277px) — переносы строк
+// там расставлены вручную. Повторяем, кроме мобилки, где колонки узкие.
+@media (min-width: #{$bp-mobile + 1}) {
+    .footer__services .footer__list:first-child li:nth-child(8) {
+        max-width: 282px;
+    }
+
+    .footer__services .footer__list:last-child li:nth-child(2n) {
+        max-width: 277px;
+    }
+}
+
+.footer__legal {
+    @include container;
+
+    position: relative;
+    z-index: 1;
+    display: flex;
+    justify-content: space-between;
+    gap: 24px;
+    // Figma: строка юр. ссылок на y 590 от верха подвала высотой 636
+    padding-top: 187px;
+    padding-bottom: 34px;
+    color: $c-muted;
+    font-size: 14px;
+    line-height: 1;
+
+    @include tablet {
+        flex-direction: column;
+        gap: 12px;
+        padding-top: 40px;
+    }
+}
+
+// Десктоп: колонки строки юр. ссылок ровно по макету (x 360 / 857 / 1268).
+@media (min-width: #{$bp-tablet + 1}) {
+    .footer__legal {
+        display: grid;
+        grid-template-columns: 497px 411px auto;
+    }
+}
+
+.footer__legal-link:hover {
+    color: $c-cream;
+}
+
+.footer__copyright {
+    order: -1; // на десктопе копирайт слева
+    margin: 0;
+}
+
+// ---------------------------------------------------------------
+// Планшет (640) — координаты из Figma.
+// ---------------------------------------------------------------
+@include tablet {
+    .footer {
+        @include gradient-dark(148deg);
+
+        padding-top: 44px;
+    }
+
+    .footer__inner {
+        gap: 30px;
+    }
+
+    .footer__grid {
+        display: grid;
+        grid-template-columns: 102px 387px;
+        align-items: start;
+        gap: 60px 61px;
+    }
+
+    .footer__services .footer__list {
+        width: 298px;
+    }
+
+    .footer__left {
+        grid-column: 1 / -1;
+    }
+
+    .footer__col--menu {
+        width: 102px;
+    }
+
+
+    // Юридические ссылки: «Политика» и копирайт в строку через 40px, «Согласие» ниже
+    .footer__legal {
+        flex-direction: row;
+        flex-wrap: wrap;
+        justify-content: flex-start;
+        gap: 18px 40px;
+        padding-top: 45px;
+        padding-bottom: 110px;
+        color: $c-muted-light;
+        font-size: 12px;
+        line-height: 12px;
+    }
+
+    .footer__copyright {
+        order: 2;
+    }
+
+    .footer__legal-link:nth-child(2) {
+        order: 3;
+        flex-basis: 100%;
+    }
+
+    .footer__backdrop {
+        height: 311px;
+    }
+
+    .footer__pattern {
+        top: 0;
+        right: auto;
+        left: -237px;
+        width: 1113px;
+        max-width: none;
+    }
+
+    .footer__wordmark {
+        bottom: -1px;
+        width: 641px;
+    }
+}
+
+// ---------------------------------------------------------------
+// Мобилка (375) — координаты из Figma.
+// ---------------------------------------------------------------
+@include mobile {
+    .footer {
+        @include gradient-dark(157deg);
+
+        padding-top: 20px;
+    }
+
+    .footer__inner {
+        gap: 25px;
+    }
+
+    // Логотип в подвале на мобилке остаётся полного размера
+    .brand--light {
+        gap: 13px;
+
+        .brand__mark {
+            width: 64px;
+        }
+
+        .brand__divider {
+            height: 39px;
+        }
+
+        .brand__tagline {
+            max-width: 160px;
+            font-size: 12px;
+        }
+    }
+
+    .footer__grid {
+        display: flex;
+        flex-direction: column;
+        gap: 25px;
+    }
+
+    .footer__left {
+        gap: 25px;
+    }
+
+    .footer__offices {
+        flex-direction: row;
+        gap: 15px;
+    }
+
+    .office {
+        gap: 15px;
+        padding: 10px;
+    }
+
+    .office__label,
+    .office__address {
+        font-size: 12px;
+        line-height: 12px;
+    }
+
+    .footer__socials-label {
+        font-size: 12px;
+    }
+
+    .footer__col {
+        gap: 10px;
+    }
+
+    .footer__col-title {
+        font-size: 14px;
+        line-height: 14px;
+    }
+
+    .footer__list {
+        font-size: 12px;
+        line-height: 12px;
+    }
+
+    // Меню: две колонки по 5 и 4 пункта
+    .footer__col--menu {
+        width: auto;
+    }
+
+    .footer__services .footer__list {
+        width: auto;
+    }
+
+    .footer__col--menu .footer__list {
+        display: grid;
+        grid-auto-flow: column;
+        grid-template-rows: repeat(5, auto);
+        grid-template-columns: repeat(2, 1fr);
+        gap: 15px;
+    }
+
+
+    .footer__legal {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        padding-top: 25px;
+        padding-bottom: 86px;
+    }
+
+    // На мобилке порядок: политика, согласие, копирайт
+    .footer__legal-link:nth-child(2) {
+        order: 2;
+        flex-basis: auto;
+    }
+
+    .footer__copyright {
+        order: 3;
+    }
+
+    .footer__backdrop {
+        height: 267px;
+    }
+
+    .footer__pattern {
+        left: -314px;
+    }
+
+    .footer__wordmark {
+        bottom: 0;
+        width: 376px;
+    }
+}

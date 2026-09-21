@@ -1,0 +1,451 @@
+@use '../abstracts/variables' as *;
+@use '../abstracts/mixins' as *;
+
+// 07. Опыт — цитата + фото команды, ниже тёмная панель с лентой логотипов.
+.experience {
+    margin-top: 100px; // 3664 − 3564
+
+    @include tablet {
+        margin-top: 80px;
+    }
+
+    @include mobile {
+        margin-top: 50px;
+    }
+}
+
+.experience__inner {
+    @include container;
+
+    display: flex;
+    flex-direction: column;
+    gap: 25px;
+}
+
+.experience__top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 21px;
+
+    @include tablet {
+        flex-direction: column;
+        align-items: stretch;
+    }
+}
+
+.experience__intro {
+    display: flex;
+    flex: 0 0 auto;
+    flex-direction: column;
+    gap: 10px;
+    width: 529px;
+
+    @include tablet {
+        width: 100%;
+    }
+}
+
+// Подсветка последних строк цитаты — в макете это две бежевые плашки под текстом.
+.experience__quote {
+    color: $c-dark;
+    font-family: $font-display;
+    font-size: 33px;
+    font-weight: 400;
+    line-height: 0.9;
+}
+
+// Подсветка хвоста цитаты: в макете это плашки #e4d5c0 под последними строками.
+.experience__mark {
+    padding: 1px 0;
+    color: inherit;
+    background-color: $c-beige-deep;
+    box-decoration-break: clone;
+    -webkit-box-decoration-break: clone;
+}
+
+.experience__text {
+    max-width: 483px;
+    color: $c-muted;
+    font-size: 14px;
+    font-weight: 500;
+    line-height: round(nearest, 1.1em, 1px);
+}
+
+.experience__actions {
+    align-self: flex-start;
+    margin-top: 25px;
+}
+
+.experience__photo {
+    // Figma: бокс 650×287, изображение кадрировано (scaleMode STRETCH
+    // с imageTransform) и чуть осветлено (exposure 0.09).
+    flex: 0 0 auto;
+    width: 650px;
+    height: 287px;
+    object-fit: fill;
+    filter: brightness(1.06); // Figma exposure 0.09
+
+    @include tablet {
+        width: 100%;
+        height: auto;
+        aspect-ratio: 650 / 287;
+    }
+}
+
+// --- Тёмная панель -------------------------------------------
+.experience__panel {
+    @include gradient-dark(105deg);
+
+    position: relative;
+    height: 353px; // высота панели из макета
+    padding: 30px 0;
+    overflow: hidden;
+    border-radius: $r-lg;
+
+    @include tablet {
+        height: auto;
+    }
+
+    @include mobile {
+        padding: 20px 0;
+        border-radius: $r-sm;
+    }
+}
+
+.experience__decor {
+    position: absolute;
+    // Figma: Group 47175 на (-154, -77), blend mode Overlay.
+    top: -77px;
+    left: -154px;
+    width: 679px;
+    mix-blend-mode: overlay;
+    pointer-events: none;
+}
+
+.experience__cards {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    width: 563px;
+    margin-left: auto;
+    margin-right: 30px;
+
+    @include tablet {
+        width: auto;
+        margin-inline: 20px;
+    }
+}
+
+// Лента логотипов в макете лежит у нижней кромки панели и шире неё.
+.experience__partners-wrap {
+    position: absolute;
+    right: 0;
+    bottom: 30px;
+    left: 0;
+    overflow: hidden;
+
+    @include tablet {
+        position: static;
+        margin-top: 25px;
+    }
+}
+
+.experience__card {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    height: 115px; // из макета: 115 и 57
+    padding: 20px;
+    background-color: rgba($c-white, 0.06);
+    border-radius: $r-sm;
+    box-shadow: -10px 15px 11px -7px rgba(#000, 0.1);
+
+    @include tablet {
+        height: auto;
+    }
+}
+
+.experience__card--title {
+    height: 57px;
+
+    @include tablet {
+        height: auto;
+    }
+}
+
+.experience__award {
+    // Figma: «M-PARTNERS» 22/19.8, остальное 15.9/14.31 (AA Stetica)
+    color: $c-cream;
+    font-family: $font-display;
+    font-size: 15.9px;
+    font-weight: 400;
+    line-height: 14.31px;
+
+    // На мобилке основной текст 12/10.8 — задаём его родителю, иначе
+    // строки держат высоту 14.31 от «стойки» абзаца.
+    @include mobile {
+        font-size: 12px;
+        line-height: 10.8px;
+    }
+}
+
+.experience__award-dash {
+    @include mobile {
+        font-size: 15.9px;
+        line-height: 10.8px;
+    }
+}
+
+.experience__award-lead {
+    font-size: 22px;
+    line-height: 19.8px;
+
+    @include mobile {
+        font-size: 16px;
+        line-height: 14.4px;
+    }
+}
+
+.experience__award-rest {
+    @include mobile {
+        font-size: 12px;
+        line-height: 10.8px;
+    }
+}
+
+.experience__video {
+    display: inline-flex;
+    align-items: center;
+    gap: 9px;
+    margin-top: 20px;
+    color: $c-cream;
+    font-size: 14px;
+    font-weight: 500;
+    line-height: round(nearest, 1.1em, 1px);
+    text-decoration: underline;
+    text-underline-offset: 3px;
+
+    svg {
+        flex: 0 0 auto;
+        width: 12px;
+        height: 12px;
+        color: $c-page;
+    }
+}
+
+.experience__partners-title {
+    color: $c-cream;
+    font-family: $font-display;
+    font-size: 22px;
+    font-weight: 400;
+    line-height: 0.9;
+
+    @include mobile {
+        font-size: 20px;
+    }
+}
+
+// Бесконечная лента логотипов партнёров (в макете она выходит за края панели).
+.experience__partners {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    gap: 8px;
+    width: max-content;
+    margin-left: -45px; // в макете лента начинается за левым краем панели
+    animation: mp-marquee 45s linear infinite;
+
+    @include tablet {
+        margin-left: 0;
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+        animation: none;
+    }
+}
+
+.partner-logo {
+    display: flex;
+    flex: 0 0 auto;
+    align-items: center;
+    justify-content: center;
+    width: 100px;
+    height: 86px;
+    padding: 10px;
+    background-color: $c-beige;
+    border-radius: $r-sm;
+}
+
+// В макете логотип — маска, залитая тёмным цветом, а не сама картинка.
+.partner-logo__mark {
+    display: block;
+    width: 100%;
+    height: 100%;
+    background-color: $c-dark;
+    mask: var(--logo) center / contain no-repeat;
+    -webkit-mask: var(--logo) center / contain no-repeat;
+}
+
+@keyframes mp-marquee {
+    from {
+        transform: translate3d(0, 0, 0);
+    }
+
+    to {
+        transform: translate3d(-50%, 0, 0);
+    }
+}
+
+// ---------------------------------------------------------------
+// Мобильный макет (375) — размеры из Figma.
+// ---------------------------------------------------------------
+@include mobile {
+    .experience__inner {
+        gap: 50px;
+    }
+
+    .experience__top {
+        gap: 21px;
+    }
+
+    .experience__intro {
+        gap: 5px;
+    }
+
+    .experience__text {
+        max-width: 315px;
+    }
+
+    .experience__actions {
+        align-self: stretch;
+        margin-top: 25px;
+
+        .btn {
+            flex: 1 1 auto;
+        }
+    }
+
+    // Панель во всю ширину экрана
+    .experience__panel {
+        height: 357px;
+        margin-inline: -20px;
+        padding: 30px 0;
+        border-radius: $r-sm;
+    }
+
+    .experience__decor {
+        top: 185px;
+        left: -86px;
+        width: 540px;
+    }
+
+    .experience__cards {
+        width: auto;
+        margin-inline: 20px;
+    }
+
+    .experience__card {
+        height: 123px;
+    }
+
+    .experience__card--title {
+        height: 57px;
+    }
+
+    .experience__video {
+        align-items: flex-start;
+        margin-top: 10px;
+        font-size: 12px;
+
+        svg {
+            margin-top: 7px;
+        }
+    }
+
+    .experience__partners-wrap {
+        position: absolute;
+        bottom: 30px;
+        margin-top: 0;
+    }
+
+    .experience__partners {
+        gap: 6.79px;
+        margin-left: -219px;
+    }
+
+    .partner-logo {
+        width: 85px;
+        height: 73px;
+        padding: 8px;
+    }
+}
+
+// ---------------------------------------------------------------
+// Планшетный макет (640): панель во всю ширину 640×496, логотипы 133×114.
+// ---------------------------------------------------------------
+@media (min-width: #{$bp-mobile + 1}) and (max-width: $bp-tablet) {
+    .experience__inner {
+        gap: 81px;
+    }
+
+    .experience__top {
+        gap: 21px;
+    }
+
+    .experience__intro {
+        gap: 10px;
+    }
+
+    .experience__text {
+        max-width: none;
+    }
+
+    .experience__actions {
+        margin-top: 25px;
+    }
+
+    .experience__panel {
+        height: 496px;
+        margin-inline: -30px;
+        padding: 30px 0;
+    }
+
+    .experience__decor {
+        top: 191px;
+        left: -104px;
+    }
+
+    .experience__cards {
+        width: auto;
+        margin-inline: 30px;
+    }
+
+    .experience__card {
+        height: 115px;
+        padding: 20px 30px;
+    }
+
+    .experience__card--title {
+        height: 57px;
+    }
+
+    .experience__partners-wrap {
+        position: absolute;
+        bottom: 85px;
+        margin-top: 0;
+    }
+
+    .experience__partners {
+        gap: 10.6px;
+        margin-left: -535px;
+    }
+
+    .partner-logo {
+        width: 132.7px;
+        height: 114px;
+        padding: 14px;
+    }
+}

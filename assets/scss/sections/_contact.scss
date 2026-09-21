@@ -1,0 +1,367 @@
+@use '../abstracts/variables' as *;
+@use '../abstracts/mixins' as *;
+
+// 12. Форма связи — тёмная панель 1200×451 с формой справа.
+.contact {
+    margin-top: 100px; // 7340 − 7240
+
+    @include tablet {
+        margin-top: 80px;
+    }
+
+    @include mobile {
+        margin-top: 50px;
+    }
+}
+
+.contact__inner {
+    @include gradient-dark(112deg);
+
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 41px;
+    padding: 30px;
+    overflow: hidden;
+    border-radius: $r-lg;
+
+    @include tablet {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 30px;
+    }
+
+    @include mobile {
+        padding: 20px;
+    }
+}
+
+.contact__decor {
+    // Figma: Group 47175 на (-110, 244), 700px, blend mode Overlay.
+    // SVG экспортирован вместе с тенью, отсюда сдвиг на ~12px.
+    position: absolute;
+    top: 232px;
+    left: -122px;
+    width: 750px;
+    max-width: none;
+    mix-blend-mode: overlay;
+    pointer-events: none;
+
+    @include mobile {
+        top: 648px;
+        left: -70px;
+        width: 431px;
+    }
+}
+
+.contact__intro {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    flex: 0 0 auto;
+    flex-direction: column;
+    justify-content: space-between;
+    align-self: center;
+    // Левая колонка в макете 536×351 и стоит по центру панели.
+    gap: 30px;
+    width: 536px;
+    min-height: 351px;
+
+    @include tablet {
+        width: 100%;
+        min-height: 0;
+    }
+}
+
+.contact__copy {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+
+
+.contact__text {
+    // В макете оба абзаца — один текст 14/14 (500) с пустой строкой между ними.
+    max-width: 536px;
+    color: $c-muted-light;
+    font-size: 14px;
+    font-weight: 500;
+    line-height: 14px;
+
+    & + & {
+        margin-top: 4px; // вместе с gap 10px — пустая строка 14px
+    }
+}
+
+.contact__socials {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.contact__socials-label {
+    color: $c-muted-light;
+    font-size: 14px;
+    font-weight: 500;
+    line-height: round(nearest, 1.1em, 1px);
+}
+
+.contact__socials-row {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 5px;
+
+    // В макете на мобилке иконки и кнопка стоят в одну строку.
+    @include mobile {
+        flex-wrap: nowrap;
+        gap: 5px;
+
+        .btn {
+            flex: 1 1 auto;
+            padding-inline: 12px;
+        }
+    }
+}
+
+// --- Форма ---------------------------------------------------
+.contact__form {
+    @include gradient-panel;
+
+    position: relative;
+    z-index: 1;
+    display: flex;
+    flex: 0 0 auto;
+    flex-direction: column;
+    gap: 10px;
+    width: 560px;
+    padding: 30px;
+    border-radius: $r-md;
+    box-shadow: -10px 15px 11px -7px rgba(#000, 0.25);
+
+    @include tablet {
+        width: 100%;
+    }
+
+    @include mobile {
+        padding: 15px;
+    }
+}
+
+.field {
+    display: block;
+
+    input {
+        width: 100%;
+        height: 44px;
+        padding: 13px 14px;
+        color: $c-cream;
+        font-size: 14px;
+        font-weight: 400;
+        line-height: 1.21;
+        background-color: transparent;
+        border: 1px solid $c-muted;
+        border-radius: $r-md;
+
+        &::placeholder {
+            color: $c-cream;
+            opacity: 1;
+        }
+
+        &:focus {
+            border-color: $c-cream;
+            outline: none;
+        }
+    }
+}
+
+.visually-hidden {
+    @include visually-hidden;
+}
+
+.contact__channels {
+    margin: 5px 0 6px;
+    padding: 0;
+    border: 0;
+}
+
+.contact__channels-label {
+    padding: 0;
+    color: $c-muted-light;
+    font-size: 13px;
+    font-weight: 500;
+    line-height: 1.21;
+}
+
+.contact__channels-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 5px;
+    margin-top: 5px;
+}
+
+.chip-toggle {
+    flex: 1 1 0; // в макете чипы делят строку поровну (121/122px)
+    min-width: 0;
+    cursor: pointer;
+
+    input {
+        @include visually-hidden;
+    }
+}
+
+.contact__submit {
+    margin-top: 10px;
+    min-height: 47px;
+}
+
+.contact__message {
+    margin-top: 10px;
+    color: $c-cream;
+    font-size: 12px;
+    line-height: 1.21;
+
+    &[hidden] {
+        display: none;
+    }
+
+    &.is-error {
+        color: #e4b4a2;
+    }
+}
+
+.consent {
+    display: flex;
+    align-self: flex-start;
+    align-items: center;
+    gap: 8px;
+    margin-top: 7px;
+    cursor: pointer;
+
+    input {
+        @include visually-hidden;
+    }
+}
+
+.consent__box {
+    flex: 0 0 auto;
+    width: 18px;
+    height: 18px;
+    border: 1.5px solid $c-muted;
+    border-radius: 4px;
+}
+
+.consent input:checked + .consent__box {
+    background-color: $c-page;
+    border-color: $c-page;
+}
+
+.consent input:focus-visible + .consent__box {
+    outline: 2px solid $c-cream;
+    outline-offset: 2px;
+}
+
+.consent__text {
+    color: $c-muted-light;
+    font-size: 12px;
+    font-weight: 400;
+    line-height: 1.21;
+}
+
+// ---------------------------------------------------------------
+// Мобильный макет (375) — размеры из Figma.
+// ---------------------------------------------------------------
+@include mobile {
+    .contact__inner {
+        gap: 20px;
+    }
+
+    .contact__intro {
+        gap: 30px;
+    }
+
+    .contact__copy {
+        gap: 5px;
+    }
+
+    .contact__text {
+        font-size: 12px;
+        font-weight: 500;
+        line-height: 12px;
+
+        & + & {
+            margin-top: 7px; // вместе с gap 5px — пустая строка 12px
+        }
+    }
+
+    .contact__socials-label {
+        color: $c-muted-light;
+        font-size: 12px;
+    }
+
+    .contact__form {
+        padding: 15px;
+    }
+
+    .field input {
+        font-size: 12px;
+        border-radius: $r-sm;
+    }
+
+    .contact__channels-label {
+        font-size: 12px;
+        line-height: 15px;
+    }
+
+    .contact__channels {
+        margin-bottom: 9px;
+    }
+
+    .contact__channels-row {
+        flex-wrap: nowrap;
+        margin-top: 6px;
+    }
+
+    .chip-toggle {
+        flex: 1 1 0;
+        min-width: 0;
+        min-height: 32px;
+        padding: 9px 0; // 32px вместе с рамкой
+        font-size: 10px;
+    }
+
+    .consent {
+        align-items: flex-start;
+    }
+
+    .consent__box {
+        margin-top: 6px;
+    }
+
+    .consent__text {
+        font-size: 12px;
+        line-height: 15px;
+    }
+}
+
+// ---------------------------------------------------------------
+// Планшетный макет (640): текст 520×296, под ним форма 520×391.
+// ---------------------------------------------------------------
+@media (min-width: #{$bp-mobile + 1}) and (max-width: $bp-tablet) {
+    .contact__inner {
+        gap: 20px;
+    }
+
+    .contact__intro {
+        justify-content: flex-start;
+        gap: 30px;
+    }
+
+    .contact__decor {
+        top: 637px;
+        left: -70px;
+        width: 621px;
+    }
+}

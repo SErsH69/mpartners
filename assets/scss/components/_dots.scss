@@ -1,0 +1,35 @@
+@use '../abstracts/variables' as *;
+@use '../abstracts/mixins' as *;
+
+// Точки-пагинация под горизонтальными лентами.
+// В макете есть только на планшете (12px) и мобилке (8–12px).
+.dots {
+    display: none;
+
+    @include tablet {
+        display: flex;
+        justify-content: center;
+        gap: 4.94px;
+    }
+}
+
+.dots__dot {
+    width: 12px;
+    height: 12px;
+    background-color: #514840;
+    border-radius: 50%;
+    transition: background-color 0.2s ease;
+
+    &.is-active {
+        background-color: $c-page;
+    }
+}
+
+// На светлом фоне (команда) неактивные точки светлее.
+.dots--light .dots__dot {
+    background-color: $c-surface;
+
+    &.is-active {
+        background-color: #514840;
+    }
+}

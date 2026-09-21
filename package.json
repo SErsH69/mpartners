@@ -1,0 +1,74 @@
+{
+    "name": "webula-starter",
+    "version": "1.0.0",
+    "description": "WordPress starter theme with a reusable spacer ACF block.",
+    "main": "index.js",
+    "scripts": {
+        "build": "yarn clean:dist && NODE_ENV=development webpack --config webpack.config.js",
+        "watch": "NODE_ENV=development webpack --mode development --watch --config webpack.config.js",
+        "dev": "yarn clean:dist && webpack --mode development --config webpack.config.js",
+        "prod": "yarn clean:dist && NODE_ENV=production webpack --mode production --config webpack.config.js",
+        "cp": "yarn clean && yarn prod && cp theme webula-starter -r",
+        "zip": "yarn cp && zip -r webula-starter.zip webula-starter",
+        "clean": "rimraf theme/dist/ && rimraf webula-starter/ && rimraf webula-starter.zip",
+        "lint": "eslint .",
+        "lint:style": "stylelint '**/*.scss'",
+        "lint:fix": "eslint . --fix && stylelint '**/*.scss' --fix",
+        "lint:quality": "eslint . --format json --output-file eslint-report.json",
+        "lint:cssquality": "stylelint '**/*.scss' --formatter json --output-file stylelint-report.json",
+        "prepare": "husky install",
+        "clean:dist": "rimraf theme/dist"
+    },
+    "keywords": [
+        "wordpress",
+        "theme",
+        "starter",
+        "acf"
+    ],
+    "private": true,
+    "engines": {
+        "node": ">=18.0.0"
+    },
+    "license": "ISC",
+    "devDependencies": {
+        "browser-sync": "^3.0.2",
+        "browser-sync-webpack-plugin": "^2.3.0",
+        "css-loader": "6.9.1",
+        "cssnano": "^6.1.2",
+        "eslint": "8.56.0",
+        "mini-css-extract-plugin": "2.7.7",
+        "postcss": "^8.4.33",
+        "prettier": "3.3.3",
+        "sass-loader": "14.0.0",
+        "stylelint": "^16.2.0",
+        "stylelint-config-standard-scss": "^13.0.0",
+        "webpack": "^5.90.0",
+        "webpack-cli": "^5.1.4"
+    },
+    "dependencies": {
+        "autoprefixer": "^10.4.20",
+        "copy-webpack-plugin": "12.0.2",
+        "dotenv": "^16.4.5",
+        "esbuild-loader": "^4.1.0",
+        "image-minimizer-webpack-plugin": "^4.0.0",
+        "imagemin": "^8.0.1",
+        "imagemin-gifsicle": "^7.0.0",
+        "imagemin-mozjpeg": "^10.0.0",
+        "imagemin-pngquant": "^9.0.2",
+        "imagemin-svgo": "^10.0.1",
+        "postcss-loader": "^8.1.1",
+        "rimraf": "^5.0.10",
+        "sass": "^1.70.0",
+        "webpack-manifest-plugin": "^5.0.0"
+    },
+    "browserslist": [
+        "last 2 versions",
+        "> 1%"
+    ],
+    "packageManager": "yarn@4.1.0",
+    "lint-staged": {
+        "*.js": "prettier --allow-empty --write --parser babel",
+        "*.css": "prettier --allow-empty --write --parser css",
+        "*.scss": "prettier --allow-empty --write --parser scss"
+    }
+}

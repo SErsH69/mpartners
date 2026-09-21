@@ -1,0 +1,110 @@
+@use '../abstracts/variables' as *;
+@use '../abstracts/mixins' as *;
+
+// 08. Награды — список со строками, разделёнными линиями.
+.awards {
+    margin-top: 100px; // 4436 − 4336
+
+    @include tablet {
+        margin-top: 80px;
+    }
+
+    @include mobile {
+        margin-top: 50px;
+    }
+}
+
+.awards__inner {
+    @include container;
+
+    display: flex;
+    flex-direction: column;
+    gap: 25px;
+}
+
+.awards__list {
+    display: flex;
+    flex-direction: column;
+    border-top: 1px solid rgba($c-dark, 0.15);
+}
+
+.award {
+    display: grid;
+    // Figma: «Право 300» (по содержимому) + 101px + заголовок; год справа.
+    // Строка 80px: 30 + 20 + 29 + 1px линия.
+    grid-template-columns: max-content 1fr auto;
+    align-items: center;
+    column-gap: 101px;
+    padding: 30px 15.5px 29px;
+    border-bottom: 1px solid rgba($c-dark, 0.15);
+
+}
+
+.award__source {
+    color: $c-dark;
+    font-size: 14px;
+    font-weight: 400;
+    line-height: round(nearest, 1.1em, 1px);
+}
+
+.award__title {
+    color: $c-dark;
+    font-size: 18px;
+    font-weight: 500;
+    line-height: 20px;
+
+    @include mobile {
+        font-size: 16px;
+    }
+}
+
+.award__year {
+    color: $c-muted;
+    font-size: 14px;
+    font-weight: 400;
+    line-height: 0.96;
+}
+
+// ---------------------------------------------------------------
+// На планшете и мобилке секции нет в макете, но под неё оставлено место
+// (планшет: 563px между «Опытом» и «Практикой», мобилка: 460px).
+// Раскладка подогнана так, чтобы секция занимала ровно этот проём.
+// ---------------------------------------------------------------
+@media (min-width: #{$bp-mobile + 1}) and (max-width: $bp-tablet) {
+    .award {
+        grid-template-columns: max-content 1fr auto;
+        column-gap: 40px;
+        padding: 25.5px 0 25px; // заголовок на планшете в 3 строки — строки чуть ниже
+    }
+}
+
+@include mobile {
+    .awards__inner {
+        gap: 20px;
+    }
+
+    .award {
+        grid-template-columns: 1fr auto;
+        grid-template-areas:
+            'source year'
+            'title title';
+        gap: 4px 10px;
+        padding: 11px 0;
+    }
+
+    .award__source {
+        grid-area: source;
+        font-size: 12px;
+    }
+
+    .award__year {
+        grid-area: year;
+        font-size: 12px;
+    }
+
+    .award__title {
+        grid-area: title;
+        font-size: 14px;
+        line-height: 15px;
+    }
+}

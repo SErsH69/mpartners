@@ -1,0 +1,211 @@
+@use '../abstracts/variables' as *;
+@use '../abstracts/mixins' as *;
+
+// 01–02. Главный экран. Десктоп: фон-группа начинается на 88px от верха
+// страницы, текст — на 421px; шапка занимает 78px.
+.hero {
+    position: relative;
+    padding-top: 343px;
+    isolation: isolate;
+
+    @include tablet {
+        padding-top: 387px;
+    }
+
+    @include mobile {
+        padding-top: 319px;
+    }
+}
+
+.hero__backdrop {
+    position: absolute;
+    z-index: -1;
+    top: 10px; // 88px от верха страницы минус высота шапки (78px)
+    right: 0;
+    left: 0;
+    // В макете полоса фона 1920×515 и узор масштабируется вместе с шириной
+    // экрана: слева отступ 195/1920, справа — 194/1920, как в макете.
+    height: 26.82vw;
+    pointer-events: none;
+
+    @include tablet {
+        top: 23px;
+        height: 515px;
+    }
+
+    @include mobile {
+        top: 15px;
+        height: 433px;
+    }
+}
+
+.hero__pattern {
+    // Экспорт фрейма «Герой/Фон» 1725×514 стоит на x = 195 от левого края.
+    // Картинка должна заканчиваться ровно по низу полосы — ниже растушёвки
+    // её хвост виден как пунктирная линия.
+    position: absolute;
+    top: 0;
+    left: 10.16%; // 195 / 1920
+    width: 89.84%; // 1725 / 1920
+    height: auto;
+
+    @include tablet {
+        left: 0;
+        width: 100%;
+        height: 100%;
+        object-fit: contain;
+        object-position: left top;
+        content: url('img/figma/hero-bg-tablet.png');
+    }
+
+    @include mobile {
+        top: 0;
+        right: auto;
+        left: -81px;
+        width: 538px;
+        max-width: none;
+        content: url('img/figma/hero-bg-mobile.png');
+    }
+}
+
+// Нижняя растушёвка: фон страницы наплывает снизу (Figma «Герой/Декор»).
+.hero__fade {
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    height: 58.45%; // 301 / 515
+    background-image: linear-gradient(to bottom, rgba($c-page, 0) 0%, $c-page 100%);
+
+    @include mobile {
+        height: 84.06%; // 364 / 433
+    }
+}
+
+// Четыре квадрата-«точки» над узором.
+.hero__dots {
+    position: absolute;
+    top: 3.69%; // 19 / 515
+    left: 36.41%; // 699 / 1920
+    width: 5.05%; // 97 / 1920
+    aspect-ratio: 97 / 199;
+
+    @include tablet {
+        top: 14px;
+        left: 31px;
+        width: 97px;
+        aspect-ratio: auto;
+        height: 199px;
+    }
+
+    @include mobile {
+        top: 16px;
+        left: 21px; // 102px в макете минус смещение узора (-81px)
+        width: 82px;
+        height: 167px;
+    }
+}
+
+.hero__dot {
+    position: absolute;
+    aspect-ratio: 1;
+    background-color: $c-dark;
+    border-radius: $r-sm;
+
+    @include mobile {
+        border-radius: 4px;
+    }
+}
+
+.hero__dot--1 {
+    top: 0;
+    left: 0;
+    width: 14.43%; // 14 / 97
+
+    @include mobile {
+        width: 14.5%;
+    }
+}
+
+.hero__dot--2 {
+    top: 70.85%; // 141 / 199
+    left: 28.87%;
+    width: 45.36%;
+}
+
+.hero__dot--3 {
+    top: 58.29%;
+    left: 74.23%;
+    width: 25.77%;
+}
+
+.hero__dot--4 {
+    top: 92.96%;
+    left: 74.23%;
+    width: 14.43%;
+}
+
+.hero__inner {
+    @include container;
+
+    position: relative;
+}
+
+.hero__content {
+    max-width: 923px;
+}
+
+.hero__subtitle {
+    max-width: 482px;
+    margin-top: 10px;
+    color: $c-muted;
+    font-size: 14px;
+    font-weight: 500;
+    line-height: round(nearest, 1.1em, 1px);
+
+    @include mobile {
+        max-width: none;
+        margin-top: 5px;
+        line-height: 15px; // 4 строки = 60px, как в макете
+    }
+}
+
+// Десктоп: кнопки прижаты к правому краю и заходят на текстовый блок.
+.hero__actions {
+    position: absolute;
+    right: 0;
+    bottom: 0;
+
+    @include tablet {
+        position: static;
+        margin-top: 25px;
+    }
+
+    @include mobile {
+        display: flex;
+        width: 100%;
+        margin-top: 20px;
+
+        .btn {
+            flex: 1 1 auto;
+            padding-inline: 15px;
+        }
+    }
+}
+
+// Плашка конфиденциальности: на планшете и мобилке живёт в первом экране,
+// на десктопе — в секции «Преимущества».
+.hero__note {
+    display: none;
+
+    @include tablet {
+        display: flex;
+        margin-top: 15px;
+    }
+
+    @include mobile {
+        // В мобильном макете плашка 355px и доходит до правого края экрана.
+        margin-top: 10px;
+        margin-right: -$gutter-mobile;
+    }
+}

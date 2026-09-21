@@ -1,0 +1,89 @@
+@use '../abstracts/variables' as *;
+@use '../abstracts/mixins' as *;
+
+// Ссылка-услуга: тёмная плашка со стрелкой. Figma — radius 5, pad 10, gap 10
+.chip-link {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    min-height: 35px;
+    padding: 10px;
+    color: $c-white;
+    font-size: 14px;
+    font-weight: 500;
+    line-height: round(nearest, 1.1em, 1px);
+    background-color: $c-dark;
+    border-radius: $r-sm;
+    transition: opacity 0.2s ease;
+
+    &:hover {
+        opacity: 0.85;
+    }
+
+    svg {
+        flex: 0 0 auto;
+        width: 9px;
+        height: 9px;
+    }
+}
+
+// Список таких плашек: вертикальный поток с зазором 5px
+.chip-list {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 5px;
+}
+
+// Выбор соцсети в форме: pill 18px, бордер 1px
+.chip-toggle {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 35px;
+    padding: 10px 27px;
+    color: $c-muted-light;
+    font-size: 12px;
+    font-weight: 500;
+    line-height: 1.2;
+    background-color: rgba($c-white, 0.06);
+    border: 1px solid $c-muted;
+    border-radius: $r-pill;
+    opacity: 0.45;
+    transition: opacity 0.2s ease, background-color 0.2s ease, color 0.2s ease;
+
+    &:hover {
+        opacity: 0.75;
+    }
+
+    &.is-active {
+        color: $c-dark;
+        background-color: $c-page;
+        opacity: 1;
+    }
+}
+
+// Плашка города на карте: pad 8/10/8/37 (слева место под булавку)
+.chip-city {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    min-height: 31px;
+    padding: 8px 10px 8px 37px;
+    color: $c-dark;
+    font-size: 14px;
+    font-weight: 500;
+    line-height: round(nearest, 1.1em, 1px);
+    background-color: $c-surface;
+    border-radius: $r-sm;
+}
+
+.chip-city__pin {
+    position: absolute;
+    top: -10px;
+    left: 10px;
+    width: 13px;
+    height: 32px;
+    color: $c-dark;
+}

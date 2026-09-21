@@ -1,0 +1,283 @@
+@use '../abstracts/variables' as *;
+@use '../abstracts/mixins' as *;
+
+// 11. Блог — крупная карточка + 4 обычных, сетка 2 ряда.
+.blog {
+    margin-top: 100px; // 6481 − 6381
+
+    @include tablet {
+        margin-top: 80px;
+    }
+
+    @include mobile {
+        margin-top: 50px;
+    }
+}
+
+.blog__inner {
+    @include container;
+
+    display: flex;
+    flex-direction: column;
+    gap: 25px;
+}
+
+// Верхний ряд: 794 + 396; нижний: три по 393. Дают 1200 при зазоре 10.
+.blog__grid {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    gap: 10px;
+
+    @include tablet {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    @include mobile {
+        grid-template-columns: 1fr;
+    }
+}
+
+.post-card {
+    position: relative;
+    overflow: hidden;
+    border-radius: $r-sm;
+}
+
+.post-card--lead {
+    grid-column: span 4;
+    grid-row: 1;
+    min-height: 320px;
+}
+
+.post-card--tall {
+    grid-column: span 2;
+    grid-row: 1;
+}
+
+.post-card:not(.post-card--lead):not(.post-card--tall) {
+    grid-column: span 2;
+    min-height: 260px;
+}
+
+@include tablet {
+    .post-card--lead,
+    .post-card--tall,
+    .post-card:not(.post-card--lead):not(.post-card--tall) {
+        grid-column: span 1;
+        grid-row: auto;
+        min-height: 260px;
+    }
+}
+
+@include mobile {
+    .post-card--lead,
+    .post-card--tall,
+    .post-card:not(.post-card--lead):not(.post-card--tall) {
+        min-height: 0;
+    }
+}
+
+.post-card--dark {
+    @include gradient-dark(121deg);
+}
+
+.post-card--lead.post-card--dark {
+    @include gradient-dark(110deg);
+}
+
+.post-card--light {
+    background-color: $c-beige;
+}
+
+.post-card__decor {
+    position: absolute;
+    top: 78px;
+    left: 56%;
+    width: 361px;
+    pointer-events: none;
+}
+
+.post-card__link {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    height: 100%;
+    padding: 30px;
+
+    @include mobile {
+        padding: 20px;
+    }
+}
+
+.post-card__category {
+    padding-bottom: 15px;
+    font-size: 12px;
+    font-weight: 400;
+    line-height: round(nearest, 1.1em, 1px);
+    border-bottom: 1px solid $c-muted;
+}
+
+.post-card__main {
+    // В макете текст у обычных карточек сразу под рубрикой, дата — внизу;
+    // только у большой тёмной карточки весь блок прижат к низу.
+    display: flex;
+    flex: 1 1 auto;
+    flex-direction: column;
+    justify-content: space-between;
+    gap: 17px;
+}
+
+.post-card--lead .post-card__main {
+    justify-content: flex-end;
+    gap: 30px;
+}
+
+.post-card__text {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.post-card__title {
+    font-size: 20px;
+    font-weight: 400;
+    line-height: 0.9;
+}
+
+.post-card--lead .post-card__title {
+    font-size: 26px;
+}
+
+.post-card__excerpt,
+.post-card__date {
+    font-size: 14px;
+    font-weight: 400;
+    line-height: round(nearest, 1.1em, 1px);
+}
+
+.post-card--lead .post-card__excerpt {
+    max-width: 484px;
+}
+
+// Цвета текста по теме карточки
+.post-card--dark {
+    .post-card__category,
+    .post-card__excerpt,
+    .post-card__date {
+        color: $c-muted-light;
+    }
+
+    .post-card__title {
+        color: $c-cream;
+    }
+}
+
+.post-card--light {
+    .post-card__category,
+    .post-card__excerpt,
+    .post-card__date {
+        color: $c-muted;
+    }
+
+    .post-card__title {
+        color: $c-dark;
+    }
+}
+
+.blog__more {
+    background-color: #514840;
+}
+
+// Декор в макете есть у крупной тёмной карточки, а на мобилке — у обеих тёмных.
+.post-card--dark:not(.post-card--lead) .post-card__decor {
+    display: none;
+
+    @include mobile {
+        display: block;
+    }
+}
+
+// ---------------------------------------------------------------
+// Мобильный макет (375) — размеры из Figma.
+// ---------------------------------------------------------------
+@include mobile {
+    .blog__inner {
+        gap: 20px;
+    }
+
+    .blog .section-head {
+        gap: 15px;
+    }
+
+    .post-card__decor {
+        top: 78px;
+        left: 275px;
+        width: 361px;
+    }
+
+    .post-card__link {
+        gap: 30px;
+        padding: 20px;
+    }
+
+    .post-card__category {
+        font-size: 12px;
+        line-height: 13px;
+    }
+
+    .post-card__main,
+    .post-card--lead .post-card__main {
+        justify-content: flex-start;
+        gap: 15px;
+    }
+
+    .post-card__text {
+        gap: 5px;
+    }
+
+    .post-card__title,
+    .post-card--lead .post-card__title {
+        font-size: 18px;
+    }
+
+    .post-card__excerpt,
+    .post-card__date {
+        font-size: 12px;
+        line-height: 13px;
+    }
+}
+
+// ---------------------------------------------------------------
+// Планшетный макет (640): крупная карточка во всю ширину 580×342,
+// ниже сетка 2×2 из карточек 285×342, зазоры 15px.
+// ---------------------------------------------------------------
+@media (min-width: #{$bp-mobile + 1}) and (max-width: $bp-tablet) {
+    .blog__inner {
+        gap: 30px;
+    }
+
+    .blog .section-head {
+        gap: 15px;
+    }
+
+    .blog__grid {
+        gap: 15px 10px;
+    }
+
+    .post-card--lead,
+    .post-card--tall,
+    .post-card:not(.post-card--lead):not(.post-card--tall) {
+        min-height: 342px;
+    }
+
+    .post-card--lead {
+        grid-column: 1 / -1;
+    }
+
+    .post-card__decor {
+        top: 78px;
+        left: 275px;
+    }
+}

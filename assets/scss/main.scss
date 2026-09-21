@@ -1,0 +1,38 @@
+// =============================================================
+// M-PARTNERS — главная страница
+// Вёрстка по макету Figma «(р) M-partners»: 1920 / 640 / 375.
+//
+// Порядок импортов важен: сначала база, затем переиспользуемые
+// компоненты, и только потом секции — так секции могут
+// переопределять компоненты без повышения специфичности.
+// =============================================================
+
+@use 'base/fonts';
+@use 'base/reset';
+@use 'base/typography';
+
+@use 'components/button';
+@use 'components/note';
+@use 'components/chip';
+@use 'components/dots';
+@use 'components/header';
+@use 'components/nav-drop';
+@use 'components/reveal';
+
+@use 'sections/hero';
+@use 'sections/advantages';
+@use 'sections/help';
+@use 'sections/industries';
+@use 'sections/quiz';
+@use 'sections/experience';
+@use 'sections/awards';
+@use 'sections/practice';
+@use 'sections/reviews';
+@use 'sections/blog';
+@use 'sections/contact';
+@use 'sections/team';
+@use 'sections/geography';
+@use 'sections/footer';
+
+@use 'layout';
+@use 'headings';

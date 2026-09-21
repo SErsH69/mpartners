@@ -1,0 +1,70 @@
+{
+    "extends": "stylelint-config-standard-scss",
+    "plugins": ["stylelint-scss", "stylelint-use-logical-spec"],
+    "ignoreFiles": ["node_modules/**/*"],
+    "rules": {
+        "selector-class-pattern": "^[a-z0-9\\-]+(?:__[a-z0-9\\-]+)?(?:--[a-z0-9\\-]+)?$",
+        "selector-pseudo-element-colon-notation": "single",
+        "scss/load-no-partial-leading-underscore": true,
+        "scss/dollar-variable-colon-space-after": "always",
+        "scss/dollar-variable-colon-space-before": "never",
+        "scss/declaration-nested-properties": "never",
+        "scss/operator-no-unspaced": true,
+        "scss/selector-no-redundant-nesting-selector": true,
+        "scss/dollar-variable-pattern": "^[a-z]+(-[a-z]+)*$",
+        "scss/no-duplicate-dollar-variables": true,
+        "scss/no-global-function-names": true,
+        "selector-max-id": 0,
+        "max-nesting-depth": 5,
+        "no-duplicate-selectors": true,
+        "color-no-hex": true,
+        "color-hex-length": "short",
+        "color-named": "never",
+        "property-no-unknown": true,
+        "custom-property-pattern": null,
+        "value-no-vendor-prefix": true,
+        "property-no-vendor-prefix": true,
+        "selector-no-vendor-prefix": true,
+        "at-rule-no-vendor-prefix": true,
+        "selector-max-type": [
+            0,
+            {
+                "ignore": ["compounded"]
+            }
+        ],
+        "unit-disallowed-list": [
+            [
+                "px",
+                "em",
+                "rem",
+                "vmin",
+                "vmax",
+                "cm",
+                "mm",
+                "Q",
+                "in",
+                "pt",
+                "pc",
+                "ex",
+                "lz",
+                "dpcm",
+                "dppx"
+            ],
+            {
+                "ignoreProperties": {
+                    "px": [
+                        "/^border/",
+                        "box-shadow",
+                        "backdrop-filter",
+                        "background-size",
+                        "transform",
+                        "background-position",
+                        "filter"
+                    ],
+                    "em": ["letter-spacing"],
+                    "rem": ["letter-spacing"]
+                }
+            }
+        ]
+    }
+}

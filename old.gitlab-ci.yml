@@ -1,0 +1,174 @@
+default:
+  image: node:18.20.3
+  tags:
+    - landings
+    - build
+
+stages:
+  - lint
+  - test
+  - code_quality
+  - build
+
+.default_scripts: &default_scripts
+  - yarn install --immutable --silent
+
+cache:
+  key: "${CI_PROJECT_PATH_SLUG}-node-modules"
+  paths:
+    - node_modules/
+  policy: pull-push
+
+php-syntax-job:
+  # using same image and cache for codeqiality jobs
+  image: composer:2.5
+  stage: lint
+  interruptible: true
+  variables:
+    COMPOSER_CACHE_DIR: "/cache/composer"
+  cache:
+    key: "${CI_PROJECT_PATH_SLUG}-composer-lint"
+    paths:
+      - vendor/
+      - /cache/composer/
+    policy: pull-push
+  before_script:
+    - composer install --prefer-dist --no-interaction --no-progress --optimize-autoloader
+  script:
+    - echo "PHP syntax check started for updated files."
+    - chmod +x ./scripts/php-changed.sh
+    - bash ./scripts/php-changed.sh
+    - echo "PHP syntax check completed."
+
+lint-job:
+  stage: lint
+  interruptible: true
+  script:
+    - *default_scripts
+    - echo "JS Linting process started."
+    - yarn lint
+    - echo "JS Linting process completed."
+
+lint-css-job:
+  stage: lint
+  interruptible: true
+  script:
+    - *default_scripts
+    - echo "CSS Linting process started."
+    - chmod +x ./scripts/lint-changed-scss.sh
+    - yarn lint:css
+    - echo "CSS Linting process completed."
+
+phpcs-quality-job:
+  image: composer:2.5
+  stage: code_quality
+  interruptible: true
+  variables:
+    COMPOSER_CACHE_DIR: "/cache/composer"
+  cache:
+    key: "${CI_PROJECT_PATH_SLUG}-composer-lint"
+    paths:
+      - vendor/
+      - /cache/composer/
+    policy: pull-push
+  script:
+    - echo "Running full PHPCS scan for code quality report."
+    - vendor/bin/phpcs --report=full --extensions=php --report-\\Micheh\\PhpCodeSniffer\\Report\\Gitlab=phpcs-quality-report.json  ./theme || true
+    - echo "Full PHPCS scan completed."
+  artifacts:
+    reports:
+      codequality: phpcs-quality-report.json
+  allow_failure: true
+
+# phpmd-quality-job:
+#   image: composer:2.5
+#   stage: code_quality
+#   interruptible: true
+#   variables:
+#     COMPOSER_CACHE_DIR: "/cache/composer"
+#   cache:
+#     key: "${CI_PROJECT_PATH_SLUG}-composer-lint"
+#     paths:
+#       - vendor/
+#       - /cache/composer/
+#     policy: pull-push
+#   before_script:
+#     - composer install --prefer-dist --no-interaction --no-progress --optimize-autoloader
+#   script:
+#     - echo "Running PHPMD for code quality report."
+#     - vendor/bin/phpmd ./theme gitlab codesize,unusedcode,naming,design,controversial,cleancode --exclude theme/dist,theme/vendor,vendor > phpmd-quality-report.json || true
+#     - echo "PHPMD scan completed."
+#   artifacts:
+#     reports:
+#       codequality: phpmd-quality-report.json
+#   allow_failure: true
+
+# phpstan-quality-job:
+#   image: composer:2.5
+#   stage: code_quality
+#   interruptible: true
+#   variables:
+#     COMPOSER_CACHE_DIR: "/cache/composer"
+#   cache:
+#     key: "${CI_PROJECT_PATH_SLUG}-composer-lint"
+#     paths:
+#       - vendor/
+#       - /cache/composer/
+#     policy: pull-push
+#   script:
+#     - echo "Running full PHPStan scan for code quality report."
+#     - php vendor/bin/phpstan analyse --error-format=json > phpstan-quality-report.json || true
+#     - echo "Full PHPStan scan completed."
+#   artifacts:
+#     reports:
+#       codequality: phpstan-quality-report.json
+#   allow_failure: true
+
+phpunit-test-job:
+  image: composer:2.5
+  stage: test
+  interruptible: true
+  variables:
+    COMPOSER_CACHE_DIR: "/cache/composer"
+  cache:
+    key: "${CI_PROJECT_PATH_SLUG}-composer-tests"
+    paths:
+      - vendor/
+      - /cache/composer/
+    policy: pull-push
+  before_script:
+    - composer install --prefer-dist --no-interaction --no-progress --optimize-autoloader
+  script:
+    - echo "Running PHPUnit tests."
+    - vendor/bin/phpunit --configuration phpunit.xml --log-junit junit-report.xml
+    - echo "PHPUnit tests completed."
+  artifacts:
+    reports:
+      junit: junit-report.xml
+    paths:
+      - junit-report.xml
+  allow_failure: false
+
+build-job:
+  stage: build
+  interruptible: true
+  needs:
+    - php-syntax-job
+    - lint-job
+    - lint-css-job
+    - phpunit-test-job
+    - phpcs-quality-job
+      # - phpstan-quality-job
+      # - phpmd-quality-job
+  script:
+    - *default_scripts
+    - echo "Compiling the code..."
+    - yarn cp
+    - echo "Compile complete."
+  artifacts:
+    untracked: false
+    when: on_success
+    expire_in: "30 days"
+    paths:
+      - "webula/"
+    name: ${CI_PROJECT_NAME}

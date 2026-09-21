@@ -1,0 +1,56 @@
+@use '../abstracts/variables' as *;
+@use '../abstracts/mixins' as *;
+
+// Заголовок секции: AA Stetica 40/36 (десктоп и планшет), 30/27 (мобилка).
+//
+// `--h-lines` резервирует высоту заголовка по макету. Это нужно, потому что
+// запасной Inter Tight уже AA Stetica: без резерва заголовок занимает меньше
+// строк и вся секция уезжает вверх относительно Figma. Когда лицензионный
+// AA Stetica будет подключён, реальная высота совпадёт с резервом.
+.h-section {
+    color: $c-dark;
+    font-family: $font-display;
+    font-size: 40px;
+    font-weight: 400;
+    line-height: 0.9;
+    letter-spacing: 0;
+    min-height: calc(var(--h-lines, 1) * 36px);
+
+    @include mobile {
+        font-size: 30px;
+        min-height: calc(var(--h-lines, 1) * 27px);
+    }
+}
+
+// Главный заголовок: AA Stetica 60/54, на мобилке 35/31.5.
+.h-hero {
+    color: $c-dark;
+    font-family: $font-display;
+    font-size: 60px;
+    font-weight: 400;
+    line-height: 0.9;
+    min-height: calc(var(--h-lines, 1) * 54px);
+
+    @include mobile {
+        // Figma ставит строки 35/31.5 с шагом 31px (4 строки = 124px)
+        font-size: 35px;
+        line-height: 31px;
+        min-height: calc(var(--h-lines, 1) * 31px);
+    }
+}
+
+.h-section--light,
+.h-hero--light {
+    color: $c-cream;
+}
+
+.text-note {
+    color: $c-muted;
+    font-size: 14px;
+    font-weight: 400;
+    line-height: round(nearest, 1.1em, 1px);
+}
+
+.text-note--light {
+    color: $c-muted-light;
+}

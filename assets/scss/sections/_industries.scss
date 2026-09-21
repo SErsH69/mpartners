@@ -1,0 +1,152 @@
+@use '../abstracts/variables' as *;
+@use '../abstracts/mixins' as *;
+
+// 05. Специализация — тёмная полоса во всю ширину с лентой карточек 183×226.
+.industries {
+    @include gradient-dark(103deg);
+
+    margin-top: 100px; // 2451 − 2351
+    padding: 60px 0;
+    overflow: hidden;
+
+    @include tablet {
+        margin-top: 80px;
+        padding: 40px 0;
+    }
+
+    @include mobile {
+        margin-top: 50px;
+        padding: 30px 0;
+        border-radius: $r-sm;
+    }
+}
+
+.industries__head {
+    @include container;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    // В макете заголовок 607 и плашка 593 занимают контейнер без зазора.
+    gap: 0;
+    margin-bottom: 25px;
+
+    @include tablet {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 15px;
+        margin-bottom: 40px;
+    }
+}
+
+
+
+.industries__note {
+    flex: 0 0 auto;
+    align-self: stretch;
+    width: 593px;
+
+    @include tablet {
+        width: 100%;
+    }
+}
+
+// Лента прокручивается по горизонтали и выходит за контейнер, как в макете.
+.industries__track {
+    @include hide-scrollbar;
+
+    display: flex;
+    gap: 10px;
+    overflow-x: auto;
+    cursor: grab;
+
+    &.is-dragging {
+        cursor: grabbing;
+        user-select: none;
+    }
+
+    @include tablet {
+        padding-inline: $gutter-tablet;
+    }
+
+    @include mobile {
+        padding-inline: $gutter-mobile;
+    }
+}
+
+.industry-card {
+    display: flex;
+    flex: 0 0 auto;
+    flex-direction: column;
+    gap: 13px;
+    width: 183px;
+    padding: 15px;
+    background-color: rgba($c-white, 0.06);
+    border-radius: $r-lg;
+}
+
+.industry-card__image {
+    width: 100%;
+    height: 141px;
+    object-fit: contain;
+}
+
+.industry-card__title {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    min-height: 42px;
+    color: $c-cream;
+    font-size: 14px;
+    font-weight: 400;
+    line-height: 1;
+}
+
+.industry-card__marker {
+    flex: 0 0 auto;
+    width: 12px;
+    height: 14px;
+    color: $c-page;
+}
+
+// ---------------------------------------------------------------
+// Мобильный макет (375): заголовок 3 строки, плашка 12/13.2,
+// карточки 131×167 с картинкой 100×92, лента выровнена по центру.
+// ---------------------------------------------------------------
+@include mobile {
+    .industries__head {
+        gap: 15px;
+        margin-bottom: 30px;
+    }
+
+    .industries__note .note__text {
+        font-size: 12px;
+        line-height: round(nearest, 1.1em, 1px);
+    }
+
+    .industry-card {
+        align-items: center;
+        gap: 13px;
+        width: 131px;
+        padding: 10px;
+    }
+
+    .industry-card__image {
+        width: 100px;
+        height: 92px;
+        object-fit: fill;
+    }
+
+    .industry-card__title {
+        align-self: stretch;
+        gap: 5px;
+        min-height: 42px;
+        font-size: 12px;
+        line-height: 1;
+    }
+
+    .industry-card__marker {
+        width: 8px;
+        height: 10px;
+    }
+}

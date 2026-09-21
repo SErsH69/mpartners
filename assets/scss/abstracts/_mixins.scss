@@ -1,0 +1,83 @@
+@use 'variables' as *;
+
+// Медиазапросы: макеты 1920 → 640 → 375
+@mixin upto($bp) {
+    @media (max-width: $bp) {
+        @content;
+    }
+}
+
+@mixin tablet {
+    @media (max-width: $bp-tablet) {
+        @content;
+    }
+}
+
+@mixin mobile {
+    @media (max-width: $bp-mobile) {
+        @content;
+    }
+}
+
+@mixin small {
+    @media (max-width: $bp-small) {
+        @content;
+    }
+}
+
+// Контейнер как в макете: 1200 контента на 1920 (x = 360…1560),
+// 580 на планшете (640) и 335 на мобилке (375).
+// Ширина задаётся без паддингов — иначе контент ужимается на их величину.
+@mixin container {
+    width: min(100% - #{$gutter-desktop * 2}, #{$container});
+    margin-inline: auto;
+
+    @include tablet {
+        width: min(100% - #{$gutter-tablet * 2}, #{$container});
+    }
+
+    @include mobile {
+        width: min(100% - #{$gutter-mobile * 2}, #{$container});
+    }
+}
+
+// Тёмный градиент карточек/секций.
+// $angle подбирается под пропорции элемента (Figma: -0.035,0.047 → 0.895,0.904).
+@mixin gradient-dark($angle: 137deg) {
+    background-image: linear-gradient($angle, $grad-dark-from 0%, $grad-dark-to 100%);
+}
+
+// Светлая «панель»: еле заметное затемнение слева, растворяется вправо.
+// Figma: заливка с opacity 0.1, стопы #ddceb9 (alpha 0) → #3c352e,
+// ручки (1.4954, 0.5) → (0, 0.5). Прозрачность заливки — ключевая:
+// без неё панель получается почти чёрной вместо светло-бежевой.
+@mixin gradient-panel {
+    background-image: linear-gradient(to right, rgba($grad-panel-from, 0.1) 0%, $grad-panel-to 149.54%);
+}
+
+// Радиальное «свечение» декоративных фигур внутри тёмных карточек.
+@mixin gradient-glow {
+    background-image: radial-gradient(circle, $grad-glow-from 0%, $grad-glow-to 88%);
+}
+
+@mixin visually-hidden {
+    position: absolute;
+    overflow: hidden;
+    width: 1px;
+    height: 1px;
+    margin: -1px;
+    padding: 0;
+    border: 0;
+    clip-path: inset(50%);
+    white-space: nowrap;
+}
+
+// Скрыть скроллбар у горизонтальных лент
+@mixin hide-scrollbar {
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+
+    &::-webkit-scrollbar {
+        display: none;
+    }
+}

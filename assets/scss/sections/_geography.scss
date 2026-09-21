@@ -1,0 +1,158 @@
+@use '../abstracts/variables' as *;
+@use '../abstracts/mixins' as *;
+
+// 14. География — текст и облако городов слева, карта России справа.
+// В макете карта перекрывает текстовую колонку, поэтому она позиционируется
+// абсолютно: x = 719 от начала секции (361 от левого края контейнера), y = 43.
+.geography {
+    margin-top: 100px;
+
+    @include tablet {
+        margin-top: 80px;
+    }
+
+    @include mobile {
+        margin-top: 50px;
+    }
+}
+
+.geography__inner {
+    @include container;
+
+    position: relative;
+
+    @include tablet {
+        display: flex;
+        flex-direction: column;
+        gap: 30px;
+    }
+}
+
+.geography__content {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    width: 650px;
+
+    @include tablet {
+        width: 100%;
+    }
+}
+
+.geography__note {
+    color: $c-muted;
+    font-size: 14px;
+    font-weight: 400;
+    line-height: round(nearest, 1.1em, 1px);
+}
+
+// Ряды городов: шаг 51px (плашка 31 + зазор 20), между плашками 5px.
+// Верхний отступ 10px — место под «хвост» булавки первой строки.
+.geography__cities {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px 5px;
+    width: 512px;
+    margin-top: 15px;
+    padding-top: 10px;
+
+    @include tablet {
+        width: 100%;
+    }
+}
+
+.geography__map {
+    position: absolute;
+    top: 43px;
+    left: 361px;
+    width: 978px;
+    max-width: none;
+    height: auto;
+
+    @include tablet {
+        position: static;
+        width: 100%;
+    }
+}
+
+// Порядок городов в планшетном и мобильном макетах свой.
+@include tablet {
+    .geography__content {
+        gap: 10px;
+    }
+
+    .geography__cities {
+        margin-top: 15px;
+
+        .chip-city {
+            order: var(--t-order, 0);
+        }
+    }
+}
+
+// ---------------------------------------------------------------
+// Мобильный макет (375): по три города в строке, шаг строк 44px.
+// ---------------------------------------------------------------
+@include mobile {
+    .geography__inner {
+        gap: 19px;
+    }
+
+    .geography__content {
+        gap: 5px;
+    }
+
+    .geography__note {
+        font-size: 12px;
+        font-weight: 500;
+        line-height: 13px;
+    }
+
+    .geography__cities {
+        gap: 15px 4px;
+        margin-top: 14px; // 19px до строки с булавками (5px даёт gap колонки)
+        padding-top: 10px;
+
+        .chip-city {
+            order: var(--m-order, 0);
+            min-height: 29px;
+            padding-block: 8px;
+            font-size: 12px;
+        }
+    }
+
+    .geography__map {
+        width: 335px;
+    }
+}
+
+// Принудительный перенос строки городов (только десктоп). Разрыв — пустая строка
+// нулевой высоты, поэтому вертикальный шаг задаём отступом у плашек, а не row-gap.
+.geography__break {
+    flex-basis: 100%;
+    height: 0;
+
+    @include tablet {
+        display: none;
+    }
+}
+
+@media (min-width: #{$bp-tablet + 1}) {
+    .geography__cities {
+        row-gap: 0;
+        margin-bottom: -20px;
+
+        .chip-city {
+            margin-bottom: 20px;
+        }
+    }
+}
+
+// Планшет (640): карта 616×318 на x=4, заходит на 26px под список городов.
+@media (min-width: #{$bp-mobile + 1}) and (max-width: $bp-tablet) {
+    .geography__map {
+        width: 616px;
+        max-width: none;
+        margin: -56px 0 0 -26px;
+    }
+}

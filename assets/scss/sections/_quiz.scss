@@ -1,0 +1,481 @@
+@use '../abstracts/variables' as *;
+@use '../abstracts/mixins' as *;
+
+// 06. Квиз — бежевая панель 1200×556 с формой слева и карточкой эксперта справа.
+.quiz {
+    margin-top: 100px; // 3008 − 2908
+
+    @include tablet {
+        margin-top: 80px;
+    }
+
+    @include mobile {
+        margin-top: 50px;
+    }
+}
+
+.quiz__inner {
+    position: relative;
+    display: flex;
+    gap: 15px;
+    padding: 30px;
+    overflow: hidden;
+    background-color: $c-beige;
+    border-radius: $r-lg;
+
+    @include tablet {
+        flex-direction: column;
+        gap: 20px; // в планшетном макете между формой и карточкой эксперта 20px
+        padding: 30px;
+    }
+
+    @include mobile {
+        gap: 30px;
+        padding: 20px;
+        border-radius: $r-sm;
+    }
+}
+
+// Крупный полупрозрачный знак на подложке.
+.quiz__decor {
+    position: absolute;
+    top: 0;
+    left: -157px;
+    width: 686px;
+    opacity: 0.12;
+    pointer-events: none;
+}
+
+.quiz__form {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    flex: 1 1 auto;
+    flex-direction: column;
+    min-width: 0;
+    padding-block: 19px; // форма 458 по центру колонки 496
+
+    @include tablet {
+        padding-block: 0;
+    }
+}
+
+.quiz__intro {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    max-width: 515px;
+}
+
+.quiz__subtitle {
+    color: $c-muted;
+    font-size: 14px;
+    font-weight: 400;
+    line-height: round(nearest, 1.1em, 1px);
+}
+
+// Шкала из четырёх отрезков по 62px.
+.quiz__progress {
+    display: flex;
+    gap: 5px;
+    margin-top: 40px;
+}
+
+.quiz__progress-item {
+    width: 62px;
+    height: 3px;
+    background-color: $c-muted;
+    opacity: 0.5;
+    transition: background-color 0.25s ease, opacity 0.25s ease;
+
+    &.is-active {
+        background-color: $c-dark;
+        opacity: 1;
+    }
+
+    @include mobile {
+        flex: 1 1 0;
+        width: auto;
+    }
+}
+
+.quiz__steps {
+    // Отступы в макете считаются от линий прогресса нулевой высоты, а у нас они 3px.
+    margin-top: 17px;
+
+    @include tablet {
+        margin-top: 32px;
+    }
+}
+
+.quiz__step {
+    display: none;
+    min-width: 0;
+    margin: 0;
+    padding: 0;
+    border: 0;
+
+    &.is-active {
+        display: block;
+    }
+}
+
+.quiz__question {
+    display: flex;
+    float: left; // legend внутри fieldset иначе живёт по своим правилам раскладки
+    align-items: center;
+    margin-bottom: 10px;
+    gap: 12px;
+    width: 100%;
+    padding: 13px 15px;
+    color: $c-dark;
+    font-size: 18px;
+    font-weight: 500;
+    line-height: round(nearest, 1.1em, 1px);
+    background-color: $c-beige-deep;
+    border-radius: $r-sm;
+
+    @include mobile {
+        font-size: 15px;
+    }
+}
+
+.quiz__question-icon {
+    flex: 0 0 auto;
+    width: 17px;
+    height: 17px;
+    color: $c-dark;
+
+    svg {
+        width: 100%;
+        height: 100%;
+    }
+}
+
+.quiz__answers {
+    // В макете ответы заполняют колонки сверху вниз.
+    clear: both;
+    display: grid;
+    grid-auto-flow: column;
+    grid-template-rows: repeat(2, auto);
+    grid-template-columns: repeat(2, 1fr);
+    gap: 9px 10px;
+
+    @include mobile {
+        grid-auto-flow: row;
+        grid-template-rows: none;
+        grid-template-columns: 1fr;
+
+        .quiz__answer:nth-child(3) {
+            margin-top: 1px; // между парами 10px, внутри пары 9px
+        }
+    }
+}
+
+.quiz__answer {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    min-height: 41px;
+    padding: 13px 15px;
+    color: $c-dark;
+    font-size: 14px;
+    font-weight: 400;
+    line-height: round(nearest, 1.1em, 1px);
+    background-color: $c-beige-deep;
+    border-radius: $r-sm;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+
+    input {
+        @include visually-hidden;
+    }
+
+    &:hover,
+    &:has(input:checked) {
+        background-color: $c-surface;
+    }
+
+    &:has(input:focus-visible) {
+        outline: 2px solid $c-dark;
+        outline-offset: 2px;
+    }
+}
+
+.quiz__answer-marker {
+    flex: 0 0 auto;
+    width: 12px;
+    height: 14px;
+    color: $c-dark;
+}
+
+.quiz__nav {
+    display: flex;
+    justify-content: flex-end;
+    gap: 5px;
+    margin-top: auto;
+    padding-top: 30px;
+}
+
+.quiz__nav-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 37px;
+    height: 37px;
+    color: $c-dark;
+    background-color: $c-beige-deep;
+    border-radius: $r-sm;
+    transition: background-color 0.2s ease;
+
+    svg {
+        width: 8px;
+        height: 14px;
+    }
+
+    &:hover {
+        background-color: $c-surface;
+    }
+
+    &[hidden] {
+        display: none;
+    }
+}
+
+// --- Карточка эксперта --------------------------------------
+.quiz__expert {
+    @include gradient-dark(139deg);
+
+    position: relative;
+    z-index: 1;
+    display: flex;
+    flex: 0 0 auto;
+    flex-direction: column;
+    justify-content: space-between;
+    gap: 40px;
+    width: 395px;
+    min-height: 496px;
+    padding: 30px;
+    overflow: hidden;
+    border-radius: $r-lg;
+
+    @include tablet {
+        width: 100%;
+    }
+
+    @include mobile {
+        min-height: 0;
+        padding: 15px;
+    }
+}
+
+.quiz__expert-decor {
+    position: absolute;
+    right: -38px;
+    bottom: -23px;
+    width: 287px;
+    pointer-events: none;
+}
+
+.quiz__expert-top,
+.quiz__expert-bottom {
+    position: relative;
+    z-index: 1;
+}
+
+.quiz__expert-person {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.quiz__expert-avatar {
+    position: relative;
+    flex: 0 0 auto;
+    width: 50px;
+    height: 50px;
+
+    img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        border-radius: 50%;
+    }
+}
+
+.quiz__expert-status {
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    width: 13px;
+    height: 13px;
+    background-color: $c-green;
+    border-radius: 50%;
+}
+
+.quiz__expert-id {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    min-width: 0;
+}
+
+.quiz__expert-name {
+    color: $c-cream;
+    font-size: 16px;
+    font-weight: 500;
+    line-height: round(nearest, 1.1em, 1px);
+}
+
+.quiz__expert-role {
+    color: $c-muted-light;
+    font-size: 12px;
+    font-weight: 400;
+    line-height: round(nearest, 1.1em, 1px);
+}
+
+.quiz__expert-quote {
+    margin-top: 0;
+    padding: 31px 15px;
+    color: $c-cream;
+    font-size: 14px;
+    font-weight: 500;
+    line-height: round(nearest, 1.1em, 1px);
+    background-color: rgba($c-white, 0.06);
+
+    @include mobile {
+        padding: 20px 15px;
+    }
+}
+
+.quiz__expert-bottom {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.quiz__expert-note {
+    max-width: 238px;
+    color: $c-muted-light;
+    font-size: 12px;
+    font-weight: 400;
+    line-height: round(nearest, 1.1em, 1px);
+}
+
+.btn-icon--ghost {
+    color: $c-page;
+    background-color: rgba($c-white, 0.06);
+
+    --icon-knockout: #342f2f;
+}
+
+// ---------------------------------------------------------------
+// Мобильный макет (375) — размеры из Figma.
+// ---------------------------------------------------------------
+@include mobile {
+    .quiz__inner {
+        padding: 20px;
+    }
+
+    .quiz__decor {
+        top: 252px;
+        left: -103px;
+        width: 474px;
+    }
+
+    .quiz__intro {
+        gap: 5px;
+    }
+
+    .quiz__subtitle {
+        font-size: 12px;
+    }
+
+    .quiz__progress {
+        margin-top: 20px;
+    }
+
+    .quiz__progress-item {
+        flex: 0 0 70px;
+        width: 70px;
+    }
+
+    .quiz__steps {
+        margin-top: 17px; // 20 от линий прогресса (сами линии 3px)
+    }
+
+    .quiz__question {
+        gap: 12px;
+        padding: 10px;
+        font-size: 14px;
+    }
+
+    .quiz__question-icon {
+        width: 15px;
+        height: 15px;
+    }
+
+    .quiz__answer {
+        min-height: 40px;
+        font-size: 12px;
+    }
+
+    .quiz__nav {
+        padding-top: 10px;
+    }
+
+    .quiz__expert {
+        gap: 30px;
+        min-height: 328px;
+        padding: 15px;
+    }
+
+    .quiz__expert-avatar {
+        width: 37px;
+        height: 37px;
+    }
+
+    .quiz__expert-person {
+        align-items: flex-start;
+        height: 56px;
+    }
+
+    .quiz__expert-name {
+        font-size: 14px;
+    }
+
+    .quiz__expert-quote {
+        min-height: 119px;
+        padding: 29px 12px 11px;
+        font-size: 12px;
+    }
+
+    .quiz__expert-note {
+        max-width: none;
+    }
+}
+
+// ---------------------------------------------------------------
+// Планшетный макет (640): форма 520×355, под ней карточка эксперта 520×309.
+// ---------------------------------------------------------------
+@media (min-width: #{$bp-mobile + 1}) and (max-width: $bp-tablet) {
+    .quiz__nav {
+        padding-top: 35px;
+    }
+
+    .quiz__expert {
+        justify-content: flex-start;
+        gap: 25px;
+        min-height: 309px;
+    }
+
+    .quiz__expert-quote {
+        min-height: 94px;
+        padding: 17px 20.6px;
+        line-height: 14px;
+    }
+
+    .quiz__expert-bottom .quiz__expert-note {
+        max-width: none;
+    }
+}

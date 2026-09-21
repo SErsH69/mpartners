@@ -1,0 +1,66 @@
+*~
+.DS_Store
+.svn
+.cvs
+*.bak
+*.swp
+Thumbs.db
+mysql.sql
+
+# wpengine specific
+.smushit-status
+.gitattributes
+_wpeprivate*
+
+# large/disallowed file types
+# a CDN should be used for these
+*.hqx
+*.bin
+*.exe
+*.dll
+*.deb
+*.dmg
+*.iso
+*.img
+*.msi
+*.msp
+*.msm
+*.mid
+*.midi
+*.kar
+*.mp3
+*.ogg
+*.m4a
+*.ra
+*.3gpp
+*.3gp
+*.mp4
+*.mpeg
+*.mpg
+*.mov
+*.webm
+*.flv
+*.m4v
+*.mng
+*.asx
+*.asf
+*.wmv
+*.avi
+
+.vscode
+.env
+node_modules/
+theme/dist
+uploads
+upgrade
+webula
+webula.zip
+/vendor
+.yarn/install-state.gz
+.phpunit.cache/test-results
+
+# Лицензионные файлы — не публикуем в открытом репозитории.
+# Шрифт AA Stetica кладётся вручную в assets/fonts/ (см. README),
+# ACF Pro — в vendor-plugins/.
+assets/fonts/AAStetica-*
+vendor-plugins/advanced-custom-fields-pro.zip
