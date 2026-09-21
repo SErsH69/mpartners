@@ -105,9 +105,17 @@ Pages отдаёт только статику, поэтому главная в
 yarn static   # сборка + php scripts/export-static.php → build-static/
 ```
 
-Содержимое `build-static/` лежит в ветке `gh-pages`. Лицензионный шрифт в
-выгрузку по умолчанию не попадает; `php scripts/export-static.php --with-font`
-добавит его.
+GitHub Pages публикуется из ветки `main` (корень), поэтому готовая выгрузка
+лежит в корне репозитория: `index.html`, `dist/`, `.nojekyll`. Чтобы обновить
+сайт после правок:
+
+```bash
+yarn prod && php scripts/export-static.php --with-font
+rm -rf dist index.html && cp -R build-static/dist build-static/index.html build-static/.nojekyll .
+git add -A && git commit -m "Обновить выгрузку для Pages" && git push
+```
+
+Без `--with-font` лицензионный шрифт в выгрузку не попадает.
 
 ## Контент
 
