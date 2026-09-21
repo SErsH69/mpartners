@@ -44,7 +44,11 @@ function mp_latest( $pattern ) {
 	usort( $files, fn( $a, $b ) => filemtime( $b ) <=> filemtime( $a ) );
 	return $files ? basename( $files[0] ) : '';
 }
-function wp_head() { echo '<link rel="stylesheet" href="./dist/' . mp_latest( 'main.*.css' ) . '">'; }
+function wp_head() {
+	// В WordPress <title> выводит сам движок (title-tag), в статике — ставим вручную.
+	echo '<title>M-PARTNERS — уголовная защита для бизнеса</title>';
+	echo '<link rel="stylesheet" href="./dist/' . mp_latest( 'main.*.css' ) . '">';
+}
 function wp_footer() { echo '<script src="./dist/' . mp_latest( 'main.*.js' ) . '"></script>'; }
 
 require_once MP_THEME . '/inc/icons.php';
