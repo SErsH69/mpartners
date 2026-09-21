@@ -354,7 +354,7 @@ function mp_home_data() {
 				'channel' => 'Укажите соцсеть',
 				'contact' => '@ник или ссылка на профиль',
 			],
-			'channels' => [ 'Telegram', 'Instagram', 'ВКонтакте', 'WhatsApp' ],
+			'channels' => [ 'Telegram', 'MAX', 'ВКонтакте', 'WhatsApp' ],
 			'submit'   => 'Получить консультацию адвоката',
 			'consent'  => 'Я согласен(-на) с политикой конфиденциальности',
 		],

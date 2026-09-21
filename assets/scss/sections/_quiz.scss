@@ -435,9 +435,11 @@
         height: 37px;
     }
 
+    // Должность переносится в 2–3 строки — блок растёт, а не наезжает на цитату.
     .quiz__expert-person {
         align-items: flex-start;
-        height: 56px;
+        min-height: 56px;
+        margin-bottom: 12px;
     }
 
     .quiz__expert-name {
