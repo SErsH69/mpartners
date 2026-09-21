@@ -17,7 +17,8 @@
         "lint:quality": "eslint . --format json --output-file eslint-report.json",
         "lint:cssquality": "stylelint '**/*.scss' --formatter json --output-file stylelint-report.json",
         "prepare": "husky install",
-        "clean:dist": "rimraf theme/dist"
+        "clean:dist": "rimraf theme/dist",
+        "static": "yarn prod && php scripts/export-static.php"
     },
     "keywords": [
         "wordpress",

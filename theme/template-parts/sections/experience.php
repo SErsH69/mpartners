@@ -62,7 +62,8 @@ $mp_exp = mp_data( 'experience' );
 			<ul class="experience__partners" data-marquee>
 				<?php foreach ( array_merge( $mp_exp['partners'], $mp_exp['partners'] ) as $mp_i => $mp_partner ) : ?>
 					<li class="partner-logo"<?php echo $mp_i >= count( $mp_exp['partners'] ) ? ' aria-hidden="true"' : ''; ?>>
-						<span class="partner-logo__mark" style="--logo: url('<?php echo esc_url( mp_img( $mp_partner ) ); ?>')"></span>
+						<?php // url() в инлайн-стиле считается от страницы, а не от CSS-файла — так путь работает и в статике. ?>
+						<span class="partner-logo__mark" style="-webkit-mask-image: url('<?php echo esc_url( mp_img( $mp_partner ) ); ?>'); mask-image: url('<?php echo esc_url( mp_img( $mp_partner ) ); ?>')"></span>
 					</li>
 				<?php endforeach; ?>
 			</ul>

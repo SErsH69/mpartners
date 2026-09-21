@@ -97,6 +97,18 @@ theme/
   Первый экран и «Преимущества» анимируются при загрузке, остальное — при
   прокрутке. Учитывается `prefers-reduced-motion`.
 
+## Просмотр на GitHub Pages
+
+Pages отдаёт только статику, поэтому главная выгружается в готовый HTML:
+
+```bash
+yarn static   # сборка + php scripts/export-static.php → build-static/
+```
+
+Содержимое `build-static/` лежит в ветке `gh-pages`. Лицензионный шрифт в
+выгрузку по умолчанию не попадает; `php scripts/export-static.php --with-font`
+добавит его.
+
 ## Контент
 
 Весь текст главной лежит в одном месте — `theme/inc/home-data.php`. Секции
