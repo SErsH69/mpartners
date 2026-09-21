@@ -59,8 +59,3 @@ webula.zip
 .yarn/install-state.gz
 .phpunit.cache/test-results
 
-# Лицензионные файлы — не публикуем в открытом репозитории.
-# Шрифт AA Stetica кладётся вручную в assets/fonts/ (см. README),
-# ACF Pro — в vendor-plugins/.
-assets/fonts/AAStetica-*
-vendor-plugins/advanced-custom-fields-pro.zip
