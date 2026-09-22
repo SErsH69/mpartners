@@ -150,3 +150,27 @@
         height: 10px;
     }
 }
+
+// ---------------------------------------------------------------
+// Бегущая строка: лента едет влево бесконечно, при наведении — пауза.
+// ---------------------------------------------------------------
+.industries__marquee {
+    overflow: hidden;
+}
+
+.industries .industries__track {
+    width: max-content;
+    // Хвостовой отступ = gap: иначе сдвиг на -50% не совпадает с периодом и лента дёргается
+    padding: 0 10px 0 0;
+    overflow: visible;
+    cursor: default;
+    animation: mp-marquee 70s linear infinite;
+
+    &:hover {
+        animation-play-state: paused;
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+        animation: none;
+    }
+}

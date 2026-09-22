@@ -255,6 +255,7 @@
     display: flex;
     gap: 8px;
     width: max-content;
+    padding-right: 8px; // = gap, чтобы стык бегущей строки не дёргался
     margin-left: -45px; // в макете лента начинается за левым краем панели
     animation: mp-marquee 45s linear infinite;
 
@@ -373,6 +374,7 @@
 
     .experience__partners {
         gap: 6.79px;
+        padding-right: 6.79px;
         margin-left: -219px;
     }
 
@@ -440,6 +442,7 @@
 
     .experience__partners {
         gap: 10.6px;
+        padding-right: 10.6px;
         margin-left: -535px;
     }
 

@@ -16,11 +16,13 @@ $mp_ind = mp_data( 'industries' );
 		</div>
 	</div>
 
-	<ul class="industries__track" data-drag-scroll data-center-mobile>
+	<div class="industries__marquee">
+	<ul class="industries__track">
 		<?php
-		// В макете набор карточек повторён дважды, чтобы лента не обрывалась.
+		// Бегущая строка: набор повторён 4 раза, лента сдвигается на половину
+		// своей длины и начинается заново — стык не виден даже на широких экранах.
 		$mp_count = count( $mp_ind['items'] );
-		foreach ( array_merge( $mp_ind['items'], $mp_ind['items'] ) as $mp_i => $mp_item ) :
+		foreach ( array_merge( $mp_ind['items'], $mp_ind['items'], $mp_ind['items'], $mp_ind['items'] ) as $mp_i => $mp_item ) :
 			?>
 			<li class="industry-card"<?php echo $mp_i >= $mp_count ? ' aria-hidden="true"' : ''; ?>>
 				<img class="industry-card__image" src="<?php echo esc_url( mp_img( $mp_item['image'] ) ); ?>" alt="" loading="lazy" decoding="async">
@@ -31,4 +33,5 @@ $mp_ind = mp_data( 'industries' );
 			</li>
 		<?php endforeach; ?>
 	</ul>
+	</div>
 </section>

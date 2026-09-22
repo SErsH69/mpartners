@@ -42,7 +42,7 @@ const BLOCKS = [
     '.experience__photo',
     '.experience__quote',
     '.help-card',
-    '.industry-card',
+    '.industries__marquee',
     '.case-card',
     '.letter',
     '.post-card',
