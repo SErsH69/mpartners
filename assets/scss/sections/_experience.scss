@@ -57,7 +57,7 @@
 
 // Подсветка хвоста цитаты: в макете это плашки #e4d5c0 под последними строками.
 .experience__mark {
-    padding: 1px 0;
+    padding: 0;
     color: inherit;
     background-color: $c-beige-deep;
     box-decoration-break: clone;
@@ -316,7 +316,7 @@
     }
 
     .experience__intro {
-        gap: 5px;
+        gap: 15px;
     }
 
     .experience__text {
@@ -360,13 +360,9 @@
     }
 
     .experience__video {
-        align-items: flex-start;
+        align-items: center;
         margin-top: 10px;
         font-size: 12px;
-
-        svg {
-            margin-top: 7px;
-        }
     }
 
     .experience__partners-wrap {

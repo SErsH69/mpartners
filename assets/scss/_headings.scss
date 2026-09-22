@@ -169,7 +169,8 @@
 
     @include mobile {
         font-size: 30px;
-        min-height: calc(var(--h-lines, 1) * 27px);
+        line-height: 33px;
+        min-height: calc(var(--h-lines, 1) * 33px);
 
         --h-lines: 7;
     }
