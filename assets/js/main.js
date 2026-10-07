@@ -4,6 +4,7 @@ import initDragScroll from './modules/drag-scroll'
 import initContactForm from './modules/contact-form'
 import initDropdown from './modules/dropdown'
 import initReveal from './modules/reveal'
+import initHeroTrail from './modules/hero-trail'
 
 const boot = () => {
     initMenu()
@@ -12,6 +13,7 @@ const boot = () => {
     initContactForm()
     initDropdown()
     initReveal()
+    initHeroTrail()
 }
 
 if ('loading' === document.readyState) {

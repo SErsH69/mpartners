@@ -10,7 +10,8 @@ $mp_note = mp_data( 'advantages.note' );
 ?>
 <section class="hero">
 	<div class="hero__backdrop" aria-hidden="true">
-		<img class="hero__pattern" src="<?php echo esc_url( mp_img( 'hero-bg' ) ); ?>" alt="" width="3062" height="1119" fetchpriority="high" decoding="async">
+		<img class="hero__pattern" src="<?php echo esc_url( mp_img( 'hero-bg' ) ); ?>" alt="" width="3064" height="1121" fetchpriority="high" decoding="async">
+		<canvas class="hero__trail"></canvas>
 		<span class="hero__fade"></span>
 		<span class="hero__dots">
 			<i class="hero__dot hero__dot--1"></i>
