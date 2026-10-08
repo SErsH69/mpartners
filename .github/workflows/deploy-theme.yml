@@ -1,0 +1,89 @@
+# Автоматическая публикация темы на https://mpartners.law
+#
+# Срабатывает на каждый push в main, который задевает тему или исходники
+# ассетов: GitHub собирает прод-бандл (theme/dist в репозитории не хранится)
+# и заливает каталог theme/ в wp-content/themes/mpartners на хостинге.
+#
+# Репозиторий публичный, поэтому адрес сервера, логин, пароль и путь лежат
+# в Secrets: DEPLOY_HOST, DEPLOY_USER, DEPLOY_PASSWORD, DEPLOY_PATH.
+name: Публикация темы
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'theme/**'
+      - 'assets/**'
+      - 'package.json'
+      - 'yarn.lock'
+      - 'webpack.config.js'
+      - '.github/workflows/deploy-theme.yml'
+  workflow_dispatch:
+
+concurrency:
+  group: deploy-mpartners-law
+  cancel-in-progress: true
+
+jobs:
+  deploy:
+    name: Сборка и выгрузка
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Забрать код
+        uses: actions/checkout@v4
+
+      - name: Проверить, что секреты заданы
+        env:
+          DEPLOY_HOST: ${{ secrets.DEPLOY_HOST }}
+          DEPLOY_USER: ${{ secrets.DEPLOY_USER }}
+          DEPLOY_PASSWORD: ${{ secrets.DEPLOY_PASSWORD }}
+          DEPLOY_PATH: ${{ secrets.DEPLOY_PATH }}
+        run: |
+          missing=
+          for name in DEPLOY_HOST DEPLOY_USER DEPLOY_PASSWORD DEPLOY_PATH; do
+            [ -n "${!name}" ] || missing="$missing $name"
+          done
+          if [ -n "$missing" ]; then
+            echo "::error::Не заданы секреты:$missing. Settings → Secrets and variables → Actions → New repository secret"
+            exit 1
+          fi
+
+      - name: Поставить Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+
+      - name: Собрать ассеты
+        run: |
+          corepack enable
+          yarn install --immutable
+          yarn prod
+
+      - name: Проверить, что бандл собрался
+        run: |
+          ls theme/dist/main.*.css theme/dist/main.*.js
+          test -f theme/dist/manifest.json
+          test -f theme/dist/fonts/AAStetica-Regular.woff2
+
+      - name: Поставить sshpass
+        run: sudo apt-get update && sudo apt-get install -y sshpass
+
+      - name: Выгрузить тему на хостинг
+        env:
+          SSHPASS: ${{ secrets.DEPLOY_PASSWORD }}
+          DEPLOY_HOST: ${{ secrets.DEPLOY_HOST }}
+          DEPLOY_USER: ${{ secrets.DEPLOY_USER }}
+          DEPLOY_PATH: ${{ secrets.DEPLOY_PATH }}
+        run: |
+          sshpass -e rsync -rlz --delete \
+            --exclude='.DS_Store' \
+            --exclude='*.map' \
+            -e "ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -o LogLevel=ERROR" \
+            theme/ "$DEPLOY_USER@$DEPLOY_HOST:$DEPLOY_PATH/"
+
+      - name: Проверить сайт
+        run: |
+          code=$(curl -s -o /dev/null -w '%{http_code}' http://mpartners.law/)
+          echo "Главная ответила $code"
+          test "$code" = "200"
