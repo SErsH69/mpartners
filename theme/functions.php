@@ -14,6 +14,8 @@ require_once get_template_directory() . '/inc/mail.php';
 require_once get_template_directory() . '/inc/post-types.php';
 require_once get_template_directory() . '/inc/icons.php';
 require_once get_template_directory() . '/inc/home-data.php';
+require_once get_template_directory() . '/inc/practices-data.php';
+require_once get_template_directory() . '/inc/cf7.php';
 require_once get_template_directory() . '/inc/contact.php';
 
 if ( defined( 'WP_CLI' ) && WP_CLI ) {

@@ -35,6 +35,7 @@ $mp_form = mp_data( 'form' );
 			</div>
 		</div>
 
+		<?php if ( ! mp_cf7( 'home', 'contact__form' ) ) : ?>
 		<form class="contact__form" method="post" action="<?php echo esc_url( admin_url( 'admin-ajax.php' ) ); ?>" data-contact-form>
 			<input type="hidden" name="action" value="mp_contact">
 			<?php wp_nonce_field( MP_CONTACT_NONCE, '_mp_nonce', false ); ?>
@@ -76,6 +77,7 @@ $mp_form = mp_data( 'form' );
 				<span class="consent__text"><?php echo esc_html( $mp_form['consent'] ); ?></span>
 			</label>
 		</form>
+		<?php endif; ?>
 	</div>
 	</div>
 </section>

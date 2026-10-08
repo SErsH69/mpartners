@@ -38,6 +38,10 @@ function wp_nonce_field( $a = '', $n = '', $r = true ) { echo '<input type="hidd
 function get_header() { include MP_THEME . '/header.php'; }
 function get_footer() { include MP_THEME . '/footer.php'; }
 function get_template_part( $slug ) { include MP_THEME . '/' . $slug . '.php'; }
+function selected( $a, $b, $e = true ) { if ( (string) $a === (string) $b ) { echo ' selected'; } }
+// Формы на сайте работают через Contact Form 7; в статике плагина нет,
+// поэтому шаблоны выводят свою запасную разметку.
+function mp_cf7( $slug, $class = '' ) { return false; }
 
 function mp_latest( $pattern ) {
 	$files = glob( MP_THEME . '/dist/' . $pattern );

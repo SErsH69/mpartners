@@ -37,7 +37,17 @@
 }
 
 // Выбор соцсети в форме: pill 18px, бордер 1px
-.chip-toggle {
+// CF7 рисует радиокнопки как .wpcf7-list-item > label — стилизуем их так же.
+.contact__channels-row .wpcf7-list-item {
+    margin: 0;
+}
+
+.contact__channels-row input[type='radio'] {
+    @include visually-hidden;
+}
+
+.chip-toggle,
+.contact__channels-row .wpcf7-list-item label {
     display: inline-flex;
     align-items: center;
     justify-content: center;
@@ -62,6 +72,12 @@
         background-color: $c-page;
         opacity: 1;
     }
+}
+
+.contact__channels-row .wpcf7-list-item label:has(input:checked) {
+    color: $c-dark;
+    background-color: $c-page;
+    opacity: 1;
 }
 
 // Плашка города на карте: pad 8/10/8/37 (слева место под булавку)

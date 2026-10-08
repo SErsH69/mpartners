@@ -18,6 +18,7 @@
 @use 'components/header';
 @use 'components/nav-drop';
 @use 'components/reveal';
+@use 'components/cf7';
 
 @use 'sections/hero';
 @use 'sections/advantages';
@@ -33,6 +34,8 @@
 @use 'sections/team';
 @use 'sections/geography';
 @use 'sections/footer';
+
+@use 'pages/practices';
 
 @use 'layout';
 @use 'headings';

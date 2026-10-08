@@ -60,3 +60,6 @@ webula.zip
 .phpunit.cache/test-results
 
 build-static
+
+docker-compose.override.yml
+.env.bak.*

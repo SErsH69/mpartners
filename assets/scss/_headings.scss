@@ -176,3 +176,19 @@
     }
 }
 
+
+.pg-hero__title {
+    width: 557px;
+
+    --h-lines: 3;
+
+    @include tablet {
+        width: 100%;
+
+        --h-lines: 3;
+    }
+
+    @include mobile {
+        --h-lines: 4;
+    }
+}
