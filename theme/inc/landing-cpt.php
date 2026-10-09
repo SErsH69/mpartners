@@ -8,7 +8,7 @@
  * @package MPartners
  */
 
-const MP_LANDING_VERSION = '1';
+const MP_LANDING_VERSION = '2';
 const MP_LANDING_TYPE    = 'mp_landing';
 
 /**
@@ -164,6 +164,31 @@ function mp_seed_landing_page() {
 		}
 	} elseif ( get_page_template_slug( $page ) !== 'page-landings.php' ) {
 		update_post_meta( $page->ID, '_wp_page_template', 'page-landings.php' );
+	}
+
+	// Первый лендинг из макета, чтобы страница услуги была на что открывать.
+	$existing = get_posts(
+		[
+			'post_type'      => MP_LANDING_TYPE,
+			'posts_per_page' => 1,
+			'post_status'    => 'any',
+			'fields'         => 'ids',
+		]
+	);
+
+	if ( ! $existing ) {
+		$landing = wp_insert_post(
+			[
+				'post_type'   => MP_LANDING_TYPE,
+				'post_title'  => mp_landing_page_data()['hero']['title'],
+				'post_status' => 'publish',
+				'menu_order'  => 1,
+			]
+		);
+
+		if ( $landing && ! is_wp_error( $landing ) && function_exists( 'update_field' ) ) {
+			update_field( 'landing_group', '1', $landing );
+		}
 	}
 
 	update_option( 'mp_landing_version', MP_LANDING_VERSION );
