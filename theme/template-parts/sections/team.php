@@ -6,6 +6,9 @@
  */
 
 $mp_team = mp_data( 'team' );
+
+// Участники — записи «Адвокаты»; пока их меньше двух, берутся из макета.
+$mp_members = function_exists( 'mp_lawyer_cards' ) ? mp_lawyer_cards() : $mp_team['members'];
 ?>
 <section class="team">
 	<div class="team__inner">
@@ -22,7 +25,7 @@ $mp_team = mp_data( 'team' );
 		</div>
 
 		<ul class="team__track" data-drag-scroll data-dots="team-dots">
-			<?php foreach ( $mp_team['members'] as $mp_member ) : ?>
+			<?php foreach ( $mp_members as $mp_member ) : ?>
 				<li class="member">
 					<div class="member__photo">
 						<img class="member__glow" src="<?php echo esc_url( mp_img( 'decor-member', 'svg' ) ); ?>" alt="" aria-hidden="true" loading="lazy" decoding="async">
@@ -33,7 +36,7 @@ $mp_team = mp_data( 'team' );
 							<p class="member__name"><?php echo esc_html( $mp_member['name'] ); ?></p>
 							<p class="member__bio"><?php echo esc_html( $mp_member['text'] ); ?></p>
 						</div>
-						<a class="member__more" href="#">
+						<a class="member__more" href="<?php echo esc_url( isset( $mp_member['href'] ) ? $mp_member['href'] : '#' ); ?>">
 							<span><?php echo esc_html( $mp_member['more'] ); ?></span>
 							<?php mp_icon( 'arrow-se' ); ?>
 						</a>
@@ -43,7 +46,7 @@ $mp_team = mp_data( 'team' );
 		</ul>
 
 		<div class="dots dots--light team__dots" id="team-dots" aria-hidden="true">
-			<?php foreach ( $mp_team['members'] as $mp_index => $mp_member ) : ?>
+			<?php foreach ( $mp_members as $mp_index => $mp_member ) : ?>
 				<span class="dots__dot<?php echo 0 === $mp_index ? ' is-active' : ''; ?>"></span>
 			<?php endforeach; ?>
 		</div>

@@ -468,6 +468,17 @@
     }
 }
 
+// Вся карточка услуги — ссылка на её страницу.
+.pg-card {
+    position: relative;
+}
+
+.pg-card__link {
+    position: absolute;
+    z-index: 2;
+    inset: 0;
+}
+
 .pg-card__panel {
     display: flex;
     flex-direction: column;
@@ -560,6 +571,8 @@
 
 // На десктопе карточка — только обложка и подпись.
 .pg-card__actions {
+    position: relative;
+    z-index: 3; // кнопки поверх ссылки-обёртки
     display: none;
 
     @include tablet {

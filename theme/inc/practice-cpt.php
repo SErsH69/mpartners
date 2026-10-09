@@ -9,7 +9,7 @@
  * @package MPartners
  */
 
-const MP_PRACTICE_VERSION = '1';
+const MP_PRACTICE_VERSION = '2';
 const MP_PRACTICE_TYPE    = 'mp_practice';
 
 /**
@@ -211,3 +211,179 @@ function mp_practice_cards() {
 
 	return $cards;
 }
+
+/**
+ * Адвокаты — отдельные записи, которые прикрепляются к услугам.
+ */
+function mp_register_lawyer_type() {
+	register_post_type(
+		'mp_lawyer',
+		[
+			'labels'        => [
+				'name'          => 'Адвокаты',
+				'singular_name' => 'Адвокат',
+				'add_new'       => 'Добавить адвоката',
+				'add_new_item'  => 'Новый адвокат',
+				'edit_item'     => 'Редактировать адвоката',
+				'menu_name'     => 'Адвокаты',
+				'not_found'     => 'Адвокатов нет',
+			],
+			'public'        => true,
+			'has_archive'   => false,
+			'show_in_rest'  => true,
+			'menu_icon'     => 'dashicons-businessperson',
+			'menu_position' => 23,
+			'supports'      => [ 'title', 'thumbnail', 'page-attributes', 'revisions' ],
+			'rewrite'       => [ 'slug' => 'lawyer' ],
+		]
+	);
+}
+add_action( 'init', 'mp_register_lawyer_type' );
+
+/**
+ * Поле «Адвокаты» у услуги.
+ */
+function mp_register_practice_relation() {
+	if ( ! function_exists( 'acf_add_local_field_group' ) ) {
+		return;
+	}
+
+	acf_add_local_field_group(
+		[
+			'key'      => 'group_mp_practice_lawyers',
+			'title'    => 'Адвокаты услуги',
+			'fields'   => [
+				[
+					'key'           => 'field_mp_practice_lawyers',
+					'label'         => 'Над делом работали',
+					'name'          => 'practice_lawyers',
+					'type'          => 'relationship',
+					'post_type'     => [ 'mp_lawyer' ],
+					'filters'       => [ 'search' ],
+					'return_format' => 'id',
+					'instructions'  => 'Кого показывать в блоке «Над делом работали» на странице услуги.',
+				],
+			],
+			'location' => [
+				[
+					[
+						'param'    => 'post_type',
+						'operator' => '==',
+						'value'    => MP_PRACTICE_TYPE,
+					],
+				],
+			],
+			'position' => 'side',
+		]
+	);
+}
+add_action( 'acf/init', 'mp_register_practice_relation' );
+
+/**
+ * Адвокаты для блока «Над делом работали».
+ *
+ * @param int $post_id Запись услуги; 0 — все адвокаты.
+ * @return array Список ['name','text','photo','more','href'].
+ */
+function mp_lawyer_cards( $post_id = 0 ) {
+	$ids = [];
+
+	if ( $post_id && function_exists( 'get_field' ) ) {
+		$ids = (array) get_field( 'practice_lawyers', $post_id );
+	}
+
+	$posts = get_posts(
+		[
+			'post_type'      => 'mp_lawyer',
+			'posts_per_page' => $ids ? count( $ids ) : 4,
+			'post__in'       => $ids ? array_map( 'intval', $ids ) : [],
+			'orderby'        => $ids ? 'post__in' : 'menu_order',
+			'order'          => 'ASC',
+		]
+	);
+
+	// Для блока команды на главной нужен хотя бы пара адвокатов — иначе
+	// показываем карточки из макета, чтобы секция не выглядела пустой.
+	if ( ! $posts || ( ! $post_id && count( $posts ) < 2 ) ) {
+		return (array) mp_data( 'team.members', [] );
+	}
+
+	$cards = [];
+
+	foreach ( $posts as $post ) {
+		$photo = get_the_post_thumbnail_url( $post->ID, 'full' );
+
+		$cards[] = [
+			'name'  => get_the_title( $post ),
+			'text'  => function_exists( 'get_field' ) ? (string) get_field( 'lawyer_role', $post->ID ) : '',
+			'photo' => $photo ? $photo : 'team-photo-b',
+			'more'  => 'Подробнее',
+			'href'  => get_permalink( $post ),
+		];
+	}
+
+	return $cards;
+}
+
+/**
+ * Заводит адвоката из макета и прикрепляет его к услугам — один раз.
+ */
+function mp_seed_lawyers() {
+	if ( ! is_admin() || get_option( 'mp_lawyer_version' ) === MP_PRACTICE_VERSION ) {
+		return;
+	}
+
+	$existing = get_posts(
+		[
+			'post_type'      => 'mp_lawyer',
+			'posts_per_page' => 1,
+			'post_status'    => 'any',
+			'fields'         => 'ids',
+		]
+	);
+
+	if ( ! $existing ) {
+		$data = mp_lawyer_data();
+
+		$id = wp_insert_post(
+			[
+				'post_type'   => 'mp_lawyer',
+				'post_title'  => $data['name'],
+				'post_status' => 'publish',
+				'menu_order'  => 1,
+			]
+		);
+
+		if ( $id && ! is_wp_error( $id ) ) {
+			if ( function_exists( 'update_field' ) ) {
+				foreach ( $data as $key => $value ) {
+					if ( in_array( $key, [ 'name', 'photo', 'pubs' ], true ) ) {
+						continue;
+					}
+
+					update_field( 'lawyer_' . $key, mp_content_to_acf( $value ), $id );
+				}
+			}
+
+			$attachment = mp_sideload_theme_image( $data['photo'], $data['name'] );
+
+			if ( $attachment ) {
+				set_post_thumbnail( $id, $attachment );
+			}
+
+			$existing = [ $id ];
+		}
+	}
+
+	// Прикрепляем адвоката ко всем услугам, где ещё никого нет.
+	if ( $existing && function_exists( 'update_field' ) ) {
+		foreach ( get_posts( [ 'post_type' => MP_PRACTICE_TYPE, 'posts_per_page' => -1, 'fields' => 'ids' ] ) as $practice ) {
+			if ( ! get_field( 'practice_lawyers', $practice ) ) {
+				update_field( 'practice_lawyers', $existing, $practice );
+			}
+		}
+	}
+
+	update_option( 'mp_lawyer_version', MP_PRACTICE_VERSION );
+}
+add_action( 'admin_init', 'mp_seed_lawyers', 25 );

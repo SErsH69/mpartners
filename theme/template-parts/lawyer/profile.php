@@ -6,6 +6,13 @@
  */
 
 $mp_lawyer   = function_exists( 'mp_content' ) ? mp_content( 'lawyer' ) : mp_lawyer_data();
+
+// У записи адвоката имя — заголовок, фото — изображение записи.
+if ( is_singular( 'mp_lawyer' ) ) {
+	$mp_lawyer['name']  = get_the_title();
+	$mp_photo           = get_the_post_thumbnail_url( get_the_ID(), 'full' );
+	$mp_lawyer['photo'] = $mp_photo ? $mp_photo : $mp_lawyer['photo'];
+}
 $mp_registry = $mp_lawyer['registry'];
 $mp_spec     = $mp_lawyer['spec'];
 ?>

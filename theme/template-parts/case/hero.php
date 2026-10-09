@@ -6,6 +6,20 @@
  */
 
 $mp_hero = mp_case( 'hero' );
+
+// На странице услуги заголовок, текст и обложка — у самой записи.
+$mp_is_post = is_singular( 'mp_practice' );
+$mp_title   = $mp_is_post ? get_the_title() : $mp_hero['title'];
+$mp_lead    = $mp_is_post && function_exists( 'get_field' ) ? (string) get_field( 'practice_text' ) : $mp_hero['text'];
+$mp_cover   = $mp_is_post ? get_the_post_thumbnail_url( get_the_ID(), 'full' ) : '';
+
+if ( ! $mp_cover ) {
+	$mp_cover = $mp_hero['image'];
+}
+
+if ( ! $mp_lead ) {
+	$mp_lead = $mp_hero['text'];
+}
 ?>
 <section class="case-hero">
 	<div class="shell">
@@ -17,13 +31,13 @@ $mp_hero = mp_case( 'hero' );
 				</p>
 
 				<div class="case-hero__text">
-					<h1 class="h-case case-hero__title"><?php echo esc_html( $mp_hero['title'] ); ?></h1>
-					<p class="case-hero__lead"><?php echo esc_html( $mp_hero['text'] ); ?></p>
+					<h1 class="h-case case-hero__title"><?php echo esc_html( $mp_title ); ?></h1>
+					<p class="case-hero__lead"><?php echo esc_html( $mp_lead ); ?></p>
 				</div>
 			</div>
 
 			<div class="case-hero__cover">
-				<img src="<?php echo esc_url( mp_img( $mp_hero['image'], 'jpg' ) ); ?>" alt="" width="1186" height="650" fetchpriority="high" decoding="async">
+				<img src="<?php echo esc_url( mp_img( $mp_cover, 'jpg' ) ); ?>" alt="" width="1186" height="650" fetchpriority="high" decoding="async">
 			</div>
 		</div>
 	</div>

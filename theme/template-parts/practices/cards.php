@@ -22,6 +22,8 @@ $mp_cards = function_exists( 'mp_practice_cards' ) ? mp_practice_cards() : mp_pr
 						<p class="pg-card__text"><?php echo esc_html( $mp_card['text'] ); ?></p>
 					</div>
 
+					<a class="pg-card__link" href="<?php echo esc_url( isset( $mp_card['href'] ) ? $mp_card['href'] : '#' ); ?>" aria-label="<?php echo esc_attr( $mp_card['title'] ); ?>"></a>
+
 					<div class="pg-card__cover">
 						<img class="pg-card__image" src="<?php echo esc_url( mp_img( $mp_card['image'], 'jpg' ) ); ?>" alt="" width="786" height="488" loading="lazy" decoding="async">
 					</div>

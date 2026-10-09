@@ -37,14 +37,18 @@ function mp_content_groups() {
 			'skip'      => [ 'cards' ],
 		],
 		'case'      => [
-			'title'     => 'Контент страницы дела',
-			'data'      => 'mp_case_data',
-			'templates' => [ 'page-case.php' ],
+			'title'      => 'Контент страницы услуги',
+			'data'       => 'mp_case_data',
+			'post_types' => [ 'mp_practice' ],
+			// Заголовок услуги — у самой записи.
+			'skip'       => [ 'hero' ],
 		],
 		'lawyer'    => [
-			'title'     => 'Контент карточки адвоката',
-			'data'      => 'mp_lawyer_data',
-			'templates' => [ 'page-lawyer.php' ],
+			'title'      => 'Карточка адвоката',
+			'data'       => 'mp_lawyer_data',
+			'post_types' => [ 'mp_lawyer' ],
+			// Имя — заголовок записи, фото — изображение записи.
+			'skip'       => [ 'name', 'photo', 'pubs' ],
 		],
 		'press'     => [
 			'title'     => 'Контент раздела',

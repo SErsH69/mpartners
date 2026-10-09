@@ -5,7 +5,7 @@
  * @package MPartners
  */
 
-$mp_members = mp_data( 'team.members', [] );
+$mp_members = function_exists( 'mp_lawyer_cards' ) ? mp_lawyer_cards( get_the_ID() ) : mp_data( 'team.members', [] );
 ?>
 <section class="case-team">
 	<div class="shell">
@@ -23,7 +23,7 @@ $mp_members = mp_data( 'team.members', [] );
 							<p class="member__name"><?php echo esc_html( $mp_member['name'] ); ?></p>
 							<p class="member__bio"><?php echo esc_html( $mp_member['text'] ); ?></p>
 						</div>
-						<a class="member__more" href="#">
+						<a class="member__more" href="<?php echo esc_url( isset( $mp_member['href'] ) ? $mp_member['href'] : '#' ); ?>">
 							<span><?php echo esc_html( $mp_member['more'] ); ?></span>
 							<?php mp_icon( 'arrow-se' ); ?>
 						</a>
