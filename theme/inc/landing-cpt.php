@@ -141,9 +141,9 @@ function mp_landing_groups() {
  * Заводит страницу хаба.
  */
 function mp_seed_landing_page() {
-	$cli = defined( 'WP_CLI' ) && WP_CLI;
-
-	if ( ( ! is_admin() && ! $cli ) || get_option( 'mp_landing_version' ) === MP_LANDING_VERSION ) {
+	// Разовая миграция: выполняется на первом же запросе после выкатки,
+	// чтобы страница появилась без захода в админку.
+	if ( get_option( 'mp_landing_version' ) === MP_LANDING_VERSION ) {
 		return;
 	}
 
@@ -169,8 +169,4 @@ function mp_seed_landing_page() {
 	update_option( 'mp_landing_version', MP_LANDING_VERSION );
 	flush_rewrite_rules();
 }
-add_action( 'admin_init', 'mp_seed_landing_page', 7 );
-
-if ( defined( 'WP_CLI' ) && WP_CLI ) {
-	add_action( 'init', 'mp_seed_landing_page', 20 );
-}
+add_action( 'init', 'mp_seed_landing_page', 20 );
