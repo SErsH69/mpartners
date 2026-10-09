@@ -356,3 +356,58 @@ add_action( 'admin_init', 'mp_seed_pages', 5 );
 if ( defined( 'WP_CLI' ) && WP_CLI ) {
 	add_action( 'init', 'mp_seed_pages', 5 );
 }
+
+/**
+ * Правовые страницы: политика и согласие на обработку данных.
+ *
+ * Создаются один раз; дальше текст правится в админке.
+ */
+function mp_seed_legal_pages() {
+	$cli = defined( 'WP_CLI' ) && WP_CLI;
+
+	if ( ( ! is_admin() && ! $cli ) || ! function_exists( 'mp_legal_pages' ) ) {
+		return;
+	}
+
+	foreach ( mp_legal_pages() as $slug => $page ) {
+		$existing = get_page_by_path( $slug );
+
+		if ( $existing ) {
+			// Заготовку политики WordPress создаёт сам — наполняем её,
+			// пока она пустой черновик, и больше не трогаем.
+			$is_stub = 'draft' === $existing->post_status
+				|| false !== strpos( (string) $existing->post_content, 'wp:heading' )
+				&& false !== strpos( (string) $existing->post_content, 'Suggested text' );
+
+			if ( ! $is_stub ) {
+				continue;
+			}
+
+			wp_update_post(
+				[
+					'ID'           => $existing->ID,
+					'post_title'   => $page['title'],
+					'post_content' => $page['content'],
+					'post_status'  => 'publish',
+				]
+			);
+
+			continue;
+		}
+
+		wp_insert_post(
+			[
+				'post_type'    => 'page',
+				'post_name'    => $slug,
+				'post_title'   => $page['title'],
+				'post_content' => $page['content'],
+				'post_status'  => 'publish',
+			]
+		);
+	}
+}
+add_action( 'admin_init', 'mp_seed_legal_pages', 6 );
+
+if ( defined( 'WP_CLI' ) && WP_CLI ) {
+	add_action( 'init', 'mp_seed_legal_pages', 6 );
+}

@@ -459,11 +459,13 @@ function mp_home_data() {
 			'legal'     => [
 				[
 					'label' => 'Политика конфиденциальности',
-					'href'  => '#',
+					'href'  => '',
+					'slug'  => 'privacy-policy',
 				],
 				[
 					'label' => 'Согласие на обработку персональных данных',
-					'href'  => '#',
+					'href'  => '',
+					'slug'  => 'consent',
 				],
 			],
 		],

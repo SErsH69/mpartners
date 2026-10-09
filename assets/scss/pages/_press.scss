@@ -162,3 +162,80 @@
         margin-top: 20px;
     }
 }
+
+// Текстовые страницы: политика, согласие на обработку данных.
+// Заголовки у них длинные, поэтому в баннере кегль меньше и перенос строк.
+.legal .pr__title {
+    font-size: 44px;
+    line-height: round(nearest, 1.05em, 1px);
+    overflow-wrap: anywhere;
+
+    @include tablet {
+        font-size: 34px;
+    }
+
+    @include mobile {
+        font-size: 26px;
+    }
+}
+
+.legal__body {
+    max-width: 860px;
+    margin-top: 30px;
+    color: $c-dark;
+    font-size: 16px;
+    line-height: round(nearest, 1.45em, 1px);
+
+    @include tablet {
+        margin-top: 24px;
+    }
+
+    @include mobile {
+        font-size: 14px;
+    }
+
+    h2 {
+        margin: 30px 0 12px;
+        font-size: 22px;
+        font-weight: 500;
+        line-height: round(nearest, 1.2em, 1px);
+
+        @include mobile {
+            margin-top: 24px;
+            font-size: 18px;
+        }
+    }
+
+    h3 {
+        margin: 20px 0 10px;
+        font-size: 18px;
+        font-weight: 500;
+
+        @include mobile {
+            font-size: 16px;
+        }
+    }
+
+    p {
+        margin: 0 0 12px;
+    }
+
+    ul,
+    ol {
+        margin: 0 0 12px;
+        padding-left: 22px;
+    }
+
+    li {
+        margin-bottom: 6px;
+    }
+
+    a {
+        color: $c-dark;
+        text-decoration: underline;
+    }
+
+    strong {
+        font-weight: 500;
+    }
+}
