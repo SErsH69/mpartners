@@ -125,9 +125,8 @@ function mp_menu_url_for( $label, $fallback = '' ) {
  * Создаёт меню с пунктами из макета, чтобы в админке было что править.
  */
 function mp_seed_menus() {
-	$cli = defined( 'WP_CLI' ) && WP_CLI;
-
-	if ( ( ! is_admin() && ! $cli ) || get_option( 'mp_menus_version' ) === MP_MENUS_VERSION ) {
+	// Разовая миграция: отрабатывает на первом же запросе после выкатки.
+	if ( get_option( 'mp_menus_version' ) === MP_MENUS_VERSION ) {
 		return;
 	}
 
@@ -274,7 +273,7 @@ function mp_seed_menus() {
 
 	update_option( 'mp_menus_version', MP_MENUS_VERSION );
 }
-add_action( 'admin_init', 'mp_seed_menus' );
+add_action( 'init', 'mp_seed_menus', 15 );
 
 /**
  * Адрес кнопки: сохранённая ссылка, иначе страница по слагу, иначе попап
