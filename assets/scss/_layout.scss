@@ -11,6 +11,15 @@
     @include container;
 }
 
+// Контейнер на 40px шире обычного — под плашки FAQ и автора (1280 на 1920).
+.shell--wide {
+    width: min(100% - #{$gutter-desktop * 2}, #{$container + 80px});
+
+    @include tablet {
+        width: 100%;
+    }
+}
+
 // Заголовок секции + инфо-плашка справа (повторяется в 04, 09, 10, 11).
 .section-head {
     display: flex;

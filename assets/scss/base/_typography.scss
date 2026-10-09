@@ -99,6 +99,20 @@
     }
 }
 
+// Заголовок раздела на тёмном баннере: 60/54, на мобилке 35/31.
+.h-pr {
+    color: $c-cream;
+    font-family: $font-display;
+    font-size: 60px;
+    font-weight: 400;
+    line-height: 54px;
+
+    @include mobile {
+        font-size: 35px;
+        line-height: 31px;
+    }
+}
+
 .h-section--light,
 .h-hero--light {
     color: $c-cream;

@@ -1,0 +1,164 @@
+@use '../abstracts/variables' as *;
+@use '../abstracts/mixins' as *;
+
+// =============================================================
+// Разделы «Пресс-центр», «Мероприятия», «СМИ о нас» — список.
+// Макеты Figma: 1920/1280 → 640 → 375 (все три раздела совпадают).
+// =============================================================
+
+.pr {
+    padding-top: 15px; // баннер на 93px от верха страницы, шапка — 78px
+
+    @include tablet {
+        padding-top: 20px;
+    }
+}
+
+.pr__head {
+    display: flex;
+    flex-direction: column;
+    gap: 25px;
+
+    @include mobile {
+        gap: 15px;
+    }
+}
+
+.pr__banner {
+    display: flex;
+    align-items: center;
+    min-height: 174px;
+    padding: 60px;
+    border-radius: $r-sm;
+
+    @include gradient-dark(97.6deg); // 1200×174
+
+    @include tablet {
+        min-height: 114px;
+        padding: 30px;
+
+        @include gradient-dark(109.4deg); // 580×114
+    }
+
+    @include mobile {
+        min-height: 71px;
+        padding: 20px;
+
+        @include gradient-dark(119.4deg); // 335×71
+    }
+}
+
+.pr__filters {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+
+    @include mobile {
+        // В макете рубрики умещаются в одну строку; в браузере шрифт чуть
+        // шире, поэтому строку не переносим, а прокручиваем.
+        flex-wrap: nowrap;
+        gap: 5px;
+        overflow-x: auto;
+        scrollbar-width: none;
+
+        &::-webkit-scrollbar {
+            display: none;
+        }
+    }
+}
+
+.pr-chip {
+    flex: 0 0 auto;
+
+    a {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        min-height: 35px;
+        padding: 10px;
+        color: $c-dark;
+        font-size: 14px;
+        font-weight: 400;
+        line-height: 15px;
+        background-color: $c-beige-deep;
+        border-radius: $r-sm;
+        transition: opacity 0.2s ease;
+
+        &:hover {
+            opacity: 0.8;
+        }
+
+        @include mobile {
+            min-height: 23px;
+            padding: 5px 10px;
+            font-size: 12px;
+            line-height: 13px;
+        }
+    }
+}
+
+.pr-chip--active a {
+    color: $c-cream;
+    background-color: transparent;
+
+    @include gradient-dark(120deg);
+}
+
+// Сетка 6 колонок: обычная карточка — две, «лид» — четыре.
+.pr__grid {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    gap: 15px 10px;
+    margin-top: 30px;
+
+    @include tablet {
+        grid-template-columns: repeat(2, 1fr);
+        margin-top: 80px;
+    }
+
+    @include mobile {
+        grid-template-columns: 1fr;
+        gap: 10px;
+        margin-top: 30px;
+    }
+}
+
+// Специфичность под стать правилам блога (.post-card:not()...:not()).
+.pr__grid .post-card.pr-card {
+    grid-column: span 2;
+    grid-row: auto;
+    min-height: 320px;
+
+    @include tablet {
+        grid-column: span 1;
+        min-height: 342px;
+    }
+
+    @include mobile {
+        min-height: 190px;
+
+        .post-card__link {
+            gap: 10px;
+        }
+    }
+}
+
+.pr__grid .post-card.pr-card--lead {
+    grid-column: span 4;
+
+    @include tablet {
+        grid-column: span 2;
+    }
+
+    @include mobile {
+        grid-column: span 1;
+    }
+}
+
+.pr__more {
+    margin-top: 30px;
+
+    @include mobile {
+        margin-top: 20px;
+    }
+}

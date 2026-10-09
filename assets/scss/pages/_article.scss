@@ -1,0 +1,522 @@
+@use '../abstracts/variables' as *;
+@use '../abstracts/mixins' as *;
+
+// =============================================================
+// Внутренняя страница раздела (статья / мероприятие / СМИ).
+// Макеты Figma: 1920/1280 → 640 → 375.
+// =============================================================
+
+.art {
+    padding-top: 15px; // шапка статьи на 93px от верха, шапка сайта — 78px
+
+    @include tablet {
+        padding-top: 20px;
+    }
+}
+
+.art__hero {
+    display: flex;
+    flex-direction: column;
+    gap: 40px;
+    padding: 40px;
+    background-color: $c-beige;
+
+    @include tablet {
+        gap: 30px;
+        padding: 30px;
+    }
+
+    @include mobile {
+        gap: 20px;
+        padding: 20px;
+    }
+}
+
+.art__badge {
+    align-self: flex-start;
+}
+
+.art__heading {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+
+    @include mobile {
+        gap: 15px;
+    }
+}
+
+.art__title {
+    max-width: 883px;
+}
+
+.art__meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 25px;
+}
+
+.art__meta-item {
+    display: inline-flex;
+    gap: 5px;
+    align-items: center;
+    color: $c-muted;
+    font-size: 14px;
+    font-weight: 500;
+    line-height: 15px;
+
+    svg {
+        flex: 0 0 auto;
+        width: 15px;
+        height: 15px;
+        color: $c-dark;
+        opacity: 0.54;
+    }
+
+    @include mobile {
+        font-size: 12px;
+        line-height: 13px;
+    }
+}
+
+// --- две колонки: текст и форма --------------------------------
+.art__cols {
+    display: flex;
+    gap: 15px;
+    align-items: flex-start;
+    margin-top: 23px;
+
+    @include tablet {
+        flex-direction: column;
+        gap: 80px;
+        margin-top: 20px;
+    }
+
+    @include mobile {
+        gap: 50px;
+        margin-top: 15px;
+    }
+}
+
+.art__main {
+    flex: 1 1 auto;
+    min-width: 0;
+
+    @include tablet {
+        width: 100%;
+    }
+}
+
+.art__aside {
+    flex: 0 0 262px;
+    margin-top: 12px; // форма стоит на 12px ниже оглавления
+
+    @include tablet {
+        width: 100%;
+        margin-top: 0;
+    }
+}
+
+// Оглавление: две колонки по 422px, по четыре пункта в каждой.
+.art__toc {
+    display: grid;
+    grid-auto-flow: column;
+    grid-template-columns: repeat(2, 422px);
+    grid-template-rows: repeat(4, auto);
+    gap: 10px 20px;
+    width: 864px;
+    max-width: 100%;
+
+    @include tablet {
+        grid-template-columns: repeat(2, 1fr);
+        grid-template-rows: repeat(4, auto);
+        width: 100%;
+    }
+
+    @include mobile {
+        grid-auto-flow: row;
+        grid-template-columns: 1fr;
+        grid-template-rows: none;
+    }
+}
+
+.art__body {
+    display: flex;
+    flex-direction: column;
+    gap: 25px;
+    margin-top: 40px;
+    padding: 30px 50px;
+    background-color: $c-surface;
+
+    @include tablet {
+        margin-top: 50px;
+        padding: 30px;
+    }
+
+    @include mobile {
+        margin-top: 30px;
+        padding: 20px;
+    }
+}
+
+.art-sec {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.art-sec__text {
+    color: $c-dark;
+    font-size: 14px;
+    font-weight: 400;
+    letter-spacing: 0.28px;
+    line-height: 18px;
+
+    @include mobile {
+        font-size: 12px;
+        letter-spacing: 0.24px;
+        line-height: 16px;
+    }
+}
+
+.art-sec__text--muted {
+    color: $c-muted;
+}
+
+.art-sec__callout {
+    padding: 10px;
+    color: $c-dark;
+    font-size: 14px;
+    font-weight: 400;
+    letter-spacing: 0.28px;
+    line-height: 18px;
+    background-color: $c-beige-deep;
+    border-radius: $r-sm;
+
+    @include mobile {
+        font-size: 12px;
+        letter-spacing: 0.24px;
+        line-height: 16px;
+    }
+}
+
+// --- FAQ -------------------------------------------------------
+.art-faq {
+    margin-top: 100px;
+
+    @include tablet {
+        margin-top: 80px;
+    }
+
+    @include mobile {
+        margin-top: 50px;
+    }
+}
+
+.art-faq__panel {
+    display: flex;
+    flex-direction: column;
+    gap: 32px;
+    padding-inline: 40px;
+
+    @include tablet {
+        gap: 25px;
+        padding-inline: 30px;
+    }
+
+    @include mobile {
+        gap: 20px;
+        padding-inline: 20px;
+    }
+}
+
+.art-faq__grid {
+    display: grid;
+    grid-auto-flow: column;
+    grid-template-columns: repeat(2, 1fr);
+    grid-template-rows: repeat(3, auto);
+    gap: 0 40px;
+
+    @include tablet {
+        grid-auto-flow: row;
+        grid-template-columns: 1fr;
+        grid-template-rows: none;
+    }
+}
+
+.art-faq__item {
+    display: flex;
+    align-items: center;
+    min-height: 52px;
+    padding-block: 16px;
+    color: $c-dark;
+    font-size: 18px;
+    font-weight: 500;
+    line-height: 20px;
+    border-bottom: 1px solid $c-beige;
+
+    &:last-child,
+    &:nth-child(3) {
+        border-bottom: 0;
+    }
+
+    @include tablet {
+        font-size: 16px;
+        line-height: 18px;
+
+        &:nth-child(3) {
+            border-bottom: 1px solid $c-beige;
+        }
+    }
+}
+
+// --- карточка автора -------------------------------------------
+.art-author {
+    margin-top: 100px;
+
+    @include tablet {
+        margin-top: 80px;
+    }
+
+    @include mobile {
+        margin-top: 50px;
+    }
+}
+
+.art-author__panel {
+    display: flex;
+    gap: 35px;
+    align-items: flex-start;
+    padding: 60px 40px;
+
+    @include gradient-dark(107.5deg); // 1280×444
+
+    @include tablet {
+        flex-wrap: wrap;
+        gap: 20px;
+        padding: 30px;
+
+        @include gradient-dark(136deg);
+    }
+
+    @include mobile {
+        gap: 20px;
+        padding: 20px;
+    }
+}
+
+.art-author__photo {
+    display: block;
+    flex: 0 0 308px;
+    width: 308px;
+    height: 324px;
+    object-fit: cover;
+    border-radius: $r-sm;
+
+    @include tablet {
+        flex: 0 0 133px;
+        width: 133px;
+        height: 140px;
+    }
+
+    @include mobile {
+        flex: 0 0 100%;
+        width: 100%;
+        height: auto;
+        aspect-ratio: 335 / 353;
+    }
+}
+
+.art-author__main {
+    flex: 0 0 519px;
+    margin-right: 26px; // 61 − 35 (gap)
+
+    @include tablet {
+        flex: 1 1 auto;
+        margin-right: 0;
+    }
+}
+
+.art-author__label {
+    color: $c-cream;
+    font-size: 18px;
+    font-weight: 500;
+    line-height: 20px;
+}
+
+.art-author__name {
+    margin-top: 10px;
+    color: $c-cream;
+    font-family: $font-display;
+    font-size: 40px;
+    font-weight: 400;
+    line-height: 36px;
+
+    @include tablet {
+        font-size: 25px;
+        line-height: 22px;
+    }
+}
+
+.art-author__role {
+    margin-top: 5px;
+    color: $c-muted;
+    font-size: 14px;
+    font-weight: 400;
+    line-height: 15px;
+
+    @include mobile {
+        font-size: 12px;
+        line-height: 13px;
+    }
+}
+
+.art-author__spec {
+    margin-top: 56px;
+    color: $c-cream;
+    font-size: 18px;
+    font-weight: 500;
+    line-height: 20px;
+
+    @include tablet {
+        margin-top: 30px;
+        font-size: 16px;
+        line-height: 18px;
+    }
+}
+
+.art-author__list {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-top: 15px;
+
+    @include mobile {
+        gap: 5px;
+    }
+}
+
+.art-author__item {
+    color: $c-cream;
+
+    .lw-spec__marker {
+        color: $c-cream;
+    }
+}
+
+.art-author__contacts {
+    display: flex;
+    flex: 0 0 277px;
+    flex-direction: column;
+    min-height: 294px;
+    margin-top: 30px;
+    padding: 30px;
+    background-color: #201c17;
+    border-radius: $r-sm;
+
+    @include tablet {
+        flex: 1 1 100%;
+        min-height: 0;
+        margin-top: 0;
+        padding: 20px;
+    }
+}
+
+.art-author__contacts-title {
+    margin-bottom: 23px;
+    color: $c-cream;
+    font-size: 18px;
+    font-weight: 500;
+    line-height: 20px;
+}
+
+.art-author__link {
+    display: flex;
+    gap: 13px;
+    align-items: center;
+    color: $c-cream;
+    font-size: 14px;
+    font-weight: 400;
+    line-height: 15px;
+
+    svg {
+        flex: 0 0 auto;
+        width: 17px;
+        height: 13px;
+    }
+
+    + .art-author__link {
+        margin-top: 10px;
+        gap: 12px;
+
+        svg {
+            width: 19px;
+            height: 19px;
+        }
+    }
+}
+
+.art-author__registry {
+    display: flex;
+    gap: 17px;
+    align-items: center;
+    margin-top: 23px;
+    color: $c-cream;
+
+    span {
+        font-size: 12px;
+        line-height: 13px;
+    }
+
+    strong {
+        font-size: 14px;
+        font-weight: 500;
+        line-height: 15px;
+    }
+}
+
+.art-author__button {
+    margin-top: auto;
+    min-height: 47px;
+    padding: 15px 10px;
+
+    @include tablet {
+        margin-top: 20px;
+    }
+}
+
+// --- полоса «Мероприятия» / «СМИ» -------------------------------
+.art-strip {
+    display: flex;
+    align-items: center;
+    min-height: 124px;
+    margin-top: 100px;
+
+    @include gradient-dark(93.9deg); // 1920×124
+
+    @include tablet {
+        min-height: 90px;
+        margin-top: 80px;
+    }
+
+    @include mobile {
+        min-height: 70px;
+        margin-top: 50px;
+    }
+}
+
+.art-strip__title {
+    color: $c-cream;
+}
+
+.art-related {
+    margin-top: 100px;
+
+    @include tablet {
+        margin-top: 80px;
+    }
+
+    @include mobile {
+        margin-top: 50px;
+    }
+}
