@@ -85,6 +85,20 @@
     }
 }
 
+// Заголовки карточки адвоката: 40/36, на мобилке 30/27 (имя — 25/22).
+.h-lawyer {
+    color: $c-dark;
+    font-family: $font-display;
+    font-size: 40px;
+    font-weight: 400;
+    line-height: 36px;
+
+    @include mobile {
+        font-size: 30px;
+        line-height: 27px;
+    }
+}
+
 .h-section--light,
 .h-hero--light {
     color: $c-cream;

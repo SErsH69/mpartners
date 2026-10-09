@@ -1,0 +1,465 @@
+@use '../abstracts/variables' as *;
+@use '../abstracts/mixins' as *;
+
+// =============================================================
+// Карточка адвоката. Макеты Figma «Адаптивы»: 1920/1280 → 640 → 375.
+// =============================================================
+
+.lw {
+    padding-top: 15px; // фото на 93px от верха страницы, шапка — 78px
+
+    @include tablet {
+        padding-top: 20px;
+    }
+}
+
+.lw__inner {
+    display: flex;
+    gap: 15px;
+    align-items: flex-start;
+
+    @include tablet {
+        flex-direction: column;
+        gap: 20px;
+    }
+
+    @include mobile {
+        gap: 10px;
+    }
+}
+
+// Фото: 607×638 на десктопе, по ширине колонки — на остальных.
+.lw__photo {
+    display: block;
+    flex: 0 0 607px;
+    width: 607px;
+    height: 638px;
+    object-fit: cover;
+    border-radius: $r-sm;
+
+    @include tablet {
+        flex: 0 0 auto;
+        width: 100%;
+        height: auto;
+        aspect-ratio: 580 / 610;
+    }
+
+    @include mobile {
+        aspect-ratio: 335 / 352;
+    }
+}
+
+.lw__side {
+    display: flex;
+    flex: 1 1 auto;
+    flex-direction: column;
+    gap: 15px;
+    min-width: 0;
+
+    @include tablet {
+        width: 100%;
+        gap: 20px;
+    }
+
+    @include mobile {
+        gap: 10px;
+    }
+}
+
+// -------------------------------------------------------------
+// Плашки: контакты и специализация
+// -------------------------------------------------------------
+.lw-card {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    min-height: 233px; // в макете у плашки снизу 33px вместо 30
+    padding: 30px;
+    background-color: $c-beige;
+    border-radius: $r-sm;
+
+    @include mobile {
+        gap: 20px;
+        min-height: 174px;
+        padding: 20px;
+    }
+}
+
+.lw-card--spec {
+    gap: 25px;
+    min-height: 287px;
+    background-color: $c-surface;
+
+    @include mobile {
+        gap: 15px;
+        min-height: 259px;
+    }
+}
+
+.lw-card__head {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+// Имя на мобилке мельче, чем заголовок «Публикации адвоката».
+.lw-card__name {
+    @include mobile {
+        font-size: 25px;
+        line-height: 22px;
+    }
+}
+
+.lw-card__role {
+    color: $c-muted;
+    font-size: 14px;
+    font-weight: 400;
+    line-height: 15px;
+
+    @include mobile {
+        font-size: 12px;
+        line-height: 13px;
+    }
+}
+
+.lw-card__contacts {
+    display: flex;
+    gap: 15px;
+    align-items: flex-end;
+    justify-content: space-between;
+
+}
+
+.lw-card__links {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.lw-card__link {
+    display: flex;
+    gap: 13px;
+    align-items: center;
+    color: $c-dark;
+    font-size: 14px;
+    font-weight: 400;
+    line-height: 15px;
+
+    svg {
+        flex: 0 0 auto;
+        width: 17px;
+        height: 13px;
+    }
+
+    + .lw-card__link {
+        gap: 12px;
+
+        svg {
+            width: 19px;
+            height: 19px;
+        }
+    }
+
+    @include mobile {
+        gap: 5px;
+        font-size: 12px;
+        line-height: 13px;
+
+        svg {
+            width: 13px;
+            height: 13px;
+        }
+
+        + .lw-card__link {
+            gap: 5px;
+
+            svg {
+                width: 13px;
+                height: 13px;
+            }
+        }
+    }
+}
+
+// Ссылка со стрелкой («Скачать визитку», «Единый реестр»).
+.lw-card__action {
+    display: inline-flex;
+    flex: 0 0 auto;
+    gap: 7px;
+    align-items: center;
+    color: $c-dark;
+    font-size: 14px;
+    font-weight: 400;
+    line-height: 15px;
+
+    svg {
+        width: 7px;
+        height: 7px;
+    }
+
+    @include mobile {
+        font-size: 12px;
+        line-height: 13px;
+    }
+}
+
+.lw-card__registry {
+    display: flex;
+    gap: 15px;
+    align-items: center;
+    justify-content: space-between;
+    min-height: 35px;
+    padding: 10px;
+    background-color: $c-beige-deep;
+    border-radius: $r-sm;
+
+    @include mobile {
+        gap: 5px;
+        min-height: 23px;
+        padding: 5px;
+    }
+}
+
+.lw-card__registry-value {
+    display: flex;
+    gap: 17px;
+    align-items: center;
+    color: $c-dark;
+
+    strong {
+        font-size: 14px;
+        font-weight: 500;
+        line-height: 15px;
+    }
+
+    @include mobile {
+        gap: 5px;
+
+        strong {
+            font-size: 12px;
+            line-height: 13px;
+        }
+    }
+}
+
+.lw-card__registry-label {
+    font-size: 12px;
+    font-weight: 400;
+    line-height: 13px;
+}
+
+// -------------------------------------------------------------
+// Специализация
+// -------------------------------------------------------------
+.lw-spec {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.lw-spec__title {
+    color: $c-dark;
+    font-size: 18px;
+    font-weight: 500;
+    line-height: 20px;
+
+    @include mobile {
+        font-size: 16px;
+        line-height: 18px;
+    }
+}
+
+.lw-spec__list {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+
+    @include mobile {
+        gap: 5px;
+    }
+}
+
+.lw-spec__item {
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+    color: $c-dark;
+    font-size: 14px;
+    font-weight: 400;
+    line-height: 15px;
+
+    @include mobile {
+        font-size: 12px;
+        line-height: 13px;
+    }
+}
+
+.lw-spec__marker {
+    flex: 0 0 14px;
+    color: $c-dark;
+
+    svg {
+        display: block;
+        width: 14px;
+        height: 16px;
+    }
+}
+
+.lw-spec__note {
+    color: $c-dark;
+    font-size: 14px;
+    font-weight: 400;
+    line-height: 15px;
+
+    @include mobile {
+        font-size: 12px;
+        line-height: 13px;
+    }
+}
+
+// -------------------------------------------------------------
+// Биография по годам
+// -------------------------------------------------------------
+.lw-time {
+    display: flex;
+    flex-direction: column;
+    gap: 36px;
+    width: 485px;
+    max-width: 100%;
+    margin-top: 15px; // 658 − 628 − 15 (gap колонки)
+    margin-left: 30px; // блок утоплен внутрь колонки, как в макете
+
+    @include tablet {
+        gap: 30px;
+        width: 100%;
+        margin-top: 8px;
+        margin-left: 0;
+    }
+
+    @include mobile {
+        gap: 15px;
+        margin-top: 40px; // 929 − 879 − 10 (gap колонки)
+    }
+}
+
+.lw-time__item {
+    position: relative;
+    display: flex;
+    gap: 15px;
+    align-items: flex-start;
+
+    // Линия от точки до следующей точки.
+    &::before {
+        content: '';
+        position: absolute;
+        top: 8px;
+        left: 7.5px;
+        width: 1px;
+        height: calc(100% + 36px);
+        background-color: $c-beige-deep;
+
+        @include tablet {
+            height: calc(100% + 30px);
+        }
+
+        @include mobile {
+            height: calc(100% + 15px);
+        }
+    }
+
+    &:last-child::before {
+        display: none;
+    }
+}
+
+.lw-time__dot {
+    position: relative;
+    flex: 0 0 16px;
+    width: 16px;
+    height: 16px;
+    background-color: $c-dark;
+    border-radius: 50%;
+}
+
+.lw-time__body {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    min-width: 0;
+}
+
+.lw-time__year {
+    color: $c-dark;
+    font-size: 18px;
+    font-weight: 500;
+    line-height: 20px;
+
+    @include mobile {
+        font-size: 16px;
+        line-height: 18px;
+    }
+}
+
+.lw-time__text {
+    color: $c-dark;
+    font-size: 16px;
+    font-weight: 400;
+    line-height: 18px;
+
+    @include mobile {
+        font-size: 12px;
+        line-height: 13px;
+    }
+}
+
+// -------------------------------------------------------------
+// Публикации
+// -------------------------------------------------------------
+.lw-pubs {
+    margin-top: 100px;
+
+    @include tablet {
+        margin-top: 80px;
+    }
+
+    @include mobile {
+        margin-top: 50px;
+    }
+}
+
+.lw-pubs__title {
+    margin-bottom: 25px;
+
+    @include mobile {
+        margin-bottom: 20px;
+    }
+}
+
+.lw-pubs__grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+
+    @include tablet {
+        grid-template-columns: 1fr;
+    }
+}
+
+// Специфичность под стать правилам блога (.post-card:not()...:not()).
+.lw-pubs__grid .post-card.lw-pub {
+    grid-column: auto;
+    grid-row: auto;
+    min-height: 320px;
+
+    @include tablet {
+        min-height: 287px;
+    }
+
+    @include mobile {
+        min-height: 189px;
+
+        .post-card__link {
+            gap: 10px;
+        }
+    }
+}
