@@ -10,7 +10,7 @@
  * @package MPartners
  */
 
-const MP_MENUS_VERSION = '3';
+const MP_MENUS_VERSION = '4';
 
 /**
  * Места для меню.
@@ -90,7 +90,7 @@ function mp_menu_items( $location, $fallback = [] ) {
  */
 function mp_menu_url_for( $label, $fallback = '' ) {
 	$map = [
-		'Услуги'      => 'practices',
+		'Услуги'      => 'uslugi',
 		'Практики'    => 'practices',
 		'Адвокаты'    => 'lawyers',
 		'Мероприятия' => 'events',
@@ -131,7 +131,7 @@ function mp_seed_menus() {
 		return;
 	}
 
-	$items = [ 'Услуги', 'Адвокаты', 'Пресс-центр', 'Мероприятия', 'СМИ о нас', 'Контакты' ];
+	$items = [ 'Услуги', 'Практики', 'Адвокаты', 'Пресс-центр', 'Мероприятия', 'СМИ о нас', 'Контакты' ];
 
 	$sets = [
 		'mp-header'   => [
