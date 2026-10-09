@@ -6,21 +6,36 @@
  */
 
 $mp_art = function_exists( 'mp_content' ) ? mp_content( 'article' ) : mp_article_data();
+
+// У настоящего материала заголовок и дата берутся из записи.
+$mp_title = is_singular() ? get_the_title() : $mp_art['title'];
+$mp_badge = $mp_art['badge'];
+
+if ( is_singular() ) {
+	$mp_tax   = [ 'post' => 'category', 'mp_event' => 'mp_event_cat', 'mp_media' => 'mp_media_cat' ];
+	$mp_type  = get_post_type();
+	$mp_terms = isset( $mp_tax[ $mp_type ] ) ? get_the_terms( get_the_ID(), $mp_tax[ $mp_type ] ) : [];
+
+	if ( $mp_terms && ! is_wp_error( $mp_terms ) ) {
+		$mp_badge = $mp_terms[0]->name;
+	}
+}
+$mp_date  = is_singular() ? get_the_date( 'j F Y' ) . 'г' : $mp_art['date'];
 ?>
 <section class="art">
 	<div class="shell">
 		<div class="art__hero">
 			<p class="case-hero__badge art__badge">
 				<span class="case-hero__badge-icon"><?php mp_icon( 'shield' ); ?></span>
-				<span><?php echo esc_html( $mp_art['badge'] ); ?></span>
+				<span><?php echo esc_html( $mp_badge ); ?></span>
 			</p>
 
 			<div class="art__heading">
-				<h1 class="h-case art__title"><?php echo esc_html( $mp_art['title'] ); ?></h1>
+				<h1 class="h-case art__title"><?php echo esc_html( $mp_title ); ?></h1>
 				<p class="art__meta">
 					<span class="art__meta-item">
 						<?php mp_icon( 'info' ); ?>
-						<span><?php echo esc_html( $mp_art['date'] ); ?></span>
+						<span><?php echo esc_html( $mp_date ); ?></span>
 					</span>
 					<span class="art__meta-item">
 						<?php mp_icon( 'question' ); ?>

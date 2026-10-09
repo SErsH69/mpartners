@@ -19,6 +19,7 @@ require_once get_template_directory() . '/inc/article-data.php';
 require_once get_template_directory() . '/inc/admin-fields.php';
 require_once get_template_directory() . '/inc/menus.php';
 require_once get_template_directory() . '/inc/practice-cpt.php';
+require_once get_template_directory() . '/inc/content-types.php';
 require_once get_template_directory() . '/inc/cf7.php';
 require_once get_template_directory() . '/inc/contact.php';
 

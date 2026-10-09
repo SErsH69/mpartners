@@ -86,6 +86,7 @@ $mp_menu     = (array) mp_data( 'menu', [] );
 		</div>
 	</footer>
 </div>
+<?php get_template_part( 'template-parts/modal' ); ?>
 <?php wp_footer(); ?>
 </body>
 </html>

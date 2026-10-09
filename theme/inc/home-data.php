@@ -48,21 +48,20 @@ function mp_home_data() {
 			'tagline' => "Эффективная защита в\nобласти уголовного права",
 			'phones'  => [
 				[
-					'label' => 'Телефон в Москве',
+					'label' => 'Бесплатно по России',
 					'value' => '+7 913 966 4489',
 					'href'  => 'tel:+79139664489',
 				],
-				[
-					'label' => 'Телефон в Омске',
-					'value' => '+7 913 623 6093',
-					'href'  => 'tel:+79136236093',
-				],
+			],
+			'max_bot' => [
+				'label' => 'Бот в MAX',
+				'href'  => 'https://max.ru/id9707035244_bot',
 			],
 			'socials' => [
 				[
 					'icon'  => 'messenger',
-					'label' => 'Мессенджер',
-					'href'  => '#',
+					'label' => 'MAX',
+					'href'  => 'https://max.ru/id9707035244_biz',
 				],
 				[
 					'icon'  => 'mail',
@@ -72,7 +71,7 @@ function mp_home_data() {
 				[
 					'icon'  => 'telegram',
 					'label' => 'Telegram',
-					'href'  => '#',
+					'href'  => 'https://t.me/advokat_bespalova',
 				],
 			],
 		],
@@ -371,7 +370,7 @@ function mp_home_data() {
 				4,
 				[
 					'name'  => 'Имя Фамилия',
-					'text'  => 'Кратная информация о человеке. Кратная информация о человеке.Кратная информация',
+					'text'  => 'Краткая информация об адвокате: специализация, опыт и ключевые дела.',
 					'photo' => 'team-photo-b',
 					'more'  => 'Подробнее',
 				]
@@ -427,8 +426,8 @@ function mp_home_data() {
 				],
 				[
 					'label'   => 'Офис в Омске',
-					'phone'   => '+7 913 623 6093',
-					'href'    => 'tel:+79136236093',
+					'phone'   => '+7 913 966 4489',
+					'href'    => 'tel:+79139664489',
 					'address' => "644099 Омск,\nИнтернациональная, 14",
 				],
 			],

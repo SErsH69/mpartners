@@ -10,7 +10,7 @@
  * @package MPartners
  */
 
-const MP_CONTENT_VERSION = '4';
+const MP_CONTENT_VERSION = '5';
 
 /**
  * Редактируемые разделы контента.
@@ -62,9 +62,11 @@ function mp_content_groups() {
 			'templates' => [ 'page-media.php' ],
 		],
 		'article'   => [
-			'title'     => 'Контент материала',
-			'data'      => 'mp_article_data',
-			'templates' => [ 'page-article.php', 'page-event.php', 'page-media-item.php' ],
+			'title'      => 'Контент материала',
+			'data'       => 'mp_article_data',
+			'post_types' => [ 'post', 'mp_event', 'mp_media' ],
+			// Заголовок и дата — у самой записи.
+			'skip'       => [ 'title', 'date' ],
 		],
 	];
 }
@@ -97,8 +99,15 @@ function mp_content_target( $group ) {
 		return $cache[ $group ];
 	}
 
+	$current = function_exists( 'get_queried_object_id' ) ? (int) get_queried_object_id() : 0;
+
+	if ( isset( $meta['post_types'] ) ) {
+		$cache[ $group ] = ( $current && in_array( get_post_type( $current ), $meta['post_types'], true ) ) ? $current : 0;
+
+		return $cache[ $group ];
+	}
+
 	$templates = isset( $meta['templates'] ) ? $meta['templates'] : [];
-	$current   = function_exists( 'get_queried_object_id' ) ? (int) get_queried_object_id() : 0;
 
 	// На самой странице берём её же значения — у каждого материала свои.
 	if ( $current && in_array( (string) get_page_template_slug( $current ), $templates, true ) ) {
@@ -138,7 +147,7 @@ function mp_content_targets( $group ) {
 	$groups = mp_content_groups();
 	$meta   = isset( $groups[ $group ] ) ? $groups[ $group ] : [];
 
-	if ( isset( $meta['location'] ) ) {
+	if ( isset( $meta['location'] ) || isset( $meta['post_types'] ) ) {
 		$target = mp_content_target( $group );
 
 		return $target ? [ $target ] : [];
@@ -459,6 +468,16 @@ function mp_register_content_fields() {
 					'value'    => 'front_page',
 				],
 			];
+		} elseif ( isset( $meta['post_types'] ) ) {
+			foreach ( $meta['post_types'] as $type ) {
+				$location[] = [
+					[
+						'param'    => 'post_type',
+						'operator' => '==',
+						'value'    => $type,
+					],
+				];
+			}
 		} else {
 			foreach ( $meta['templates'] as $template ) {
 				$location[] = [

@@ -1,0 +1,134 @@
+@use '../abstracts/variables' as *;
+@use '../abstracts/mixins' as *;
+
+// =============================================================
+// Попап с формой: открывается по кнопкам «Заказать звонок» и другим
+// ссылкам на форму.
+// =============================================================
+
+.modal {
+    position: fixed;
+    z-index: 100;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+
+    &[hidden] {
+        display: none;
+    }
+}
+
+.modal__overlay {
+    position: absolute;
+    inset: 0;
+    background-color: rgba($c-dark, 0.55);
+    backdrop-filter: blur(4px);
+}
+
+.modal__dialog {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    width: min(100%, 493px);
+    max-height: calc(100vh - 40px);
+    padding: 30px;
+    overflow-y: auto;
+    background-color: #201c17;
+    border-radius: $r-sm;
+    animation: mp-modal-in 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+
+    @include mobile {
+        gap: 15px;
+        padding: 20px;
+    }
+}
+
+@keyframes mp-modal-in {
+    from {
+        opacity: 0;
+        transform: translateY(16px);
+    }
+}
+
+.modal__close {
+    position: absolute;
+    top: 14px;
+    right: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 24px;
+    height: 24px;
+    color: $c-muted-light;
+    background: none;
+    border: 0;
+    cursor: pointer;
+    transition: color 0.2s ease;
+
+    &:hover {
+        color: $c-cream;
+    }
+
+    svg {
+        width: 12px;
+        height: 12px;
+    }
+}
+
+.modal__title {
+    max-width: calc(100% - 30px);
+    color: $c-cream;
+    font-size: 18px;
+    font-weight: 500;
+    line-height: 20px;
+
+    @include mobile {
+        font-size: 16px;
+        line-height: 18px;
+    }
+}
+
+.modal__note {
+    color: $c-muted-light;
+    font-size: 12px;
+    line-height: 16px;
+
+    a {
+        color: $c-cream;
+        text-decoration: underline;
+    }
+}
+
+// Внутри попапа форма живёт на своей ширине и без собственной подложки.
+.pg-form--modal {
+    width: 100%;
+    min-height: 0;
+    padding: 0;
+    background: none;
+
+    .pg-form__title {
+        display: none; // Заголовок у попапа свой.
+    }
+
+    .pg-form__row {
+        @include upto(560px) {
+            flex-direction: column;
+            align-items: stretch;
+        }
+    }
+
+    .pg-form__messenger {
+        @include upto(560px) {
+            flex: 0 0 auto;
+            justify-content: center;
+        }
+    }
+}
+
+body.is-modal-open {
+    overflow: hidden;
+}

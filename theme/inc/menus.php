@@ -10,7 +10,7 @@
  * @package MPartners
  */
 
-const MP_MENUS_VERSION = '1';
+const MP_MENUS_VERSION = '2';
 
 /**
  * Места для меню.
@@ -82,6 +82,48 @@ function mp_menu_items( $location, $fallback = [] ) {
 }
 
 /**
+ * Куда ведёт пункт меню с таким названием.
+ *
+ * @param string $label    Название пункта.
+ * @param string $fallback Адрес, если страницы нет.
+ * @return string
+ */
+function mp_menu_url_for( $label, $fallback = '' ) {
+	$map = [
+		'Услуги'           => 'practices',
+		'Практики'         => 'practices',
+		'Адвокаты'         => 'lawyer',
+		'Дела'             => 'case',
+		'Мероприятия'      => 'events',
+		'СМИ о нас'        => 'media',
+		'Пресс-центр'      => 'press',
+		'Блог'             => 'press',
+	];
+
+	if ( isset( $map[ $label ] ) ) {
+		$page = get_page_by_path( $map[ $label ] );
+
+		if ( $page ) {
+			return get_permalink( $page );
+		}
+	}
+
+	if ( 'Контакты' === $label ) {
+		return '#form'; // Открывает попап с формой.
+	}
+
+	if ( $fallback ) {
+		$page = get_page_by_path( $fallback );
+
+		if ( $page ) {
+			return get_permalink( $page );
+		}
+	}
+
+	return home_url( '/' );
+}
+
+/**
  * Создаёт меню с пунктами из макета, чтобы в админке было что править.
  */
 function mp_seed_menus() {
@@ -99,8 +141,9 @@ function mp_seed_menus() {
 			'items' => (array) mp_data( 'menu', [] ),
 		],
 		'mp-services' => [
-			'name'  => 'Подвал — услуги',
-			'items' => (array) mp_data( 'footer.services', [] ),
+			'name'     => 'Подвал — услуги',
+			'items'    => (array) mp_data( 'footer.services', [] ),
+			'fallback' => 'practices',
 		],
 	];
 
@@ -125,7 +168,10 @@ function mp_seed_menus() {
 					0,
 					[
 						'menu-item-title'  => is_array( $label ) ? $label['label'] : $label,
-						'menu-item-url'    => is_array( $label ) && isset( $label['href'] ) ? $label['href'] : '#',
+						'menu-item-url'    => mp_menu_url_for(
+							is_array( $label ) ? $label['label'] : $label,
+							isset( $set['fallback'] ) ? $set['fallback'] : ''
+						),
 						'menu-item-status' => 'publish',
 						'menu-item-type'   => 'custom',
 					]
@@ -137,6 +183,31 @@ function mp_seed_menus() {
 	}
 
 	set_theme_mod( 'nav_menu_locations', $locations );
+
+	// У меню, созданных раньше, пункты вели на «#» — проставляем адреса.
+	foreach ( $locations as $location => $menu_id ) {
+		if ( ! isset( $sets[ $location ] ) || ! $menu_id ) {
+			continue;
+		}
+
+		foreach ( (array) wp_get_nav_menu_items( $menu_id ) as $item ) {
+			if ( '#' !== $item->url && '' !== $item->url ) {
+				continue;
+			}
+
+			wp_update_nav_menu_item(
+				$menu_id,
+				$item->ID,
+				[
+					'menu-item-title'  => $item->title,
+					'menu-item-url'    => mp_menu_url_for( $item->title, isset( $sets[ $location ]['fallback'] ) ? $sets[ $location ]['fallback'] : '' ),
+					'menu-item-status' => 'publish',
+					'menu-item-type'   => 'custom',
+				]
+			);
+		}
+	}
+
 	update_option( 'mp_menus_version', MP_MENUS_VERSION );
 }
 add_action( 'admin_init', 'mp_seed_menus' );
