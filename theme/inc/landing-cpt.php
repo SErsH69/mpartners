@@ -8,7 +8,7 @@
  * @package MPartners
  */
 
-const MP_LANDING_VERSION = '3';
+const MP_LANDING_VERSION = '4';
 const MP_LANDING_TYPE    = 'mp_landing';
 
 /**
@@ -199,7 +199,7 @@ function mp_seed_landing_page() {
 			continue;
 		}
 
-		$slug = function_exists( 'ctl_sanitize_title' ) ? ctl_sanitize_title( $post->post_title ) : sanitize_title( $post->post_title );
+		$slug = mp_translit_slug( $post->post_title );
 
 		if ( $slug && preg_match( '~^[a-z0-9-]+$~', $slug ) ) {
 			wp_update_post( [ 'ID' => $post->ID, 'post_name' => $slug ] );
@@ -210,3 +210,27 @@ function mp_seed_landing_page() {
 	flush_rewrite_rules();
 }
 add_action( 'init', 'mp_seed_landing_page', 20 );
+
+/**
+ * Латинский слаг из русского заголовка.
+ *
+ * Cyr-To-Lat работает на хуках сохранения, а записи мы заводим кодом,
+ * поэтому транслитерацию делаем сами.
+ *
+ * @param string $title Заголовок.
+ * @return string
+ */
+function mp_translit_slug( $title ) {
+	$map = [
+		'а' => 'a', 'б' => 'b', 'в' => 'v', 'г' => 'g', 'д' => 'd', 'е' => 'e', 'ё' => 'e',
+		'ж' => 'zh', 'з' => 'z', 'и' => 'i', 'й' => 'j', 'к' => 'k', 'л' => 'l', 'м' => 'm',
+		'н' => 'n', 'о' => 'o', 'п' => 'p', 'р' => 'r', 'с' => 's', 'т' => 't', 'у' => 'u',
+		'ф' => 'f', 'х' => 'h', 'ц' => 'cz', 'ч' => 'ch', 'ш' => 'sh', 'щ' => 'shh',
+		'ъ' => '', 'ы' => 'y', 'ь' => '', 'э' => 'e', 'ю' => 'yu', 'я' => 'ya',
+	];
+
+	$slug = strtr( mb_strtolower( (string) $title ), $map );
+	$slug = preg_replace( '~[^a-z0-9]+~', '-', $slug );
+
+	return trim( (string) $slug, '-' );
+}
