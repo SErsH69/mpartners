@@ -8,7 +8,7 @@
  * @package MPartners
  */
 
-const MP_CF7_VERSION = '2';
+const MP_CF7_VERSION = '3';
 
 /**
  * Inline SVG as a string (иконки нужны внутри тела формы).
@@ -71,6 +71,40 @@ function mp_cf7_definitions() {
 		esc_attr( $form['consent'] )
 	);
 
+	$case_form = mp_case( 'form' );
+
+	// Форма дела: на десктопе узкая колонка, на планшете и мобилке — широкая,
+	// поэтому в разметке два заголовка, лишний скрывается стилями.
+	$case = sprintf(
+		'<p class="pg-form__title pg-form__title--narrow">%1$s</p>
+<p class="pg-form__title pg-form__title--wide">%2$s</p>
+<div class="pg-form__body">
+<div class="pg-form__rows">
+<div class="pg-form__row">
+<span class="field pg-form__field pg-form__field--name">[text* name placeholder "%3$s"]</span>
+<span class="field pg-form__field pg-form__field--phone">[tel* phone placeholder "%4$s"]</span>
+</div>
+<div class="pg-form__row">
+<span class="pg-form__messenger"><span class="pg-form__messenger-icon">%6$s</span>[select channel class:pg-form__select "Telegram" "MAX" "ВКонтакте" "WhatsApp"]<span class="pg-form__messenger-caret">%7$s</span></span>
+<span class="field pg-form__field pg-form__field--contact">[text contact placeholder "%5$s"]</span>
+</div>
+</div>
+<div class="pg-form__submit">
+[submit class:btn class:btn--light class:btn--block "%8$s"]
+<span class="consent pg-form__consent">[acceptance consent "%9$s"]</span>
+</div>
+</div>',
+		esc_html( $case_form['title'] ),
+		esc_html( $case_form['title_wide'] ),
+		esc_attr( $form['fields']['name'] ),
+		esc_attr( $form['fields']['phone'] ),
+		esc_attr( $form['fields']['contact'] ),
+		mp_cf7_icon( 'telegram' ),
+		mp_cf7_icon( 'caret' ),
+		esc_attr( $case_form['submit'] ),
+		esc_attr( $form['consent'] )
+	);
+
 	$home_form = mp_data( 'form' );
 
 	$home = sprintf(
@@ -100,6 +134,11 @@ function mp_cf7_definitions() {
 		'home'      => [
 			'title' => 'M-PARTNERS — главная',
 			'form'  => $home,
+			'mail'  => $mail,
+		],
+		'case'      => [
+			'title' => 'M-PARTNERS — карточка дела',
+			'form'  => $case,
 			'mail'  => $mail,
 		],
 	];

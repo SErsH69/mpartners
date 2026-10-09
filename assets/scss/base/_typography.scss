@@ -55,6 +55,36 @@
     }
 }
 
+// Заголовок дела: Figma 35/31 (десктоп и планшет), 25/22 на мобилке.
+.h-case {
+    color: $c-dark;
+    font-family: $font-display;
+    font-size: 35px;
+    font-weight: 400;
+    line-height: 31px;
+    min-height: calc(var(--h-lines, 1) * 31px);
+
+    @include mobile {
+        font-size: 25px;
+        line-height: 22px;
+        min-height: calc(var(--h-lines, 1) * 22px);
+    }
+}
+
+// «Над делом работали»: 40/36, на мобилке 30/27.
+.h-case-team {
+    color: $c-dark;
+    font-family: $font-display;
+    font-size: 40px;
+    font-weight: 400;
+    line-height: 36px;
+
+    @include mobile {
+        font-size: 30px;
+        line-height: 27px;
+    }
+}
+
 .h-section--light,
 .h-hero--light {
     color: $c-cream;
