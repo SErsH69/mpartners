@@ -9,7 +9,7 @@
  * @package MPartners
  */
 
-const MP_SECTIONS_VERSION = '4';
+const MP_SECTIONS_VERSION = '5';
 
 /**
  * Раздел → слаг корневой рубрики.
@@ -220,8 +220,12 @@ function mp_seed_sections() {
 		return;
 	}
 
+	// Какие карточки широкие, знает макет: в сохранённом контенте раньше
+	// у всех строк стояла единица, поэтому читаем исходные данные.
+	$macet = function_exists( 'mp_press_data' ) ? mp_press_data() : [];
+
 	foreach ( mp_section_types() as $section => $meta ) {
-		$data = mp_press( $section );
+		$data = isset( $macet[ $section ] ) ? $macet[ $section ] : mp_press( $section );
 		$root = get_term_by( 'slug', $meta['slug'], 'category' );
 
 		if ( ! $root ) {
@@ -270,6 +274,8 @@ function mp_seed_sections() {
 				$leads[] = $item['title'];
 			}
 		}
+
+		mp_repair_section_items( $section, $leads );
 
 		if ( $existing ) {
 			if ( function_exists( 'update_field' ) ) {
@@ -478,4 +484,44 @@ function mp_parse_ru_date( $value ) {
 	}
 
 	return sprintf( '%s-%s-%02d 09:00:00', $m[3], $months[ $month ], (int) $m[1] );
+}
+
+/**
+ * Чинит сохранённый список материалов: раньше ACF подставлял «широкую
+ * карточку» в каждую строку репитера.
+ *
+ * @param string $section Section key.
+ * @param array  $leads   Titles of the wide cards.
+ */
+function mp_repair_section_items( $section, $leads ) {
+	if ( ! function_exists( 'get_field' ) || ! function_exists( 'mp_content_targets' ) ) {
+		return;
+	}
+
+	foreach ( mp_content_targets( $section ) as $target ) {
+		$rows = get_field( $section . '_items', $target );
+
+		if ( ! is_array( $rows ) || ! $rows ) {
+			continue;
+		}
+
+		$changed = false;
+
+		foreach ( $rows as $index => $row ) {
+			if ( ! is_array( $row ) || ! isset( $row['title'] ) ) {
+				continue;
+			}
+
+			$lead = in_array( $row['title'], $leads, true );
+
+			if ( (bool) ( isset( $row['lead'] ) ? $row['lead'] : false ) !== $lead ) {
+				$rows[ $index ]['lead'] = $lead;
+				$changed                = true;
+			}
+		}
+
+		if ( $changed ) {
+			update_field( $section . '_items', $rows, $target );
+		}
+	}
 }

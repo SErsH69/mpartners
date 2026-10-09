@@ -298,10 +298,61 @@ function mp_link( $href, $fallback = '' ) {
 	if ( $fallback ) {
 		$page = get_page_by_path( $fallback );
 
-		if ( $page ) {
+		// Черновик (например заготовка политики от WordPress) отдал бы 404.
+		if ( $page && 'publish' === $page->post_status ) {
 			return get_permalink( $page );
 		}
 	}
 
 	return '#form';
+}
+
+/**
+ * Страницы разделов: создаются сами, чтобы сайт одинаково разворачивался
+ * на любом сервере.
+ */
+function mp_seed_pages() {
+	$cli = defined( 'WP_CLI' ) && WP_CLI;
+
+	if ( ! is_admin() && ! $cli ) {
+		return;
+	}
+
+	$pages = [
+		'practices' => [ 'Практики', 'page-practices.php' ],
+		'lawyers'   => [ 'Адвокаты', 'page-lawyers.php' ],
+		'press'     => [ 'Пресс-центр', 'page-press.php' ],
+		'events'    => [ 'Мероприятия', 'page-events.php' ],
+		'media'     => [ 'СМИ о нас', 'page-media.php' ],
+	];
+
+	foreach ( $pages as $slug => $page ) {
+		$existing = get_page_by_path( $slug );
+
+		if ( $existing ) {
+			if ( get_page_template_slug( $existing ) !== $page[1] ) {
+				update_post_meta( $existing->ID, '_wp_page_template', $page[1] );
+			}
+
+			continue;
+		}
+
+		$id = wp_insert_post(
+			[
+				'post_type'   => 'page',
+				'post_name'   => $slug,
+				'post_title'  => $page[0],
+				'post_status' => 'publish',
+			]
+		);
+
+		if ( $id && ! is_wp_error( $id ) ) {
+			update_post_meta( $id, '_wp_page_template', $page[1] );
+		}
+	}
+}
+add_action( 'admin_init', 'mp_seed_pages', 5 );
+
+if ( defined( 'WP_CLI' ) && WP_CLI ) {
+	add_action( 'init', 'mp_seed_pages', 5 );
 }
