@@ -1,127 +1,88 @@
 <?php
 /**
- * Материалы разделов.
+ * Материалы разделов — обычные записи WordPress.
  *
- * Пресс-центр — обычные записи WordPress с рубриками. Мероприятия и «СМИ о
- * нас» — свои типы записей со своими рубриками. Карточки в списках и
- * внутренние страницы берутся из них; пока записей нет, показываются
- * материалы из макета.
+ * У каждого раздела своя корневая рубрика (Пресс-центр, Мероприятия, СМИ о
+ * нас), её подрубрики показываются табами над списком. Карточки и
+ * внутренние страницы берутся из записей; пока записей нет — из макета.
  *
  * @package MPartners
  */
 
-const MP_SECTIONS_VERSION = '1';
+const MP_SECTIONS_VERSION = '2';
 
 /**
- * Раздел → тип записи и таксономия.
+ * Раздел → слаг корневой рубрики.
  *
  * @return array
  */
 function mp_section_types() {
 	return [
 		'press'  => [
-			'post_type' => 'post',
-			'taxonomy'  => 'category',
+			'slug'  => 'press',
+			'title' => 'Пресс-центр',
 		],
 		'events' => [
-			'post_type' => 'mp_event',
-			'taxonomy'  => 'mp_event_cat',
+			'slug'  => 'events',
+			'title' => 'Мероприятия',
 		],
 		'media'  => [
-			'post_type' => 'mp_media',
-			'taxonomy'  => 'mp_media_cat',
+			'slug'  => 'media',
+			'title' => 'СМИ о нас',
 		],
 	];
 }
 
 /**
- * Регистрация типов записей и рубрик.
+ * Корневая рубрика раздела.
+ *
+ * @param string $section press|events|media.
+ * @return WP_Term|null
  */
-function mp_register_section_types() {
-	register_post_type(
-		'mp_event',
-		[
-			'labels'        => [
-				'name'          => 'Мероприятия',
-				'singular_name' => 'Мероприятие',
-				'add_new'       => 'Добавить мероприятие',
-				'add_new_item'  => 'Новое мероприятие',
-				'edit_item'     => 'Редактировать мероприятие',
-				'menu_name'     => 'Мероприятия',
-				'not_found'     => 'Мероприятий нет',
-			],
-			'public'        => true,
-			'has_archive'   => false,
-			'show_in_rest'  => true,
-			'menu_icon'     => 'dashicons-calendar-alt',
-			'menu_position' => 23,
-			'supports'      => [ 'title', 'excerpt', 'thumbnail', 'revisions' ],
-			'rewrite'       => [ 'slug' => 'event' ],
-		]
-	);
+function mp_section_term( $section ) {
+	$types = mp_section_types();
 
-	register_post_type(
-		'mp_media',
-		[
-			'labels'        => [
-				'name'          => 'СМИ о нас',
-				'singular_name' => 'Публикация в СМИ',
-				'add_new'       => 'Добавить публикацию',
-				'add_new_item'  => 'Новая публикация',
-				'edit_item'     => 'Редактировать публикацию',
-				'menu_name'     => 'СМИ о нас',
-				'not_found'     => 'Публикаций нет',
-			],
-			'public'        => true,
-			'has_archive'   => false,
-			'show_in_rest'  => true,
-			'menu_icon'     => 'dashicons-megaphone',
-			'menu_position' => 24,
-			'supports'      => [ 'title', 'excerpt', 'thumbnail', 'revisions' ],
-			'rewrite'       => [ 'slug' => 'smi' ],
-		]
-	);
-
-	foreach ( [ 'mp_event_cat' => [ 'mp_event', 'Рубрики мероприятий' ], 'mp_media_cat' => [ 'mp_media', 'Рубрики СМИ' ] ] as $taxonomy => $meta ) {
-		register_taxonomy(
-			$taxonomy,
-			$meta[0],
-			[
-				'labels'            => [
-					'name'          => $meta[1],
-					'singular_name' => 'Рубрика',
-					'add_new_item'  => 'Добавить рубрику',
-					'menu_name'     => 'Рубрики',
-				],
-				'hierarchical'      => true,
-				'public'            => true,
-				'show_in_rest'      => true,
-				'show_admin_column' => true,
-				'rewrite'           => [ 'slug' => str_replace( '_cat', '', $taxonomy ) ],
-			]
-		);
+	if ( ! isset( $types[ $section ] ) ) {
+		return null;
 	}
+
+	$term = get_term_by( 'slug', $types[ $section ]['slug'], 'category' );
+
+	return $term ? $term : null;
 }
-add_action( 'init', 'mp_register_section_types' );
 
 /**
- * Поля карточки материала.
+ * Раздел, которому принадлежит запись.
+ *
+ * @param int $post_id Запись.
+ * @return string press|events|media.
+ */
+function mp_post_section( $post_id ) {
+	$ids = wp_get_post_categories( $post_id );
+
+	foreach ( mp_section_types() as $section => $meta ) {
+		$term = mp_section_term( $section );
+
+		if ( ! $term ) {
+			continue;
+		}
+
+		foreach ( $ids as $id ) {
+			if ( (int) $id === (int) $term->term_id || term_is_ancestor_of( $term->term_id, $id, 'category' ) ) {
+				return $section;
+			}
+		}
+	}
+
+	return 'press';
+}
+
+/**
+ * Поле «Широкая карточка» у записи.
  */
 function mp_register_section_fields() {
 	if ( ! function_exists( 'acf_add_local_field_group' ) ) {
 		return;
-	}
-
-	$location = [];
-
-	foreach ( mp_section_types() as $meta ) {
-		$location[] = [
-			[
-				'param'    => 'post_type',
-				'operator' => '==',
-				'value'    => $meta['post_type'],
-			],
-		];
 	}
 
 	acf_add_local_field_group(
@@ -138,7 +99,15 @@ function mp_register_section_fields() {
 					'instructions' => 'Тёмная карточка на всю ширину двух колонок — как первая и последняя в макете.',
 				],
 			],
-			'location' => $location,
+			'location' => [
+				[
+					[
+						'param'    => 'post_type',
+						'operator' => '==',
+						'value'    => 'post',
+					],
+				],
+			],
 			'position' => 'side',
 		]
 	);
@@ -146,22 +115,23 @@ function mp_register_section_fields() {
 add_action( 'acf/init', 'mp_register_section_fields' );
 
 /**
- * Карточки раздела: записи, а если их нет — материалы из макета.
+ * Карточки раздела: записи его рубрики, а если их нет — макет.
  *
  * @param string $section press|events|media.
  * @return array
  */
 function mp_section_cards( $section ) {
-	$types = mp_section_types();
+	$term = mp_section_term( $section );
 
-	if ( ! isset( $types[ $section ] ) ) {
-		return [];
+	if ( ! $term ) {
+		return (array) mp_press( $section )['items'];
 	}
 
 	$posts = get_posts(
 		[
-			'post_type'      => $types[ $section ]['post_type'],
+			'post_type'      => 'post',
 			'posts_per_page' => 10,
+			'cat'            => $term->term_id,
 		]
 	);
 
@@ -172,11 +142,26 @@ function mp_section_cards( $section ) {
 	$cards = [];
 
 	foreach ( $posts as $post ) {
-		$terms = get_the_terms( $post->ID, $types[ $section ]['taxonomy'] );
+		$terms  = get_the_terms( $post->ID, 'category' );
+		$label  = '';
+		$slugs  = [];
+
+		foreach ( (array) $terms as $item ) {
+			if ( is_wp_error( $item ) || (int) $item->term_id === (int) $term->term_id ) {
+				continue;
+			}
+
+			$slugs[] = $item->slug;
+
+			if ( ! $label ) {
+				$label = $item->name;
+			}
+		}
 
 		$cards[] = [
 			'lead'     => function_exists( 'get_field' ) ? (bool) get_field( 'card_lead', $post->ID ) : false,
-			'category' => $terms && ! is_wp_error( $terms ) ? $terms[0]->name : '',
+			'category' => $label ? $label : $term->name,
+			'rubrics'  => $slugs,
 			'title'    => get_the_title( $post ),
 			'excerpt'  => get_the_excerpt( $post ),
 			'date'     => get_the_date( 'j F Y', $post ),
@@ -188,21 +173,22 @@ function mp_section_cards( $section ) {
 }
 
 /**
- * Рубрики раздела для строки фильтров.
+ * Подрубрики раздела для табов.
  *
  * @param string $section press|events|media.
- * @return array Названия рубрик.
+ * @return array
  */
 function mp_section_filters( $section ) {
-	$types = mp_section_types();
+	$term = mp_section_term( $section );
 
-	if ( ! isset( $types[ $section ] ) ) {
+	if ( ! $term ) {
 		return [];
 	}
 
 	$terms = get_terms(
 		[
-			'taxonomy'   => $types[ $section ]['taxonomy'],
+			'taxonomy'   => 'category',
+			'parent'     => $term->term_id,
 			'hide_empty' => false,
 		]
 	);
@@ -211,24 +197,21 @@ function mp_section_filters( $section ) {
 		return [];
 	}
 
-	$names = [];
+	$items = [];
 
-	foreach ( $terms as $term ) {
-		if ( 'category' === $types[ $section ]['taxonomy'] && 'uncategorized' === $term->slug ) {
-			continue;
-		}
-
-		$names[] = [
-			'label' => $term->name,
-			'href'  => get_term_link( $term ),
+	foreach ( $terms as $child ) {
+		$items[] = [
+			'label' => $child->name,
+			'slug'  => $child->slug,
+			'href'  => get_term_link( $child ),
 		];
 	}
 
-	return $names;
+	return $items;
 }
 
 /**
- * Заводит рубрики и материалы разделов из макета — один раз.
+ * Заводит рубрики и демо-материалы разделов — один раз.
  */
 function mp_seed_sections() {
 	if ( ! is_admin() || get_option( 'mp_sections_version' ) === MP_SECTIONS_VERSION ) {
@@ -237,33 +220,54 @@ function mp_seed_sections() {
 
 	foreach ( mp_section_types() as $section => $meta ) {
 		$data = mp_press( $section );
+		$root = get_term_by( 'slug', $meta['slug'], 'category' );
 
-		// Рубрики из строки фильтров, кроме первой («Все рубрики»).
+		if ( ! $root ) {
+			$created = wp_insert_term( $meta['title'], 'category', [ 'slug' => $meta['slug'] ] );
+
+			if ( is_wp_error( $created ) ) {
+				continue;
+			}
+
+			$root = get_term( $created['term_id'], 'category' );
+		}
+
+		$rubrics = [];
+
 		foreach ( array_slice( (array) $data['filters'], 1 ) as $name ) {
-			if ( ! term_exists( $name, $meta['taxonomy'] ) ) {
-				wp_insert_term( $name, $meta['taxonomy'] );
+			$existing = get_term_by( 'name', $name, 'category' );
+
+			if ( $existing && (int) $existing->parent === (int) $root->term_id ) {
+				$rubrics[] = $existing->term_id;
+
+				continue;
+			}
+
+			$created = wp_insert_term( $name, 'category', [ 'parent' => $root->term_id ] );
+
+			if ( ! is_wp_error( $created ) ) {
+				$rubrics[] = $created['term_id'];
 			}
 		}
 
 		$existing = get_posts(
 			[
-				'post_type'      => $meta['post_type'],
+				'post_type'      => 'post',
 				'posts_per_page' => 1,
 				'post_status'    => 'any',
 				'fields'         => 'ids',
+				'cat'            => $root->term_id,
 			]
 		);
 
-		if ( $existing ) {
+		if ( $existing || ! $rubrics ) {
 			continue;
 		}
-
-		$rubrics = array_values( array_slice( (array) $data['filters'], 1 ) );
 
 		foreach ( array_values( array_reverse( (array) $data['items'] ) ) as $index => $item ) {
 			$id = wp_insert_post(
 				[
-					'post_type'    => $meta['post_type'],
+					'post_type'    => 'post',
 					'post_title'   => $item['title'],
 					'post_excerpt' => $item['excerpt'],
 					'post_status'  => 'publish',
@@ -274,11 +278,7 @@ function mp_seed_sections() {
 				continue;
 			}
 
-			// Рубрику берём из строки фильтров — чтобы их было столько же,
-			// сколько в макете, а не по рубрике на каждый материал.
-			if ( $rubrics ) {
-				wp_set_object_terms( $id, $rubrics[ $index % count( $rubrics ) ], $meta['taxonomy'] );
-			}
+			wp_set_post_categories( $id, [ (int) $root->term_id, (int) $rubrics[ $index % count( $rubrics ) ] ] );
 
 			if ( function_exists( 'update_field' ) && ! empty( $item['lead'] ) ) {
 				update_field( 'card_lead', 1, $id );

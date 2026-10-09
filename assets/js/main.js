@@ -6,6 +6,7 @@ import initDropdown from './modules/dropdown'
 import initReveal from './modules/reveal'
 import initHeroTrail from './modules/hero-trail'
 import initModal from './modules/modal'
+import initRubricTabs from './modules/rubric-tabs'
 
 const boot = () => {
     initMenu()
@@ -16,6 +17,7 @@ const boot = () => {
     initReveal()
     initHeroTrail()
     initModal()
+    initRubricTabs()
 }
 
 if ('loading' === document.readyState) {

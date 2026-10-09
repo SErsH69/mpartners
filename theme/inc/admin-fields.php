@@ -64,7 +64,7 @@ function mp_content_groups() {
 		'article'   => [
 			'title'      => 'Контент материала',
 			'data'       => 'mp_article_data',
-			'post_types' => [ 'post', 'mp_event', 'mp_media' ],
+			'post_types' => [ 'post' ],
 			// Заголовок и дата — у самой записи.
 			'skip'       => [ 'title', 'date' ],
 		],

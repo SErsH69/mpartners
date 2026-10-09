@@ -324,13 +324,17 @@
     }
 
     input[type='checkbox'] {
+        // Общий .consent input прячет чекбокс — здесь он нужен видимым.
+        position: static;
         flex: 0 0 auto;
         width: 16px;
         height: 16px;
         margin: 0;
+        overflow: visible;
         background-color: transparent;
         border: 1.5px solid $c-muted;
         border-radius: 3px;
+        clip-path: none;
         appearance: none;
         cursor: pointer;
 

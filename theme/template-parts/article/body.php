@@ -12,12 +12,12 @@ $mp_title = is_singular() ? get_the_title() : $mp_art['title'];
 $mp_badge = $mp_art['badge'];
 
 if ( is_singular() ) {
-	$mp_tax   = [ 'post' => 'category', 'mp_event' => 'mp_event_cat', 'mp_media' => 'mp_media_cat' ];
-	$mp_type  = get_post_type();
-	$mp_terms = isset( $mp_tax[ $mp_type ] ) ? get_the_terms( get_the_ID(), $mp_tax[ $mp_type ] ) : [];
-
-	if ( $mp_terms && ! is_wp_error( $mp_terms ) ) {
-		$mp_badge = $mp_terms[0]->name;
+	foreach ( (array) get_the_terms( get_the_ID(), 'category' ) as $mp_term ) {
+		// Корневая рубрика раздела — не метка, берём подрубрику.
+		if ( ! is_wp_error( $mp_term ) && $mp_term->parent ) {
+			$mp_badge = $mp_term->name;
+			break;
+		}
 	}
 }
 $mp_date  = is_singular() ? get_the_date( 'j F Y' ) . 'г' : $mp_art['date'];
