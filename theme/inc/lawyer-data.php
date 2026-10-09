@@ -22,7 +22,7 @@ function mp_lawyer_data() {
 		'name'     => 'Имя Фамилия',
 		'role'     => 'Управляющий партнер, адвокат',
 		'email'    => 'bespalova@mpartners.law',
-		'phone'    => '+7 913 966 44 89',
+		'phone'    => '8 800 350 40 15',
 		'card'     => [
 			'label' => 'Скачать визитку',
 			'href'  => '#',
