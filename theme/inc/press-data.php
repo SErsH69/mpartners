@@ -131,7 +131,38 @@ function mp_press_data() {
  * @return array
  */
 function mp_press( $section ) {
-	$data = function_exists( 'mp_content' ) ? mp_content( 'press' ) : mp_press_data();
+	if ( function_exists( 'mp_content' ) && in_array( $section, [ 'press', 'events', 'media' ], true ) ) {
+		$data = mp_content( $section );
+
+		if ( $data ) {
+			return $data;
+		}
+	}
+
+	$data = mp_press_data();
 
 	return isset( $data[ $section ] ) ? $data[ $section ] : $data['press'];
+}
+
+/**
+ * Данные одного раздела — для полей на его странице.
+ *
+ * @return array
+ */
+function mp_press_section_data() {
+	return mp_press_data()['press'];
+}
+
+/**
+ * @return array
+ */
+function mp_events_section_data() {
+	return mp_press_data()['events'];
+}
+
+/**
+ * @return array
+ */
+function mp_media_section_data() {
+	return mp_press_data()['media'];
 }

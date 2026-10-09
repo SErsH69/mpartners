@@ -480,7 +480,17 @@ function mp_home_data() {
 function mp_data( $path, $default = null ) {
 	// Контент берётся из админки (ACF), значения из макета — запасные.
 	if ( function_exists( 'mp_content_get' ) ) {
-		return mp_content_get( 'home', $path, $default );
+		$root = strtok( $path, '.' );
+
+		// Контакты и подвал одинаковы на всех страницах, меню — в «Внешний
+		// вид → Меню», остальное принадлежит главной.
+		if ( in_array( $root, [ 'contacts', 'footer' ], true ) ) {
+			return mp_content_get( 'common', $path, $default );
+		}
+
+		if ( 'menu' !== $root ) {
+			return mp_content_get( 'home', $path, $default );
+		}
 	}
 
 	$value = mp_home_data();
@@ -494,6 +504,33 @@ function mp_data( $path, $default = null ) {
 	}
 
 	return $value;
+}
+
+/**
+ * Общие данные: контакты и подвал — они одинаковы на всех страницах.
+ *
+ * @return array
+ */
+function mp_common_data() {
+	$data = mp_home_data();
+
+	return [
+		'contacts' => $data['contacts'],
+		'footer'   => $data['footer'],
+	];
+}
+
+/**
+ * Данные только главной страницы (без общих блоков и меню).
+ *
+ * @return array
+ */
+function mp_home_page_data() {
+	$data = mp_home_data();
+
+	unset( $data['contacts'], $data['footer'], $data['menu'] );
+
+	return $data;
 }
 
 /**

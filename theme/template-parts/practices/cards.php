@@ -9,7 +9,8 @@
  * @package MPartners
  */
 
-$mp_cards = mp_practice( 'cards', [] );
+// Карточки — записи типа «Практики»; пока их нет, берутся из макета.
+$mp_cards = function_exists( 'mp_practice_cards' ) ? mp_practice_cards() : mp_practice( 'cards', [] );
 ?>
 <section class="pg-cards">
 	<ul class="pg-cards__grid">
@@ -27,8 +28,8 @@ $mp_cards = mp_practice( 'cards', [] );
 				</article>
 
 				<div class="btn-pair pg-card__actions">
-					<a class="btn" href="#form"><?php echo esc_html( mp_practice( 'card_cta' ) ); ?></a>
-					<a class="btn-icon" href="#form" aria-hidden="true" tabindex="-1"><?php mp_icon( 'plus' ); ?></a>
+					<a class="btn" href="<?php echo esc_url( isset( $mp_card['href'] ) ? $mp_card['href'] : '#form' ); ?>"><?php echo esc_html( mp_practice( 'card_cta' ) ); ?></a>
+					<a class="btn-icon" href="<?php echo esc_url( isset( $mp_card['href'] ) ? $mp_card['href'] : '#form' ); ?>" aria-hidden="true" tabindex="-1"><?php mp_icon( 'plus' ); ?></a>
 				</div>
 			</li>
 		<?php endforeach; ?>

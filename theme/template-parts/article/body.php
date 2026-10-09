@@ -5,7 +5,7 @@
  * @package MPartners
  */
 
-$mp_art = mp_article_data();
+$mp_art = function_exists( 'mp_content' ) ? mp_content( 'article' ) : mp_article_data();
 ?>
 <section class="art">
 	<div class="shell">

@@ -6,7 +6,7 @@
  */
 
 $mp_author = mp_article( 'author' );
-$mp_person = mp_lawyer_data();
+$mp_person = function_exists( 'mp_content' ) ? mp_content( 'lawyer' ) : mp_lawyer_data();
 ?>
 <section class="art-author">
 	<div class="shell shell--wide">

@@ -42,6 +42,14 @@ function selected( $a, $b, $e = true ) { if ( (string) $a === (string) $b ) { ec
 // Формы на сайте работают через Contact Form 7; в статике плагина нет,
 // поэтому шаблоны выводят свою запасную разметку.
 function mp_cf7( $slug, $class = '' ) { return false; }
+// Меню на сайте редактируются в админке; в статике берём пункты из макета.
+function mp_menu_items( $location, $fallback = [] ) {
+	$items = [];
+	foreach ( (array) $fallback as $item ) {
+		$items[] = is_array( $item ) ? $item : [ 'label' => $item, 'href' => '#' ];
+	}
+	return $items;
+}
 
 function mp_latest( $pattern ) {
 	$files = glob( MP_THEME . '/dist/' . $pattern );

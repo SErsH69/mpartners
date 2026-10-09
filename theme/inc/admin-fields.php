@@ -10,7 +10,7 @@
  * @package MPartners
  */
 
-const MP_CONTENT_VERSION = '3';
+const MP_CONTENT_VERSION = '4';
 
 /**
  * Редактируемые разделы контента.
@@ -19,31 +19,146 @@ const MP_CONTENT_VERSION = '3';
  */
 function mp_content_groups() {
 	return [
+		'common'    => [
+			'title'    => 'Общие настройки',
+			'data'     => 'mp_common_data',
+			'location' => 'options',
+		],
 		'home'      => [
-			'title' => 'Главная',
-			'data'  => 'mp_home_data',
+			'title'    => 'Контент главной',
+			'data'     => 'mp_home_page_data',
+			'location' => 'front_page',
 		],
 		'practices' => [
-			'title' => 'Практики',
-			'data'  => 'mp_practices_data',
+			'title'     => 'Контент страницы «Практики»',
+			'data'      => 'mp_practices_data',
+			'templates' => [ 'page-practices.php' ],
+			// Карточки практик живут в записях «Практики», а не здесь.
+			'skip'      => [ 'cards' ],
 		],
 		'case'      => [
-			'title' => 'Страница дела',
-			'data'  => 'mp_case_data',
+			'title'     => 'Контент страницы дела',
+			'data'      => 'mp_case_data',
+			'templates' => [ 'page-case.php' ],
 		],
 		'lawyer'    => [
-			'title' => 'Карточка адвоката',
-			'data'  => 'mp_lawyer_data',
+			'title'     => 'Контент карточки адвоката',
+			'data'      => 'mp_lawyer_data',
+			'templates' => [ 'page-lawyer.php' ],
 		],
 		'press'     => [
-			'title' => 'Пресс-центр, мероприятия, СМИ',
-			'data'  => 'mp_press_data',
+			'title'     => 'Контент раздела',
+			'data'      => 'mp_press_section_data',
+			'templates' => [ 'page-press.php' ],
+		],
+		'events'    => [
+			'title'     => 'Контент раздела',
+			'data'      => 'mp_events_section_data',
+			'templates' => [ 'page-events.php' ],
+		],
+		'media'     => [
+			'title'     => 'Контент раздела',
+			'data'      => 'mp_media_section_data',
+			'templates' => [ 'page-media.php' ],
 		],
 		'article'   => [
-			'title' => 'Внутренняя страница раздела',
-			'data'  => 'mp_article_data',
+			'title'     => 'Контент материала',
+			'data'      => 'mp_article_data',
+			'templates' => [ 'page-article.php', 'page-event.php', 'page-media-item.php' ],
 		],
 	];
+}
+
+/**
+ * Страница, к которой привязан раздел контента.
+ *
+ * @param string $group Ключ раздела.
+ * @return string|int 'option' или ID страницы (0, если страницы нет).
+ */
+function mp_content_target( $group ) {
+	static $cache = [];
+
+	if ( isset( $cache[ $group ] ) ) {
+		return $cache[ $group ];
+	}
+
+	$groups = mp_content_groups();
+	$meta   = isset( $groups[ $group ] ) ? $groups[ $group ] : [];
+
+	if ( isset( $meta['location'] ) && 'options' === $meta['location'] ) {
+		$cache[ $group ] = 'option';
+
+		return 'option';
+	}
+
+	if ( isset( $meta['location'] ) && 'front_page' === $meta['location'] ) {
+		$cache[ $group ] = (int) get_option( 'page_on_front' );
+
+		return $cache[ $group ];
+	}
+
+	$templates = isset( $meta['templates'] ) ? $meta['templates'] : [];
+	$current   = function_exists( 'get_queried_object_id' ) ? (int) get_queried_object_id() : 0;
+
+	// На самой странице берём её же значения — у каждого материала свои.
+	if ( $current && in_array( (string) get_page_template_slug( $current ), $templates, true ) ) {
+		$cache[ $group ] = $current;
+
+		return $current;
+	}
+
+	$pages = get_posts(
+		[
+			'post_type'      => 'page',
+			'posts_per_page' => 1,
+			'post_status'    => 'any',
+			'fields'         => 'ids',
+			'meta_query'     => [ // phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_query
+				[
+					'key'     => '_wp_page_template',
+					'value'   => $templates,
+					'compare' => 'IN',
+				],
+			],
+		]
+	);
+
+	$cache[ $group ] = $pages ? (int) $pages[0] : 0;
+
+	return $cache[ $group ];
+}
+
+/**
+ * Все страницы, к которым привязан раздел контента.
+ *
+ * @param string $group Ключ раздела.
+ * @return array Список 'option' или ID страниц.
+ */
+function mp_content_targets( $group ) {
+	$groups = mp_content_groups();
+	$meta   = isset( $groups[ $group ] ) ? $groups[ $group ] : [];
+
+	if ( isset( $meta['location'] ) ) {
+		$target = mp_content_target( $group );
+
+		return $target ? [ $target ] : [];
+	}
+
+	return get_posts(
+		[
+			'post_type'      => 'page',
+			'posts_per_page' => -1,
+			'post_status'    => 'any',
+			'fields'         => 'ids',
+			'meta_query'     => [ // phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_query
+				[
+					'key'     => '_wp_page_template',
+					'value'   => isset( $meta['templates'] ) ? $meta['templates'] : [],
+					'compare' => 'IN',
+				],
+			],
+		]
+	);
 }
 
 /**
@@ -299,23 +414,61 @@ function mp_register_content_fields() {
 			continue;
 		}
 
-		$slug = 'mp-content-' . $group;
-
-		if ( function_exists( 'acf_add_options_sub_page' ) ) {
-			acf_add_options_sub_page(
-				[
-					'page_title'  => $meta['title'],
-					'menu_title'  => $meta['title'],
-					'menu_slug'   => $slug,
-					'parent_slug' => 'mp-content',
-				]
-			);
-		}
-
 		$fields = [];
+		$skip   = isset( $meta['skip'] ) ? $meta['skip'] : [];
 
 		foreach ( call_user_func( $meta['data'] ) as $key => $value ) {
+			if ( in_array( $key, $skip, true ) ) {
+				continue;
+			}
+
 			$fields[] = mp_acf_field( $group . '.' . $key, $group . '_' . $key, $value, mp_acf_label( $key ) );
+		}
+
+		if ( ! $fields ) {
+			continue;
+		}
+
+		$location = [];
+
+		if ( isset( $meta['location'] ) && 'options' === $meta['location'] ) {
+			if ( function_exists( 'acf_add_options_page' ) ) {
+				acf_add_options_page(
+					[
+						'page_title' => $meta['title'],
+						'menu_title' => $meta['title'],
+						'menu_slug'  => 'mp-settings',
+						'icon_url'   => 'dashicons-admin-generic',
+						'position'   => 23,
+					]
+				);
+			}
+
+			$location[] = [
+				[
+					'param'    => 'options_page',
+					'operator' => '==',
+					'value'    => 'mp-settings',
+				],
+			];
+		} elseif ( isset( $meta['location'] ) && 'front_page' === $meta['location'] ) {
+			$location[] = [
+				[
+					'param'    => 'page_type',
+					'operator' => '==',
+					'value'    => 'front_page',
+				],
+			];
+		} else {
+			foreach ( $meta['templates'] as $template ) {
+				$location[] = [
+					[
+						'param'    => 'page_template',
+						'operator' => '==',
+						'value'    => $template,
+					],
+				];
+			}
 		}
 
 		acf_add_local_field_group(
@@ -323,15 +476,8 @@ function mp_register_content_fields() {
 				'key'      => 'group_mp_' . $group,
 				'title'    => $meta['title'],
 				'fields'   => $fields,
-				'location' => [
-					[
-						[
-							'param'    => 'options_page',
-							'operator' => '==',
-							'value'    => $slug,
-						],
-					],
-				],
+				'location' => $location,
+				'style'    => 'default',
 			]
 		);
 	}
@@ -351,25 +497,44 @@ function mp_seed_content_fields() {
 		return;
 	}
 
+	$pending = false;
+
 	foreach ( mp_content_groups() as $group => $meta ) {
 		if ( ! function_exists( $meta['data'] ) ) {
 			continue;
 		}
 
-		foreach ( call_user_func( $meta['data'] ) as $key => $value ) {
-			$name = $group . '_' . $key;
+		$targets = mp_content_targets( $group );
+		$skip    = isset( $meta['skip'] ) ? $meta['skip'] : [];
 
-			$current = get_field( $name, 'option' );
+		if ( ! $targets ) {
+			// Страницы с таким шаблоном ещё нет — попробуем в следующий раз.
+			$pending = true;
 
-			// Пустой репитер ACF отдаёт как false, пустая группа — как массив
-			// с пустыми ключами, поэтому проверяем все «пустые» варианты.
-			if ( null === $current || '' === $current || false === $current || [] === $current ) {
-				update_field( $name, mp_content_to_acf( $value ), 'option' );
+			continue;
+		}
+
+		foreach ( $targets as $target ) {
+			foreach ( call_user_func( $meta['data'] ) as $key => $value ) {
+				if ( in_array( $key, $skip, true ) ) {
+					continue;
+				}
+
+				$name    = $group . '_' . $key;
+				$current = get_field( $name, $target );
+
+				// Пустой репитер ACF отдаёт как false, пустая группа — как
+				// массив с пустыми ключами: проверяем все «пустые» варианты.
+				if ( null === $current || '' === $current || false === $current || [] === $current ) {
+					update_field( $name, mp_content_to_acf( $value ), $target );
+				}
 			}
 		}
 	}
 
-	update_option( 'mp_content_version', MP_CONTENT_VERSION );
+	if ( ! $pending ) {
+		update_option( 'mp_content_version', MP_CONTENT_VERSION );
+	}
 }
 add_action( 'acf/init', 'mp_seed_content_fields', 20 );
 
@@ -426,9 +591,11 @@ function mp_content( $group ) {
 
 	$data = call_user_func( $groups[ $group ]['data'] );
 
-	if ( function_exists( 'get_field' ) ) {
+	$target = mp_content_target( $group );
+
+	if ( $target && function_exists( 'get_field' ) ) {
 		foreach ( $data as $key => $default ) {
-			$saved = get_field( $group . '_' . $key, 'option' );
+			$saved = get_field( $group . '_' . $key, $target );
 
 			if ( null !== $saved ) {
 				$data[ $key ] = mp_merge_content( $default, mp_content_from_acf( $saved ) );
@@ -466,3 +633,65 @@ function mp_content_get( $group, $path, $fallback = '' ) {
 
 	return $value;
 }
+
+/**
+ * Шаблоны страниц, у которых весь контент — в полях.
+ *
+ * @return array
+ */
+function mp_content_templates() {
+	$templates = [];
+
+	foreach ( mp_content_groups() as $meta ) {
+		if ( isset( $meta['templates'] ) ) {
+			$templates = array_merge( $templates, $meta['templates'] );
+		}
+	}
+
+	return $templates;
+}
+
+/**
+ * На страницах с нашими шаблонами блочный редактор не нужен: содержимое
+ * собирается из полей, а блоки только путают.
+ *
+ * @param bool   $enabled   Включён ли редактор блоков.
+ * @param object $post      Запись.
+ * @return bool
+ */
+function mp_disable_block_editor( $enabled, $post ) {
+	if ( ! $post || 'page' !== $post->post_type ) {
+		return $enabled;
+	}
+
+	if ( (int) get_option( 'page_on_front' ) === (int) $post->ID ) {
+		return false;
+	}
+
+	return in_array( (string) get_page_template_slug( $post->ID ), mp_content_templates(), true ) ? false : $enabled;
+}
+add_filter( 'use_block_editor_for_post', 'mp_disable_block_editor', 10, 2 );
+
+/**
+ * Текстовый редактор на таких страницах тоже лишний — шаблон его не выводит.
+ */
+function mp_hide_page_editor() {
+	$screen = get_current_screen();
+
+	if ( ! $screen || 'page' !== $screen->id ) {
+		return;
+	}
+
+	$post_id = isset( $_GET['post'] ) ? (int) $_GET['post'] : 0; // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+
+	if ( ! $post_id ) {
+		return;
+	}
+
+	$is_front = (int) get_option( 'page_on_front' ) === $post_id;
+
+	if ( $is_front || in_array( (string) get_page_template_slug( $post_id ), mp_content_templates(), true ) ) {
+		remove_post_type_support( 'page', 'editor' );
+	}
+}
+add_action( 'current_screen', 'mp_hide_page_editor' );

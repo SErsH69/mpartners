@@ -5,7 +5,7 @@
  * @package MPartners
  */
 
-$mp_lawyer   = mp_lawyer_data();
+$mp_lawyer   = function_exists( 'mp_content' ) ? mp_content( 'lawyer' ) : mp_lawyer_data();
 $mp_registry = $mp_lawyer['registry'];
 $mp_spec     = $mp_lawyer['spec'];
 ?>

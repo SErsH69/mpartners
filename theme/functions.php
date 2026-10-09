@@ -17,6 +17,8 @@ require_once get_template_directory() . '/inc/lawyer-data.php';
 require_once get_template_directory() . '/inc/press-data.php';
 require_once get_template_directory() . '/inc/article-data.php';
 require_once get_template_directory() . '/inc/admin-fields.php';
+require_once get_template_directory() . '/inc/menus.php';
+require_once get_template_directory() . '/inc/practice-cpt.php';
 require_once get_template_directory() . '/inc/cf7.php';
 require_once get_template_directory() . '/inc/contact.php';
 
@@ -56,12 +58,6 @@ function webula_setup() {
 		]
 	);
 
-	register_nav_menus(
-		[
-			'menu-top'    => __( 'Header Menu', 'm-partners' ),
-			'menu-footer' => __( 'Footer Menu', 'm-partners' ),
-		]
-	);
 }
 add_action( 'after_setup_theme', 'webula_setup' );
 

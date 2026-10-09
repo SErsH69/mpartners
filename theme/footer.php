@@ -53,8 +53,8 @@ $mp_menu     = (array) mp_data( 'menu', [] );
 				<nav class="footer__col footer__col--menu" aria-label="<?php echo esc_attr( $mp_footer['menu_title'] ); ?>">
 					<p class="footer__col-title"><?php echo esc_html( $mp_footer['menu_title'] ); ?></p>
 					<ul class="footer__list">
-						<?php foreach ( $mp_menu as $mp_item ) : ?>
-							<li><a href="#"><?php echo esc_html( $mp_item ); ?></a></li>
+						<?php foreach ( mp_menu_items( 'mp-footer', $mp_menu ) as $mp_item ) : ?>
+							<li><a href="<?php echo esc_url( $mp_item['href'] ); ?>"><?php echo esc_html( $mp_item['label'] ); ?></a></li>
 						<?php endforeach; ?>
 					</ul>
 				</nav>
@@ -62,11 +62,14 @@ $mp_menu     = (array) mp_data( 'menu', [] );
 				<nav class="footer__col footer__col--services" aria-label="<?php echo esc_attr( $mp_footer['services_title'] ); ?>">
 					<p class="footer__col-title"><?php echo esc_html( $mp_footer['services_title'] ); ?></p>
 					<div class="footer__services">
-						<?php // В макете две независимые колонки: 8 и 6 пунктов. ?>
-						<?php foreach ( [ array_slice( $mp_footer['services'], 0, 8 ), array_slice( $mp_footer['services'], 8 ) ] as $mp_column ) : ?>
+						<?php
+						// В макете две независимые колонки: 8 и 6 пунктов.
+						$mp_services = mp_menu_items( 'mp-services', $mp_footer['services'] );
+						?>
+						<?php foreach ( [ array_slice( $mp_services, 0, 8 ), array_slice( $mp_services, 8 ) ] as $mp_column ) : ?>
 							<ul class="footer__list">
 								<?php foreach ( $mp_column as $mp_service ) : ?>
-									<li><a href="#"><?php echo esc_html( $mp_service ); ?></a></li>
+									<li><a href="<?php echo esc_url( $mp_service['href'] ); ?>"><?php echo esc_html( $mp_service['label'] ); ?></a></li>
 								<?php endforeach; ?>
 							</ul>
 						<?php endforeach; ?>

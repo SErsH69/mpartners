@@ -51,8 +51,8 @@ $mp_contacts = mp_data( 'contacts' );
 					<div class="nav-drop" id="nav-drop" aria-hidden="true">
 						<p class="nav-drop__label">Разделы</p>
 						<ul class="nav-drop__list">
-							<?php foreach ( (array) mp_data( 'menu', [] ) as $mp_item ) : ?>
-								<li class="nav-drop__item"><a href="#"><?php echo esc_html( $mp_item ); ?></a></li>
+							<?php foreach ( mp_menu_items( 'mp-header', mp_data( 'menu', [] ) ) as $mp_item ) : ?>
+								<li class="nav-drop__item"><a href="<?php echo esc_url( $mp_item['href'] ); ?>"><?php echo esc_html( $mp_item['label'] ); ?></a></li>
 							<?php endforeach; ?>
 						</ul>
 						<hr class="nav-drop__divider nav-drop__item">
@@ -99,8 +99,8 @@ $mp_contacts = mp_data( 'contacts' );
 			<button class="menu-panel__close" type="button" data-menu-close aria-label="Закрыть меню"><?php mp_icon( 'close' ); ?></button>
 			<nav class="menu-panel__nav" aria-label="Основное меню">
 				<ul>
-					<?php foreach ( (array) mp_data( 'menu', [] ) as $mp_item ) : ?>
-						<li><a href="#"><?php echo esc_html( $mp_item ); ?></a></li>
+					<?php foreach ( mp_menu_items( 'mp-header', mp_data( 'menu', [] ) ) as $mp_item ) : ?>
+						<li><a href="<?php echo esc_url( $mp_item['href'] ); ?>"><?php echo esc_html( $mp_item['label'] ); ?></a></li>
 					<?php endforeach; ?>
 				</ul>
 			</nav>
