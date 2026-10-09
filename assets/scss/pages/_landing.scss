@@ -1,0 +1,566 @@
+@use '../abstracts/variables' as *;
+@use '../abstracts/mixins' as *;
+
+// =============================================================
+// Хаб услуг — макет «(р) M-partners (Copy) (Copy)», 1920 / 1280 / 640 / 375.
+// Контейнер 1200, как и на остальных страницах сайта.
+// =============================================================
+
+// --- Первый экран -------------------------------------------
+.hub-hero {
+    padding-top: 15px; // от шапки до панели
+}
+
+.hub-hero__panel {
+    position: relative;
+    display: flex;
+    gap: 50px;
+    min-height: 385px;
+    padding: 50px 50px 48px; // снизу 48, чтобы панель была ровно 385
+    overflow: hidden;
+    border-radius: $r-sm;
+
+    @include gradient-dark;
+
+    @include tablet {
+        flex-direction: column;
+        gap: 30px;
+        min-height: 0;
+        padding: 30px;
+    }
+
+    @include mobile {
+        gap: 25px;
+        padding: 20px;
+    }
+}
+
+.hub-hero__decor {
+    position: absolute;
+    top: -228px;
+    left: 544px;
+    width: 824px;
+    height: 824px;
+    pointer-events: none;
+
+    @include tablet {
+        left: auto;
+        right: -300px;
+    }
+}
+
+.hub-hero__copy {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    flex: 0 0 557px;
+    flex-direction: column;
+    gap: 86px; // заголовок кончается на 148, блок гарантии начинается на 234
+    width: 557px;
+
+    @include tablet {
+        flex: 0 0 auto;
+        gap: 25px;
+        width: 100%;
+    }
+}
+
+.hub-hero__title {
+    margin: 0;
+    color: $c-cream;
+    font-family: $font-display;
+    font-size: 55px;
+    font-weight: 400;
+    line-height: 49px;
+
+    @include tablet {
+        font-size: 44px;
+        line-height: round(nearest, 0.9em, 1px);
+    }
+
+    @include mobile {
+        font-size: 32px;
+        line-height: round(nearest, 0.92em, 1px);
+    }
+}
+
+.hub-hero__note {
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+    width: 363px;
+    min-height: 101px; // бокс из макета
+    padding: 13px 15px;
+    background-color: rgba($c-white, 0.06);
+    border-radius: $r-sm;
+
+    @include tablet {
+        width: 100%;
+    }
+}
+
+.hub-hero__note-icon {
+    display: flex;
+    flex: 0 0 auto;
+    color: $c-cream;
+
+    svg {
+        display: block;
+        width: 17px;
+        height: 20px;
+    }
+}
+
+.hub-hero__note-text {
+    margin: 0;
+    color: $c-muted-light;
+    font-size: 14px;
+    font-weight: 400;
+    line-height: round(nearest, 1.1em, 1px);
+}
+
+// --- Форма первого экрана -----------------------------------
+.hub-form {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    flex: 0 0 493px;
+    flex-direction: column;
+    gap: 20px;
+    width: 493px;
+    padding: 20px;
+    background-color: #201b16;
+    border-radius: $r-sm;
+
+    @include tablet {
+        flex: 0 0 auto;
+        width: 100%;
+    }
+
+    @include mobile {
+        gap: 15px;
+    }
+}
+
+.hub-form__lead {
+    margin: 0;
+    color: $c-cream;
+    font-size: 18px;
+    font-weight: 500;
+    line-height: round(nearest, 1.1em, 1px);
+}
+
+.hub-form__body {
+    display: flex;
+    flex-direction: column;
+}
+
+.hub-form__rows {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.hub-form__row {
+    display: flex;
+    gap: 10px;
+
+    @include mobile {
+        flex-wrap: wrap;
+    }
+}
+
+.hub-form__field {
+    flex: 1 1 auto;
+    min-width: 0;
+
+    input {
+        width: 100%;
+        height: 44px;
+        padding: 0 14px;
+        font-family: inherit;
+        font-size: 14px;
+        color: $c-cream;
+        background: none;
+        border: 1px solid rgba($c-white, 0.06);
+        border-radius: 8px;
+        appearance: none;
+
+        &::placeholder {
+            color: $c-muted-light;
+        }
+    }
+}
+
+// Выбор мессенджера: светлая плашка, кликается целиком.
+.hub-form__messenger {
+    position: relative;
+    display: flex;
+    flex: 0 0 120px;
+    gap: 8px;
+    align-items: center;
+    width: 120px;
+    height: 44px;
+    padding: 0 10px;
+    background-color: #f2ede0;
+    border-radius: $r-sm;
+
+    .wpcf7-form-control-wrap {
+        position: static;
+        flex: 1 1 auto;
+    }
+}
+
+.hub-form__messenger-icon,
+.hub-form__messenger-caret {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    flex: 0 0 auto;
+    color: $c-dark;
+    pointer-events: none;
+
+    svg {
+        display: block;
+        width: 17px;
+        height: 15px;
+    }
+}
+
+.hub-form__messenger-caret {
+    margin-left: auto;
+
+    svg {
+        width: 10px;
+        height: 6px;
+    }
+}
+
+.hub-form__select {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    padding: 0 27px 0 34px;
+    font-family: inherit;
+    font-size: 14px;
+    color: $c-dark;
+    background: none;
+    border: 0;
+    appearance: none;
+    cursor: pointer;
+}
+
+.hub-form__submit {
+    width: 100%;
+    height: 47px;
+    margin-top: 15px;
+    font-size: 14px;
+}
+
+.hub-form__consent {
+    // Строчные обёртки CF7 добавляли бы лишние 3px под текстом.
+    display: flex;
+    margin-top: 10px;
+
+    .wpcf7-form-control-wrap,
+    .wpcf7-acceptance {
+        display: flex;
+    }
+
+    .wpcf7-list-item {
+        margin: 0;
+    }
+
+    label {
+        display: flex;
+        gap: 8px;
+        align-items: center;
+        cursor: pointer;
+    }
+
+    input[type='checkbox'] {
+        position: static;
+        box-sizing: border-box; // рамка не должна добавлять высоту
+        flex: 0 0 auto;
+        width: 16px;
+        height: 16px;
+        margin: 0;
+        overflow: visible;
+        background-color: transparent;
+        border: 1.5px solid $c-muted;
+        border-radius: 3px;
+        clip-path: none;
+        appearance: none;
+        cursor: pointer;
+
+        &:checked {
+            background-color: $c-cream;
+            border-color: $c-cream;
+        }
+    }
+
+    .wpcf7-list-item-label {
+        color: $c-muted;
+        font-size: 12px;
+        line-height: 16px;
+    }
+}
+
+// --- Строка преимуществ -------------------------------------
+.hub-adv {
+    display: grid;
+    gap: 11px;
+    grid-template-columns: repeat(4, 1fr);
+    margin: 15px 0 0;
+    padding: 0;
+    list-style: none;
+
+    @include tablet {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    @include mobile {
+        grid-template-columns: 1fr;
+        gap: 5px; // в макете колонка 139px на четыре строки
+    }
+}
+
+.hub-adv__item {
+    display: flex;
+    gap: 15px;
+    align-items: center;
+    min-height: 31px;
+    padding: 5px;
+    background-color: $c-surface;
+    border-radius: $r-sm;
+}
+
+.hub-adv__icon {
+    display: flex;
+    flex: 0 0 21px;
+    align-items: center;
+    justify-content: center;
+    width: 21px;
+    height: 21px;
+    color: $c-dark;
+    background-color: $c-beige-deep;
+    border-radius: 50%;
+
+    svg {
+        display: block;
+        width: 11px;
+        height: 13px;
+    }
+}
+
+.hub-adv__text {
+    color: $c-muted;
+    font-size: 14px;
+    font-weight: 400;
+    line-height: round(nearest, 1.1em, 1px);
+}
+
+// --- Разделы с услугами -------------------------------------
+.hub-groups {
+    padding-top: 100px;
+
+    @include tablet {
+        padding-top: 60px;
+    }
+
+    @include mobile {
+        padding-top: 50px;
+    }
+}
+
+.hub-group + .hub-group {
+    margin-top: 45px;
+
+    @include tablet {
+        margin-top: 35px;
+    }
+}
+
+.hub-group__title {
+    max-width: 923px;
+    margin: 0 0 25px;
+    color: $c-dark;
+    font-family: $font-display;
+    font-size: 40px;
+    font-weight: 400;
+    line-height: 36px;
+
+    @include tablet {
+        margin-bottom: 20px;
+        font-size: 30px;
+        line-height: round(nearest, 0.92em, 1px);
+    }
+
+    @include mobile {
+        font-size: 24px;
+    }
+}
+
+.hub-group__grid {
+    display: grid;
+    gap: 10px;
+    grid-template-columns: repeat(2, 1fr);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+
+    @include tablet {
+        grid-template-columns: 1fr;
+    }
+}
+
+.hub-card {
+    background-color: $c-surface;
+    border-radius: $r-sm;
+    transition: background-color 0.2s ease;
+
+    &:hover {
+        background-color: $c-beige-deep;
+    }
+}
+
+.hub-card__link {
+    display: flex;
+    gap: 20px;
+    align-items: center;
+    min-height: 100px;
+    padding: 20px 30px;
+    color: $c-dark;
+    text-decoration: none;
+
+    @include mobile {
+        min-height: 80px;
+        padding: 18px 20px;
+    }
+}
+
+.hub-card__title {
+    flex: 1 1 auto;
+    font-size: 18px;
+    font-weight: 500;
+    line-height: round(nearest, 1.1em, 1px);
+
+    @include mobile {
+        font-size: 16px;
+    }
+}
+
+.hub-card__arrow {
+    display: flex;
+    flex: 0 0 auto;
+
+    svg {
+        display: block;
+        width: 14px;
+        height: 14px;
+    }
+}
+
+// --- Запись на консультацию ---------------------------------
+.hub-cta {
+    padding: 100px 0;
+
+    @include tablet {
+        padding: 60px 0;
+    }
+
+    @include mobile {
+        padding: 50px 0;
+    }
+}
+
+.hub-cta__panel {
+    position: relative;
+    display: flex;
+    gap: 30px;
+    align-items: flex-start;
+    min-height: 246px;
+    padding: 50px 50px 50px 30px;
+    overflow: hidden;
+    border-radius: $r-sm;
+
+    @include gradient-dark;
+
+    @include tablet {
+        flex-direction: column;
+        gap: 25px;
+        min-height: 0;
+        padding: 30px;
+    }
+
+    @include mobile {
+        padding: 20px;
+    }
+}
+
+.hub-cta__decor {
+    position: absolute;
+    top: -262px;
+    left: 465px;
+    width: 915px;
+    height: 915px;
+    pointer-events: none;
+}
+
+.hub-cta__copy {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    flex: 1 1 auto;
+    flex-direction: column;
+    gap: 10px;
+    min-width: 0;
+}
+
+.hub-cta__title {
+    max-width: 536px;
+    margin: 0;
+    color: $c-cream;
+    font-family: $font-display;
+    font-size: 40px;
+    font-weight: 400;
+    line-height: 36px;
+
+    @include tablet {
+        font-size: 30px;
+        line-height: round(nearest, 0.92em, 1px);
+    }
+
+    @include mobile {
+        font-size: 24px;
+    }
+}
+
+.hub-cta__text {
+    max-width: 513px;
+    min-height: 42px; // бокс из макета
+    margin: 0;
+    color: $c-muted-light;
+    font-size: 14px;
+    font-weight: 500;
+    line-height: 14px;
+
+    @include mobile {
+        line-height: round(nearest, 1.2em, 1px);
+    }
+}
+
+.hub-cta__button {
+    position: absolute;
+    top: 148px;
+    right: 50px;
+    z-index: 1;
+    width: 377px;
+    height: 47px;
+
+    @include tablet {
+        position: static;
+        width: 100%;
+    }
+}

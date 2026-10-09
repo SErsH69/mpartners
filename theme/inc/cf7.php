@@ -219,6 +219,32 @@ function mp_cf7_definitions() {
 		]
 	);
 
+
+	// --- Форма хаба услуг ---------------------------------------------
+	$hub = mp_landings( 'form' );
+
+	$landing = sprintf(
+		'<div class="hub-form__rows">
+<div class="hub-form__row">
+<span class="field hub-form__field">[text* name placeholder "%1$s"]</span>
+<span class="field hub-form__field">[tel* phone placeholder "%2$s"]</span>
+</div>
+<div class="hub-form__row">
+<span class="hub-form__messenger"><span class="hub-form__messenger-icon">%4$s</span>[select channel class:hub-form__select "Telegram" "MAX" "ВКонтакте" "WhatsApp"]<span class="hub-form__messenger-caret">%5$s</span></span>
+<span class="field hub-form__field">[text contact placeholder "%3$s"]</span>
+</div>
+</div>
+[submit class:btn class:btn--light class:hub-form__submit "%6$s"]
+<span class="consent hub-form__consent">[acceptance consent "%7$s"]</span>',
+		esc_attr( $hub['fields']['name'] ),
+		esc_attr( $hub['fields']['phone'] ),
+		esc_attr( $hub['fields']['contact'] ),
+		mp_cf7_icon( 'telegram' ),
+		mp_cf7_icon( 'caret' ),
+		esc_attr( $hub['submit'] ),
+		esc_attr( $hub['consent'] )
+	);
+
 	return [
 		'practices' => [
 			'title' => 'M-PARTNERS — практики',
@@ -239,6 +265,11 @@ function mp_cf7_definitions() {
 			'title' => 'M-PARTNERS — квиз',
 			'form'  => $quiz_form,
 			'mail'  => $quiz_mail,
+		],
+		'landing'   => [
+			'title' => 'M-PARTNERS — хаб услуг',
+			'form'  => $landing,
+			'mail'  => $mail,
 		],
 	];
 }
