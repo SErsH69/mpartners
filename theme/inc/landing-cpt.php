@@ -8,7 +8,7 @@
  * @package MPartners
  */
 
-const MP_LANDING_VERSION = '2';
+const MP_LANDING_VERSION = '3';
 const MP_LANDING_TYPE    = 'mp_landing';
 
 /**
@@ -181,6 +181,8 @@ function mp_seed_landing_page() {
 			[
 				'post_type'   => MP_LANDING_TYPE,
 				'post_title'  => mp_landing_page_data()['hero']['title'],
+				// Слаг задаём явно: Cyr-To-Lat на этом хуке ещё не работает.
+				'post_name'   => 'advokat-po-ekonomicheskim-prestupleniyam',
 				'post_status' => 'publish',
 				'menu_order'  => 1,
 			]
@@ -188,6 +190,19 @@ function mp_seed_landing_page() {
 
 		if ( $landing && ! is_wp_error( $landing ) && function_exists( 'update_field' ) ) {
 			update_field( 'landing_group', '1', $landing );
+		}
+	}
+
+	// Кириллический слаг отдавал бы длинный %-адрес — переводим в латиницу.
+	foreach ( get_posts( [ 'post_type' => MP_LANDING_TYPE, 'posts_per_page' => -1, 'post_status' => 'any' ] ) as $post ) {
+		if ( preg_match( '~^[a-z0-9-]+$~', $post->post_name ) ) {
+			continue;
+		}
+
+		$slug = function_exists( 'ctl_sanitize_title' ) ? ctl_sanitize_title( $post->post_title ) : sanitize_title( $post->post_title );
+
+		if ( $slug && preg_match( '~^[a-z0-9-]+$~', $slug ) ) {
+			wp_update_post( [ 'ID' => $post->ID, 'post_name' => $slug ] );
 		}
 	}
 
