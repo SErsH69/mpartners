@@ -97,6 +97,10 @@ function mp_article_data() {
  * @return mixed
  */
 function mp_article( $path, $fallback = '' ) {
+	if ( function_exists( 'mp_content_get' ) ) {
+		return mp_content_get( 'article', $path, $fallback );
+	}
+
 	$value = mp_article_data();
 
 	foreach ( explode( '.', $path ) as $key ) {

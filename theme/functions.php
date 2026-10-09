@@ -8,10 +8,7 @@ require_once get_template_directory() . '/inc/acf-options.php';
 require_once get_template_directory() . '/inc/ajax.php';
 require_once get_template_directory() . '/inc/pictures.php';
 require_once get_template_directory() . '/inc/speed.php';
-require_once get_template_directory() . '/inc/template-tags.php';
 require_once get_template_directory() . '/inc/template-functions.php';
-require_once get_template_directory() . '/inc/mail.php';
-require_once get_template_directory() . '/inc/post-types.php';
 require_once get_template_directory() . '/inc/icons.php';
 require_once get_template_directory() . '/inc/home-data.php';
 require_once get_template_directory() . '/inc/practices-data.php';
@@ -19,6 +16,7 @@ require_once get_template_directory() . '/inc/case-data.php';
 require_once get_template_directory() . '/inc/lawyer-data.php';
 require_once get_template_directory() . '/inc/press-data.php';
 require_once get_template_directory() . '/inc/article-data.php';
+require_once get_template_directory() . '/inc/admin-fields.php';
 require_once get_template_directory() . '/inc/cf7.php';
 require_once get_template_directory() . '/inc/contact.php';
 

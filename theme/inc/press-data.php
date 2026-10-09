@@ -131,7 +131,7 @@ function mp_press_data() {
  * @return array
  */
 function mp_press( $section ) {
-	$data = mp_press_data();
+	$data = function_exists( 'mp_content' ) ? mp_content( 'press' ) : mp_press_data();
 
 	return isset( $data[ $section ] ) ? $data[ $section ] : $data['press'];
 }

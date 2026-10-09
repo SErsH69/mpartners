@@ -61,6 +61,10 @@ function mp_case_data() {
  * @return mixed
  */
 function mp_case( $path, $fallback = '' ) {
+	if ( function_exists( 'mp_content_get' ) ) {
+		return mp_content_get( 'case', $path, $fallback );
+	}
+
 	$value = mp_case_data();
 
 	foreach ( explode( '.', $path ) as $key ) {

@@ -103,6 +103,10 @@ function mp_lawyer_data() {
  * @return mixed
  */
 function mp_lawyer( $path, $fallback = '' ) {
+	if ( function_exists( 'mp_content_get' ) ) {
+		return mp_content_get( 'lawyer', $path, $fallback );
+	}
+
 	$value = mp_lawyer_data();
 
 	foreach ( explode( '.', $path ) as $key ) {

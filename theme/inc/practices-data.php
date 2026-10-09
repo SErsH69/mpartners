@@ -111,6 +111,10 @@ function mp_practices_data() {
  * @return mixed
  */
 function mp_practice( $path, $fallback = '' ) {
+	if ( function_exists( 'mp_content_get' ) ) {
+		return mp_content_get( 'practices', $path, $fallback );
+	}
+
 	$value = mp_practices_data();
 
 	foreach ( explode( '.', $path ) as $key ) {

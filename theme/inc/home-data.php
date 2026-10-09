@@ -478,6 +478,11 @@ function mp_home_data() {
  * @return mixed
  */
 function mp_data( $path, $default = null ) {
+	// Контент берётся из админки (ACF), значения из макета — запасные.
+	if ( function_exists( 'mp_content_get' ) ) {
+		return mp_content_get( 'home', $path, $default );
+	}
+
 	$value = mp_home_data();
 
 	foreach ( explode( '.', $path ) as $key ) {
@@ -499,6 +504,21 @@ function mp_data( $path, $default = null ) {
  * @return string
  */
 function mp_img( $name, $ext = 'png' ) {
+	// Из ACF может прийти массив или готовый URL загруженной картинки.
+	if ( is_array( $name ) ) {
+		$name = isset( $name['url'] ) ? $name['url'] : '';
+	}
+
+	$name = (string) $name;
+
+	if ( '' === $name ) {
+		return '';
+	}
+
+	if ( preg_match( '~^(https?:)?//|^/~', $name ) ) {
+		return $name;
+	}
+
 	return get_template_directory_uri() . '/dist/img/figma/' . $name . '.' . $ext;
 }
 

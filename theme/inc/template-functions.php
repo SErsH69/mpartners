@@ -45,37 +45,3 @@ function webula_cookie_banner() {
 	get_template_part( 'template-parts/banner', 'cookie' );
 }
 add_action( 'webula_after_footer', 'webula_cookie_banner' );
-
-// Add a new column to the post/page list
-function webula_add_blocks_column( $columns ) {
-	$columns['blocks_used'] = 'Р‘Р»РѕРєРё';
-	return $columns;
-}
-add_filter( 'manage_posts_columns', 'webula_add_blocks_column' );
-add_filter( 'manage_pages_columns', 'webula_add_blocks_column' );
-
-// Output the content of the new column
-function webula_display_blocks_column( $column, $post_id ) {
-	if ( 'blocks_used' === $column ) {
-		// Get the post content
-		$post_content = get_post_field( 'post_content', $post_id );
-
-		// Parse the blocks
-		$blocks = parse_blocks( $post_content );
-
-		// Create an array to hold the block names
-		$block_names = [];
-
-		// Loop through the blocks and add the block names to the array
-		foreach ( $blocks as $block ) {
-			if ( ! empty( $block['blockName'] ) ) {
-				$block_names[] = $block['blockName'];
-			}
-		}
-
-		// Output the block names as a comma-separated list
-		echo implode( '<br> ', $block_names );
-	}
-}
-add_action( 'manage_posts_custom_column', 'webula_display_blocks_column', 10, 2 );
-add_action( 'manage_pages_custom_column', 'webula_display_blocks_column', 10, 2 );
