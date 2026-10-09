@@ -45,7 +45,7 @@ $mp_person = function_exists( 'mp_content' ) ? mp_content( 'lawyer' ) : mp_lawye
 					<strong><?php echo esc_html( $mp_person['registry']['number'] ); ?></strong>
 				</p>
 
-				<a class="btn btn--light art-author__button" href="<?php echo esc_url( $mp_person['card']['href'] ); ?>"><?php echo esc_html( $mp_author['button'] ); ?></a>
+				<a class="btn btn--light art-author__button" href="<?php echo esc_url( mp_link( $mp_person['card'], 'lawyers' ) ); ?>"><?php echo esc_html( $mp_author['button'] ); ?></a>
 			</div>
 		</div>
 	</div>
