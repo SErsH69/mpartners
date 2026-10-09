@@ -423,10 +423,12 @@ function mp_search_label( $post ) {
  * @return array
  */
 function mp_recent_cards( $count = 3, $exclude = 0, $fallback = [] ) {
+	// Демо-материалы разделов повторяют друг друга по заголовкам, поэтому
+	// берём с запасом и отбрасываем повторы и саму открытую запись.
 	$posts = get_posts(
 		[
 			'post_type'        => 'post',
-			'posts_per_page'   => (int) $count,
+			'posts_per_page'   => max( (int) $count * 4, 12 ),
 			'post__not_in'     => $exclude ? [ (int) $exclude ] : [],
 			'suppress_filters' => false,
 		]
@@ -436,9 +438,27 @@ function mp_recent_cards( $count = 3, $exclude = 0, $fallback = [] ) {
 		return (array) $fallback;
 	}
 
+	$seen = [];
+
+	if ( $exclude ) {
+		$seen[] = get_the_title( (int) $exclude );
+	}
+
 	$cards = [];
 
 	foreach ( $posts as $post ) {
+		$title = get_the_title( $post );
+
+		if ( in_array( $title, $seen, true ) ) {
+			continue;
+		}
+
+		$seen[] = $title;
+
+		if ( count( $cards ) >= (int) $count ) {
+			break;
+		}
+
 		$cards[] = [
 			'category' => mp_search_label( $post ),
 			'title'    => get_the_title( $post ),
