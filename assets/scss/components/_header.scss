@@ -264,7 +264,9 @@
     transition: opacity 0.25s ease, visibility 0.25s ease;
 
     &[hidden] {
-        display: flex; // управляем видимостью через класс, а не через [hidden]
+        // Видимостью панели управляет класс .is-open, а не атрибут: иначе
+        // пропадёт плавное появление. Перебиваем общее правило из reset.
+        display: flex !important;
     }
 
     &.is-open {
