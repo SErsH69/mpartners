@@ -45,7 +45,8 @@ foreach ( $mp_terms ? $mp_terms : array_slice( (array) $mp_section['filters'], 1
 			</ul>
 		</div>
 
-		<ul class="pr__grid" data-rubric-list>
+		<?php // Шаг показа — столько карточек, сколько в макете на первом экране. ?>
+		<ul class="pr__grid" data-more-list data-more-step="<?php echo esc_attr( max( count( (array) $mp_section['items'] ), 1 ) ); ?>">
 			<?php foreach ( $mp_items as $mp_item ) : ?>
 				<?php $mp_lead = ! empty( $mp_item['lead'] ); ?>
 				<li class="post-card pr-card <?php echo $mp_lead ? 'post-card--dark pr-card--lead' : 'post-card--light'; ?>" data-rubrics="<?php echo esc_attr( implode( ' ', (array) ( isset( $mp_item['rubrics'] ) ? $mp_item['rubrics'] : [] ) ) ); ?>">
@@ -66,6 +67,6 @@ foreach ( $mp_terms ? $mp_terms : array_slice( (array) $mp_section['filters'], 1
 			<?php endforeach; ?>
 		</ul>
 
-		<button class="btn btn--block pr__more" type="button"><?php echo esc_html( $mp_section['more'] ); ?></button>
+		<button class="btn btn--block pr__more" type="button" data-more hidden><?php echo esc_html( $mp_section['more'] ); ?></button>
 	</div>
 </section>

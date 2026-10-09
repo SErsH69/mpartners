@@ -6,7 +6,7 @@ import initDropdown from './modules/dropdown'
 import initReveal from './modules/reveal'
 import initHeroTrail from './modules/hero-trail'
 import initModal from './modules/modal'
-import initRubricTabs from './modules/rubric-tabs'
+import initCards from './modules/cards'
 import initSearch from './modules/search'
 import initGallery from './modules/gallery'
 
@@ -19,7 +19,7 @@ const boot = () => {
     initReveal()
     initHeroTrail()
     initModal()
-    initRubricTabs()
+    initCards()
     initSearch()
     initGallery()
 }

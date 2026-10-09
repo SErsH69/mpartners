@@ -267,6 +267,9 @@
 // Форма заявки: на десктопе узкая колонка 262px
 // -------------------------------------------------------------
 .pg-form--case {
+    // Форма едет за чтением описания, пока не кончится колонка с блоками.
+    position: sticky;
+    top: 20px;
     flex: 0 0 262px;
     width: 262px;
     min-height: 0;
@@ -274,6 +277,7 @@
     padding: 20px 20px 23px;
 
     @include tablet {
+        position: static;
         flex: 0 0 auto;
         gap: 27px;
         width: 100%;

@@ -37,5 +37,5 @@ $mp_cards = function_exists( 'mp_practice_cards' ) ? mp_practice_cards() : mp_pr
 		<?php endforeach; ?>
 	</ul>
 
-	<button class="btn btn--block pg-cards__more" type="button"><?php echo esc_html( mp_practice( 'more' ) ); ?></button>
+	<button class="btn btn--block pg-cards__more" type="button" data-more hidden><?php echo esc_html( mp_practice( 'more' ) ); ?></button>
 </section>
