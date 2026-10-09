@@ -28,12 +28,23 @@ function mp_cf7_icon( $name ) {
  *
  * @return array
  */
+/**
+ * Куда уходят заявки с форм. Адрес правится в «Настройки сайта → Контакты».
+ *
+ * @return string
+ */
+function mp_cf7_recipient() {
+	$email = (string) mp_data( 'contacts.email', '' );
+
+	return is_email( $email ) ? $email : get_option( 'admin_email' );
+}
+
 function mp_cf7_definitions() {
 	$host = wp_parse_url( home_url(), PHP_URL_HOST );
 	$mail = [
 		'subject'            => 'Заявка с сайта M-PARTNERS',
 		'sender'             => sprintf( '[_site_title] <wordpress@%s>', $host ),
-		'recipient'          => get_option( 'admin_email' ),
+		'recipient'          => mp_cf7_recipient(),
 		'body'               => "Имя: [name]\nТелефон: [phone]\nМессенджер: [channel]\nКонтакт: [contact]\n\nСтраница: [_post_title]\n[_url]\n",
 		'additional_headers' => '',
 		'attachments'        => '',

@@ -46,6 +46,7 @@ function mp_home_data() {
 	$data = [
 		'contacts' => [
 			'tagline' => "Эффективная защита в\nобласти уголовного права",
+			'email'   => 'bespalova@mpartners.law',
 			'phones'  => [
 				[
 					'label' => 'Бесплатно по России',
@@ -66,7 +67,7 @@ function mp_home_data() {
 				[
 					'icon'  => 'mail',
 					'label' => 'Почта',
-					'href'  => 'mailto:info@m-partners.ru',
+					'href'  => 'mailto:bespalova@mpartners.law',
 				],
 				[
 					'icon'  => 'telegram',
