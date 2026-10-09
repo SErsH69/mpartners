@@ -801,3 +801,79 @@ function mp_hide_page_editor() {
 	}
 }
 add_action( 'current_screen', 'mp_hide_page_editor' );
+
+/**
+ * Разовые замены в уже сохранённом контенте: данные из файлов темы правятся
+ * свободно, а то, что лежит в полях админки, нужно обновлять отдельно.
+ */
+const MP_REPLACE_VERSION = '1';
+
+/**
+ * Что на что меняем.
+ *
+ * @return array
+ */
+function mp_content_replacements() {
+	return [
+		'8 800 350 40 15' => '8 800 101 42 47',
+		'tel:88003504015' => 'tel:88001014247',
+	];
+}
+
+/**
+ * Рекурсивная замена строк в значении поля.
+ *
+ * @param mixed $value Field value.
+ * @param array $map   Replacements.
+ * @return mixed
+ */
+function mp_replace_deep( $value, $map ) {
+	if ( is_string( $value ) ) {
+		return strtr( $value, $map );
+	}
+
+	if ( is_array( $value ) ) {
+		foreach ( $value as $key => $item ) {
+			$value[ $key ] = mp_replace_deep( $item, $map );
+		}
+	}
+
+	return $value;
+}
+
+/**
+ * Применяет замены ко всем группам контента.
+ */
+function mp_apply_content_replacements() {
+	if ( ! function_exists( 'get_field' ) || get_option( 'mp_content_replace_version' ) === MP_REPLACE_VERSION ) {
+		return;
+	}
+
+	$map = mp_content_replacements();
+
+	foreach ( mp_content_groups() as $group => $meta ) {
+		if ( ! function_exists( $meta['data'] ) ) {
+			continue;
+		}
+
+		foreach ( mp_content_targets( $group ) as $target ) {
+			foreach ( array_keys( (array) call_user_func( $meta['data'] ) ) as $key ) {
+				$name  = $group . '_' . $key;
+				$value = get_field( $name, $target );
+
+				if ( null === $value || '' === $value || false === $value || [] === $value ) {
+					continue;
+				}
+
+				$updated = mp_replace_deep( $value, $map );
+
+				if ( $updated !== $value ) {
+					update_field( $name, $updated, $target );
+				}
+			}
+		}
+	}
+
+	update_option( 'mp_content_replace_version', MP_REPLACE_VERSION );
+}
+add_action( 'acf/init', 'mp_apply_content_replacements', 30 );

@@ -22,7 +22,7 @@ function mp_lawyer_data() {
 		'name'     => 'Екатерина Беспалова',
 		'role'     => 'Управляющий партнер МКА «M-PARTNERS», адвокат по уголовным делам',
 		'email'    => 'bespalova@mpartners.law',
-		'phone'    => '8 800 350 40 15',
+		'phone'    => '8 800 101 42 47',
 		'card'     => [
 			'label' => 'Скачать визитку',
 			'href'  => '#',
