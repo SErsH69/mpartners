@@ -80,7 +80,7 @@ $mp_menu     = (array) mp_data( 'menu', [] );
 
 		<div class="footer__legal">
 			<?php foreach ( $mp_footer['legal'] as $mp_legal ) : ?>
-				<a class="footer__legal-link" href="<?php echo esc_url( $mp_legal['href'] ); ?>"><?php echo esc_html( $mp_legal['label'] ); ?></a>
+				<a class="footer__legal-link" href="<?php echo esc_url( mp_link( $mp_legal, 'privacy-policy' ) ); ?>"><?php echo esc_html( $mp_legal['label'] ); ?></a>
 			<?php endforeach; ?>
 			<p class="footer__copyright"><?php echo esc_html( $mp_footer['copyright'] ); ?></p>
 		</div>

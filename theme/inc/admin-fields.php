@@ -10,7 +10,7 @@
  * @package MPartners
  */
 
-const MP_CONTENT_VERSION = '5';
+const MP_CONTENT_VERSION = '8';
 
 /**
  * Редактируемые разделы контента.
@@ -341,14 +341,52 @@ function mp_acf_field( $path, $name, $value, $label = '' ) {
 		];
 	}
 
+	if ( is_bool( $value ) ) {
+		return $field + [
+			'type' => 'true_false',
+			'ui'   => 1,
+		];
+	}
+
 	$text = (string) $value;
 	$long = mb_strlen( $text ) > 90 || false !== strpos( $text, "\n" );
 
+	// Значение из макета записывается при первичном заполнении, а
+	// `default_value` здесь опасен: ACF подставлял бы его в каждую пустую
+	// строку репитера — так «широкими» становились все карточки подряд.
 	return $field + [
-		'type'          => $long ? 'textarea' : 'text',
-		'rows'          => $long ? 4 : null,
-		'default_value' => $text,
+		'type' => $long ? 'textarea' : 'text',
+		'rows' => $long ? 4 : null,
 	];
+}
+
+/**
+ * Ищет строку макета, соответствующую сохранённой: сначала по смысловому
+ * ключу (номер, заголовок), иначе по позиции в списке.
+ *
+ * @param array $default Default list.
+ * @param mixed $row     Saved row.
+ * @param int   $index   Row position.
+ * @return array|null
+ */
+function mp_default_row( $default, $row, $index ) {
+	if ( ! is_array( $row ) ) {
+		return null;
+	}
+
+	foreach ( [ 'number', 'title', 'label', 'name' ] as $key ) {
+		if ( ! isset( $row[ $key ] ) || '' === $row[ $key ] ) {
+			continue;
+		}
+
+		foreach ( $default as $item ) {
+			if ( is_array( $item ) && isset( $item[ $key ] ) && $item[ $key ] === $row[ $key ] ) {
+				return $item;
+			}
+		}
+	}
+
+	return isset( $default[ $index ] ) && is_array( $default[ $index ] ) ? $default[ $index ] : null;
 }
 
 /**
@@ -364,19 +402,55 @@ function mp_content_to_acf( $value ) {
 	}
 
 	if ( mp_is_list( $value ) ) {
+		// ACF пропускает подполя, которых нет в строке, и оставляет в них
+		// прежние значения — поэтому каждую строку дополняем всеми ключами.
+		$shape = [];
+
+		foreach ( $value as $item ) {
+			if ( is_array( $item ) && ! mp_is_list( $item ) ) {
+				foreach ( $item as $key => $sample ) {
+					if ( ! array_key_exists( $key, $shape ) ) {
+						$shape[ $key ] = is_bool( $sample ) ? false : '';
+					}
+				}
+			}
+		}
+
 		return array_map(
-			function ( $item ) {
-				return is_array( $item ) ? mp_content_to_acf( $item ) : [ 'value' => $item ];
+			function ( $item ) use ( $shape ) {
+				if ( ! is_array( $item ) ) {
+					return [ 'value' => $item ];
+				}
+
+				return mp_content_to_acf( mp_is_list( $item ) ? $item : array_merge( $shape, $item ) );
 			},
 			$value
 		);
 	}
 
 	foreach ( $value as $key => $item ) {
+		// Поле «Изображение» хранит ID вложения — имя файла из макета туда
+		// писать нельзя, иначе ACF вернёт пустоту вместо картинки.
+		if ( mp_is_image_key( $key ) && ! is_array( $item ) ) {
+			$value[ $key ] = '';
+
+			continue;
+		}
+
 		$value[ $key ] = mp_content_to_acf( $item );
 	}
 
 	return $value;
+}
+
+/**
+ * Поле с таким именем выводится как «Изображение».
+ *
+ * @param string $key Field key.
+ * @return bool
+ */
+function mp_is_image_key( $key ) {
+	return in_array( (string) $key, [ 'image', 'photo' ], true );
 }
 
 /**
@@ -577,9 +651,18 @@ function mp_merge_content( $default, $saved ) {
 		return $saved;
 	}
 
-	// Список целиком заменяется сохранённым — иначе нельзя убрать карточку.
+	// Список целиком задаётся сохранённым — иначе нельзя убрать карточку, —
+	// но каждую строку дополняем данными из макета: пустое поле строки
+	// (например незагруженная картинка) должно остаться макетным.
 	if ( mp_is_list( $default ) ) {
-		return $saved;
+		$result = [];
+
+		foreach ( $saved as $index => $row ) {
+			$base     = mp_default_row( $default, $row, $index );
+			$result[] = null === $base ? $row : mp_merge_content( $base, $row );
+		}
+
+		return $result;
 	}
 
 	$result = $default;

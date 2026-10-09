@@ -4195,6 +4195,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"lightgallery@npm:^3.0.0":
+  version: 3.0.0
+  resolution: "lightgallery@npm:3.0.0"
+  checksum: 10c0/cc5b016944450a0b297bf4bcf4fc5f689db4341c1c83ad86f4dc54ff7ba52d8dadece0d54b03dd4f1802b3ffa89928b35b20ae2e3ab8c59ecae0b2d92e2b283e
+  languageName: node
+  linkType: hard
+
 "lilconfig@npm:^3.1.1":
   version: 3.1.1
   resolution: "lilconfig@npm:3.1.1"
@@ -7305,6 +7312,7 @@ __metadata:
     imagemin-mozjpeg: "npm:^10.0.0"
     imagemin-pngquant: "npm:^9.0.2"
     imagemin-svgo: "npm:^10.0.1"
+    lightgallery: "npm:^3.0.0"
     mini-css-extract-plugin: "npm:2.7.7"
     postcss: "npm:^8.4.33"
     postcss-loader: "npm:^8.1.1"

@@ -82,6 +82,14 @@
 
 }
 
+// Клик по скану открывает lightGallery — ссылка повторяет бокс картинки.
+.letter__link {
+    display: flex;
+    flex: 0 0 auto;
+    height: 100%;
+    cursor: zoom-in;
+}
+
 .letter__scan {
     flex: 0 0 auto;
     width: 259px;

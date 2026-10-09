@@ -28,7 +28,7 @@ $mp_note = mp_data( 'advantages.note' );
 		</div>
 
 		<div class="btn-pair hero__actions">
-			<a class="btn" href="<?php echo esc_url( $mp_hero['cta']['href'] ); ?>"><?php echo esc_html( $mp_hero['cta']['label'] ); ?></a>
+			<a class="btn" href="<?php echo esc_url( mp_link( $mp_hero['cta'] ) ); ?>"><?php echo esc_html( $mp_hero['cta']['label'] ); ?></a>
 			<a class="btn-icon" href="<?php echo esc_url( $mp_hero['cta']['href'] ); ?>" aria-hidden="true" tabindex="-1"><?php mp_icon( 'plus' ); ?></a>
 		</div>
 

@@ -7,6 +7,8 @@ import initReveal from './modules/reveal'
 import initHeroTrail from './modules/hero-trail'
 import initModal from './modules/modal'
 import initRubricTabs from './modules/rubric-tabs'
+import initSearch from './modules/search'
+import initGallery from './modules/gallery'
 
 const boot = () => {
     initMenu()
@@ -18,6 +20,8 @@ const boot = () => {
     initHeroTrail()
     initModal()
     initRubricTabs()
+    initSearch()
+    initGallery()
 }
 
 if ('loading' === document.readyState) {

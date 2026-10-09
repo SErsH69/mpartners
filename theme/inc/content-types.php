@@ -9,7 +9,7 @@
  * @package MPartners
  */
 
-const MP_SECTIONS_VERSION = '2';
+const MP_SECTIONS_VERSION = '4';
 
 /**
  * Раздел → слаг корневой рубрики.
@@ -214,7 +214,9 @@ function mp_section_filters( $section ) {
  * Заводит рубрики и демо-материалы разделов — один раз.
  */
 function mp_seed_sections() {
-	if ( ! is_admin() || get_option( 'mp_sections_version' ) === MP_SECTIONS_VERSION ) {
+	$cli = defined( 'WP_CLI' ) && WP_CLI;
+
+	if ( ( ! is_admin() && ! $cli ) || get_option( 'mp_sections_version' ) === MP_SECTIONS_VERSION ) {
 		return;
 	}
 
@@ -260,19 +262,72 @@ function mp_seed_sections() {
 			]
 		);
 
-		if ( $existing || ! $rubrics ) {
+		// Широкая карточка — только у тех материалов, что помечены в макете.
+		$leads = [];
+
+		foreach ( (array) $data['items'] as $item ) {
+			if ( ! empty( $item['lead'] ) ) {
+				$leads[] = $item['title'];
+			}
+		}
+
+		if ( $existing ) {
+			if ( function_exists( 'update_field' ) ) {
+				$posts = get_posts(
+					[
+						'post_type'      => 'post',
+						'posts_per_page' => -1,
+						'post_status'    => 'any',
+						'cat'            => $root->term_id,
+					]
+				);
+
+				$dates = [];
+
+				foreach ( (array) $data['items'] as $item ) {
+					$dates[ $item['title'] ] = isset( $item['date'] ) ? $item['date'] : '';
+				}
+
+				foreach ( $posts as $post ) {
+					update_field( 'card_lead', in_array( $post->post_title, $leads, true ) ? 1 : 0, $post->ID );
+
+					$date = isset( $dates[ $post->post_title ] ) ? mp_parse_ru_date( $dates[ $post->post_title ] ) : '';
+
+					if ( $date && substr( $post->post_date, 0, 10 ) !== substr( $date, 0, 10 ) ) {
+						wp_update_post(
+							[
+								'ID'            => $post->ID,
+								'post_date'     => $date,
+								'post_date_gmt' => get_gmt_from_date( $date ),
+							]
+						);
+					}
+				}
+			}
+
+			continue;
+		}
+
+		if ( ! $rubrics ) {
 			continue;
 		}
 
 		foreach ( array_values( array_reverse( (array) $data['items'] ) ) as $index => $item ) {
-			$id = wp_insert_post(
-				[
-					'post_type'    => 'post',
-					'post_title'   => $item['title'],
-					'post_excerpt' => $item['excerpt'],
-					'post_status'  => 'publish',
-				]
-			);
+			$args = [
+				'post_type'    => 'post',
+				'post_title'   => $item['title'],
+				'post_excerpt' => $item['excerpt'],
+				'post_status'  => 'publish',
+			];
+
+			$date = mp_parse_ru_date( isset( $item['date'] ) ? $item['date'] : '' );
+
+			if ( $date ) {
+				$args['post_date']     = $date;
+				$args['post_date_gmt'] = get_gmt_from_date( $date );
+			}
+
+			$id = wp_insert_post( $args );
 
 			if ( ! $id || is_wp_error( $id ) ) {
 				continue;
@@ -280,8 +335,8 @@ function mp_seed_sections() {
 
 			wp_set_post_categories( $id, [ (int) $root->term_id, (int) $rubrics[ $index % count( $rubrics ) ] ] );
 
-			if ( function_exists( 'update_field' ) && ! empty( $item['lead'] ) ) {
-				update_field( 'card_lead', 1, $id );
+			if ( function_exists( 'update_field' ) ) {
+				update_field( 'card_lead', in_array( $item['title'], $leads, true ) ? 1 : 0, $id );
 			}
 		}
 	}
@@ -289,3 +344,138 @@ function mp_seed_sections() {
 	update_option( 'mp_sections_version', MP_SECTIONS_VERSION );
 }
 add_action( 'admin_init', 'mp_seed_sections', 30 );
+
+/**
+ * Склонение числительных: 1 материал, 2 материала, 5 материалов.
+ *
+ * @param int    $number Count.
+ * @param string $one    Form for 1.
+ * @param string $few    Form for 2–4.
+ * @param string $many   Form for 5+.
+ * @return string
+ */
+function mp_plural( $number, $one, $few, $many ) {
+	$number = abs( (int) $number ) % 100;
+	$tail   = $number % 10;
+
+	if ( $number > 10 && $number < 20 ) {
+		return $many;
+	}
+
+	if ( $tail > 1 && $tail < 5 ) {
+		return $few;
+	}
+
+	return 1 === $tail ? $one : $many;
+}
+
+/**
+ * Подпись карточки в результатах поиска: тип записи или рубрика.
+ *
+ * @param WP_Post $post Post object.
+ * @return string
+ */
+function mp_search_label( $post ) {
+	if ( ! $post instanceof WP_Post ) {
+		return '';
+	}
+
+	if ( 'mp_practice' === $post->post_type ) {
+		return 'Услуга';
+	}
+
+	if ( 'mp_lawyer' === $post->post_type ) {
+		return 'Адвокат';
+	}
+
+	if ( 'page' === $post->post_type ) {
+		return 'Страница';
+	}
+
+	$section = mp_post_section( $post->ID );
+
+	if ( $section ) {
+		$types = mp_section_types();
+
+		if ( isset( $types[ $section ]['title'] ) ) {
+			return $types[ $section ]['title'];
+		}
+	}
+
+	$terms = get_the_terms( $post, 'category' );
+
+	return $terms && ! is_wp_error( $terms ) ? $terms[0]->name : 'Материал';
+}
+
+/**
+ * Свежие записи в виде карточек блога. Пока записей нет, возвращает
+ * `$fallback` — карточки из макета.
+ *
+ * @param int   $count    How many posts.
+ * @param int   $exclude  Post ID to skip.
+ * @param array $fallback Cards from the mockup.
+ * @return array
+ */
+function mp_recent_cards( $count = 3, $exclude = 0, $fallback = [] ) {
+	$posts = get_posts(
+		[
+			'post_type'        => 'post',
+			'posts_per_page'   => (int) $count,
+			'post__not_in'     => $exclude ? [ (int) $exclude ] : [],
+			'suppress_filters' => false,
+		]
+	);
+
+	if ( ! $posts ) {
+		return (array) $fallback;
+	}
+
+	$cards = [];
+
+	foreach ( $posts as $post ) {
+		$cards[] = [
+			'category' => mp_search_label( $post ),
+			'title'    => get_the_title( $post ),
+			'excerpt'  => wp_trim_words( wp_strip_all_tags( get_the_excerpt( $post ) ), 18 ),
+			'date'     => get_the_date( 'd.m.Y', $post ),
+			'href'     => get_permalink( $post ),
+		];
+	}
+
+	return $cards;
+}
+
+/**
+ * Дата вида «15 июня 2025» → формат WordPress.
+ *
+ * @param string $value Human readable date.
+ * @return string Empty string when the date cannot be read.
+ */
+function mp_parse_ru_date( $value ) {
+	$months = [
+		'января'   => '01',
+		'февраля'  => '02',
+		'марта'    => '03',
+		'апреля'   => '04',
+		'мая'      => '05',
+		'июня'     => '06',
+		'июля'     => '07',
+		'августа'  => '08',
+		'сентября' => '09',
+		'октября'  => '10',
+		'ноября'   => '11',
+		'декабря'  => '12',
+	];
+
+	if ( ! preg_match( '~^(\d{1,2})\s+([а-яё]+)\s+(\d{4})~ui', (string) $value, $m ) ) {
+		return '';
+	}
+
+	$month = mb_strtolower( $m[2] );
+
+	if ( ! isset( $months[ $month ] ) ) {
+		return '';
+	}
+
+	return sprintf( '%s-%s-%02d 09:00:00', $m[3], $months[ $month ], (int) $m[1] );
+}

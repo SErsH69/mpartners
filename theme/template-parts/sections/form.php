@@ -30,7 +30,7 @@ $mp_form = mp_data( 'form' );
 							</a>
 						<?php endforeach; ?>
 					</div>
-					<a class="btn" href="<?php echo esc_url( $mp_form['cta']['href'] ); ?>"><?php echo esc_html( $mp_form['cta']['label'] ); ?></a>
+					<a class="btn" href="<?php echo esc_url( mp_link( $mp_form['cta'] ) ); ?>"><?php echo esc_html( $mp_form['cta']['label'] ); ?></a>
 				</div>
 			</div>
 		</div>

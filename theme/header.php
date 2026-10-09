@@ -43,7 +43,7 @@ $mp_contacts = mp_data( 'contacts' );
 						<span>Меню</span>
 						<span class="burger" aria-hidden="true"><i></i><i></i></span>
 					</button>
-					<button class="btn-icon btn-icon--surface header__search" type="button" aria-label="Поиск">
+					<button class="btn-icon btn-icon--surface header__search" type="button" data-search-open aria-expanded="false" aria-controls="site-search" aria-label="Поиск">
 						<?php mp_icon( 'search' ); ?>
 					</button>
 
@@ -87,12 +87,22 @@ $mp_contacts = mp_data( 'contacts' );
 						<span class="header__cta-full">Заказать звонок</span>
 						<span class="header__cta-short">Связаться</span>
 					</a>
-					<button class="header__icon-btn" type="button" aria-label="Поиск"><?php mp_icon( 'search' ); ?></button>
+					<button class="header__icon-btn" type="button" data-search-open aria-expanded="false" aria-controls="site-search" aria-label="Поиск"><?php mp_icon( 'search' ); ?></button>
 					<button class="header__icon-btn" type="button" data-menu-open aria-expanded="false" aria-controls="site-menu" aria-label="Меню"><?php mp_icon( 'menu' ); ?></button>
 				</div>
 			</div>
 		</div>
 	</header>
+
+	<?php // Панель поиска: раскрывается по кнопке с лупой в шапке. ?>
+	<div class="search-panel" id="site-search" hidden>
+		<form class="search-form" role="search" method="get" action="<?php echo esc_url( home_url( '/' ) ); ?>">
+			<span class="search-form__icon" aria-hidden="true"><?php mp_icon( 'search' ); ?></span>
+			<input class="search-form__input" type="search" name="s" value="<?php echo esc_attr( get_search_query() ); ?>" placeholder="Поиск по сайту" aria-label="Поиск по сайту">
+			<button class="btn search-form__submit" type="submit">Найти</button>
+			<button class="search-form__close btn-icon btn-icon--surface" type="button" data-search-close aria-label="Закрыть поиск"><?php mp_icon( 'close' ); ?></button>
+		</form>
+	</div>
 
 	<div class="menu-panel" id="site-menu" hidden>
 		<div class="menu-panel__inner">

@@ -31,13 +31,19 @@ input.btn {
     position: relative;
 }
 
+// Подсказка у поля наезжала на соседний ряд, поэтому незаполненное поле
+// подсвечиваем рамкой, а текст ошибки читает скринридер и показывает
+// общий ответ формы внизу.
 .wpcf7-not-valid-tip {
-    position: absolute;
-    top: calc(100% + 2px);
-    left: 0;
+    @include visually-hidden;
+}
+
+.wpcf7-not-valid {
+    border-color: #e2725b !important;
+}
+
+.wpcf7-form.invalid .wpcf7-response-output {
     color: #e2725b;
-    font-size: 11px;
-    line-height: 1.2;
 }
 
 .wpcf7-spinner {

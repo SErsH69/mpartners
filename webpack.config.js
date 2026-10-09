@@ -27,6 +27,11 @@ const plugins = [
                 },
             },
             {
+                from: 'node_modules/lightgallery/images',
+                to: path.resolve(__dirname, 'theme/images'),
+                noErrorOnMissing: true,
+            },
+            {
                 from: 'assets/fonts',
                 to: 'fonts',
                 noErrorOnMissing: true,
@@ -106,6 +111,29 @@ module.exports = {
     },
     module: {
         rules: [
+            {
+                // Стили lightGallery лежат в node_modules — их тоже собираем,
+                // картинку прелоадера копирует CopyPlugin в theme/images.
+                test: /\.css$/,
+                include: [path.resolve(__dirname, 'node_modules/lightgallery')],
+                use: [
+                    MiniCssExtractPlugin.loader,
+                    {
+                        loader: 'css-loader',
+                        options: {
+                            url: false,
+                        },
+                    },
+                    {
+                        loader: 'postcss-loader',
+                        options: {
+                            postcssOptions: {
+                                plugins: ['autoprefixer', 'cssnano'],
+                            },
+                        },
+                    },
+                ],
+            },
             {
                 test: /\.css$/,
                 include: [path.resolve(__dirname, 'assets')],

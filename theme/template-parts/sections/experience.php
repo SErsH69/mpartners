@@ -27,8 +27,8 @@ $mp_exp = mp_data( 'experience' );
 				</blockquote>
 				<p class="experience__text"><?php echo esc_html( $mp_exp['text'] ); ?></p>
 				<div class="btn-pair experience__actions">
-					<a class="btn" href="<?php echo esc_url( $mp_exp['cta']['href'] ); ?>"><?php echo esc_html( $mp_exp['cta']['label'] ); ?></a>
-					<a class="btn-icon" href="<?php echo esc_url( $mp_exp['cta']['href'] ); ?>" aria-hidden="true" tabindex="-1"><?php mp_icon( 'plus' ); ?></a>
+					<a class="btn" href="<?php echo esc_url( mp_link( $mp_exp['cta'], 'lawyers' ) ); ?>"><?php echo esc_html( $mp_exp['cta']['label'] ); ?></a>
+					<a class="btn-icon" href="<?php echo esc_url( mp_link( $mp_exp['cta'], 'lawyers' ) ); ?>" aria-hidden="true" tabindex="-1"><?php mp_icon( 'plus' ); ?></a>
 				</div>
 			</div>
 			<img class="experience__photo" src="<?php echo esc_url( mp_img( 'experience-team' ) ); ?>" alt="Адвокаты коллегии M-PARTNERS" width="1028" height="574" loading="lazy" decoding="async">
@@ -48,7 +48,7 @@ $mp_exp = mp_data( 'experience' );
 						<span class="experience__award-dash">-</span>
 						<span class="experience__award-rest"><?php echo esc_html( $mp_award_rest ); ?></span>
 					</p>
-					<a class="experience__video" href="<?php echo esc_url( $mp_exp['video']['href'] ); ?>">
+					<a class="experience__video" href="<?php echo esc_url( mp_link( $mp_exp['video'] ) ); ?>">
 						<?php mp_icon( 'video' ); ?>
 						<span><?php echo esc_html( $mp_exp['video']['label'] ); ?></span>
 					</a>

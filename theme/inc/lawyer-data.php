@@ -19,8 +19,8 @@ function mp_lawyer_data() {
 
 	$data = [
 		'photo'    => 'lawyer-photo',
-		'name'     => 'Имя Фамилия',
-		'role'     => 'Управляющий партнер, адвокат',
+		'name'     => 'Екатерина Беспалова',
+		'role'     => 'Управляющий партнер МКА «M-PARTNERS», адвокат по уголовным делам',
 		'email'    => 'bespalova@mpartners.law',
 		'phone'    => '8 800 350 40 15',
 		'card'     => [

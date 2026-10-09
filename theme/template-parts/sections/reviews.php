@@ -16,10 +16,13 @@ $mp_reviews = mp_data( 'reviews' );
 		</div>
 	</div>
 
-	<ul class="reviews__track" data-drag-scroll data-dots="reviews-dots">
+	<ul class="reviews__track" data-drag-scroll data-dots="reviews-dots" data-gallery>
 		<?php foreach ( $mp_reviews['items'] as $mp_review ) : ?>
+			<?php $mp_scan = mp_img( $mp_review['scan'] ); ?>
 			<li class="letter">
-				<img class="letter__scan" src="<?php echo esc_url( mp_img( $mp_review['scan'] ) ); ?>" alt="Рекомендательное письмо" loading="lazy" decoding="async">
+				<a class="letter__link" href="<?php echo esc_url( $mp_scan ); ?>" data-sub-html="<?php echo esc_attr( $mp_review['company'] ); ?>" aria-label="Открыть рекомендательное письмо">
+					<img class="letter__scan" src="<?php echo esc_url( $mp_scan ); ?>" alt="Рекомендательное письмо" loading="lazy" decoding="async">
+				</a>
 				<div class="letter__body">
 					<img class="letter__logo" src="<?php echo esc_url( mp_img( $mp_review['logo'] ) ); ?>" alt="" loading="lazy" decoding="async">
 					<div class="letter__content">

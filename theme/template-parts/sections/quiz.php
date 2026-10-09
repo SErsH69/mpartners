@@ -14,43 +14,11 @@ $mp_total  = count( $mp_quiz['steps'] );
 	<div class="quiz__inner">
 		<img class="quiz__decor" src="<?php echo esc_url( mp_img( 'decor-quiz', 'svg' ) ); ?>" alt="" aria-hidden="true" loading="lazy" decoding="async">
 
-		<form class="quiz__form" data-quiz data-total="<?php echo esc_attr( $mp_total ); ?>">
-			<div class="quiz__intro">
-				<h2 class="h-section"><?php echo esc_html( $mp_quiz['title'] ); ?></h2>
-				<p class="quiz__subtitle"><?php echo esc_html( $mp_quiz['subtitle'] ); ?></p>
-			</div>
+		<?php // Тело квиза задаётся в inc/cf7.php, чтобы ответы уходили через Contact Form 7. ?>
+		<div class="quiz__host" data-quiz data-total="<?php echo esc_attr( $mp_total + 1 ); ?>">
+			<?php mp_cf7( 'quiz', 'quiz__form' ); ?>
+		</div>
 
-			<div class="quiz__progress" role="progressbar" aria-valuemin="1" aria-valuemax="<?php echo esc_attr( $mp_total ); ?>" aria-valuenow="1">
-				<?php for ( $mp_i = 0; $mp_i < $mp_total; $mp_i++ ) : ?>
-					<span class="quiz__progress-item<?php echo 0 === $mp_i ? ' is-active' : ''; ?>"></span>
-				<?php endfor; ?>
-			</div>
-
-			<div class="quiz__steps">
-				<?php foreach ( $mp_quiz['steps'] as $mp_index => $mp_step ) : ?>
-					<fieldset class="quiz__step<?php echo 0 === $mp_index ? ' is-active' : ''; ?>" data-quiz-step="<?php echo esc_attr( $mp_index ); ?>"<?php echo 0 === $mp_index ? '' : ' hidden'; ?>>
-						<legend class="quiz__question">
-							<span class="quiz__question-icon"><?php mp_icon( 'question' ); ?></span>
-							<span><?php echo esc_html( $mp_step['question'] ); ?></span>
-						</legend>
-						<div class="quiz__answers">
-							<?php foreach ( $mp_step['answers'] as $mp_answer ) : ?>
-								<label class="quiz__answer">
-									<input type="radio" name="quiz-<?php echo esc_attr( $mp_index ); ?>" value="<?php echo esc_attr( $mp_answer ); ?>">
-									<?php mp_icon( 'polygon', 'quiz__answer-marker' ); ?>
-									<span><?php echo esc_html( $mp_answer ); ?></span>
-								</label>
-							<?php endforeach; ?>
-						</div>
-					</fieldset>
-				<?php endforeach; ?>
-			</div>
-
-			<div class="quiz__nav">
-				<button class="quiz__nav-btn" type="button" data-quiz-prev aria-label="Назад" hidden><?php mp_icon( 'arrow-left' ); ?></button>
-				<button class="quiz__nav-btn" type="button" data-quiz-next aria-label="Далее"><?php mp_icon( 'arrow-right' ); ?></button>
-			</div>
-		</form>
 
 		<aside class="quiz__expert">
 			<img class="quiz__expert-decor" src="<?php echo esc_url( mp_img( 'decor-quiz-glow1', 'svg' ) ); ?>" alt="" aria-hidden="true" loading="lazy" decoding="async">

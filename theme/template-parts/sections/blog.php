@@ -6,6 +6,15 @@
  */
 
 $mp_blog = mp_data( 'blog' );
+
+// Оформление карточек берём из макета, содержимое — из последних записей.
+$mp_layout = (array) $mp_blog['items'];
+$mp_posts  = function_exists( 'mp_recent_cards' ) ? mp_recent_cards( count( $mp_layout ), 0, $mp_layout ) : $mp_layout;
+$mp_items  = [];
+
+foreach ( $mp_layout as $mp_index => $mp_style ) {
+	$mp_items[] = isset( $mp_posts[ $mp_index ] ) ? array_merge( $mp_style, $mp_posts[ $mp_index ] ) : $mp_style;
+}
 ?>
 <section class="blog">
 	<div class="blog__inner">
@@ -18,7 +27,7 @@ $mp_blog = mp_data( 'blog' );
 		</header>
 
 		<ul class="blog__grid">
-			<?php foreach ( $mp_blog['items'] as $mp_post ) : ?>
+			<?php foreach ( $mp_items as $mp_post ) : ?>
 				<?php
 				$mp_classes = [ 'post-card', 'post-card--' . $mp_post['theme'] ];
 
@@ -30,7 +39,7 @@ $mp_blog = mp_data( 'blog' );
 					<?php if ( 'dark' === $mp_post['theme'] ) : ?>
 						<img class="post-card__decor" src="<?php echo esc_url( mp_img( 'decor-blog', 'svg' ) ); ?>" alt="" aria-hidden="true" loading="lazy" decoding="async">
 					<?php endif; ?>
-					<a class="post-card__link" href="#">
+					<a class="post-card__link" href="<?php echo esc_url( isset( $mp_post['href'] ) ? $mp_post['href'] : get_post_type_archive_link( 'post' ) ); ?>">
 						<span class="post-card__category"><?php echo esc_html( $mp_post['category'] ); ?></span>
 						<span class="post-card__main">
 							<span class="post-card__text">
@@ -44,6 +53,6 @@ $mp_blog = mp_data( 'blog' );
 			<?php endforeach; ?>
 		</ul>
 
-		<a class="btn btn--block blog__more" href="<?php echo esc_url( $mp_blog['more']['href'] ); ?>"><?php echo esc_html( $mp_blog['more']['label'] ); ?></a>
+		<a class="btn btn--block blog__more" href="<?php echo esc_url( mp_link( $mp_blog['more'], 'press' ) ); ?>"><?php echo esc_html( $mp_blog['more']['label'] ); ?></a>
 	</div>
 </section>

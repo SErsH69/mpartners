@@ -57,6 +57,7 @@
         "imagemin-mozjpeg": "^10.0.0",
         "imagemin-pngquant": "^9.0.2",
         "imagemin-svgo": "^10.0.1",
+        "lightgallery": "^3.0.0",
         "postcss-loader": "^8.1.1",
         "rimraf": "^5.0.10",
         "sass": "^1.70.0",

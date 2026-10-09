@@ -40,7 +40,7 @@ $mp_spec     = $mp_lawyer['spec'];
 							</a>
 						</div>
 
-						<a class="lw-card__action" href="<?php echo esc_url( $mp_lawyer['card']['href'] ); ?>">
+						<a class="lw-card__action" href="<?php echo esc_url( mp_link( $mp_lawyer['card'] ) ); ?>">
 							<span><?php echo esc_html( $mp_lawyer['card']['label'] ); ?></span>
 							<?php mp_icon( 'arrow-ne' ); ?>
 						</a>
@@ -51,7 +51,7 @@ $mp_spec     = $mp_lawyer['spec'];
 							<span class="lw-card__registry-label"><?php echo esc_html( $mp_registry['label'] ); ?></span>
 							<strong><?php echo esc_html( $mp_registry['number'] ); ?></strong>
 						</p>
-						<a class="lw-card__action" href="<?php echo esc_url( $mp_registry['link']['href'] ); ?>">
+						<a class="lw-card__action" href="<?php echo esc_url( mp_link( $mp_registry['link'] ) ); ?>">
 							<span><?php echo esc_html( $mp_registry['link']['label'] ); ?></span>
 							<?php mp_icon( 'arrow-ne' ); ?>
 						</a>

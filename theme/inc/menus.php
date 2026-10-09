@@ -10,7 +10,7 @@
  * @package MPartners
  */
 
-const MP_MENUS_VERSION = '2';
+const MP_MENUS_VERSION = '3';
 
 /**
  * Места для меню.
@@ -90,14 +90,12 @@ function mp_menu_items( $location, $fallback = [] ) {
  */
 function mp_menu_url_for( $label, $fallback = '' ) {
 	$map = [
-		'Услуги'           => 'practices',
-		'Практики'         => 'practices',
-		'Адвокаты'         => 'lawyer',
-		'Дела'             => 'case',
-		'Мероприятия'      => 'events',
-		'СМИ о нас'        => 'media',
-		'Пресс-центр'      => 'press',
-		'Блог'             => 'press',
+		'Услуги'      => 'practices',
+		'Практики'    => 'practices',
+		'Адвокаты'    => 'lawyers',
+		'Мероприятия' => 'events',
+		'СМИ о нас'   => 'media',
+		'Пресс-центр' => 'press',
 	];
 
 	if ( isset( $map[ $label ] ) ) {
@@ -127,18 +125,22 @@ function mp_menu_url_for( $label, $fallback = '' ) {
  * Создаёт меню с пунктами из макета, чтобы в админке было что править.
  */
 function mp_seed_menus() {
-	if ( ! is_admin() || get_option( 'mp_menus_version' ) === MP_MENUS_VERSION ) {
+	$cli = defined( 'WP_CLI' ) && WP_CLI;
+
+	if ( ( ! is_admin() && ! $cli ) || get_option( 'mp_menus_version' ) === MP_MENUS_VERSION ) {
 		return;
 	}
+
+	$items = [ 'Услуги', 'Адвокаты', 'Пресс-центр', 'Мероприятия', 'СМИ о нас', 'Контакты' ];
 
 	$sets = [
 		'mp-header'   => [
 			'name'  => 'Меню сайта',
-			'items' => (array) mp_data( 'menu', [] ),
+			'items' => $items,
 		],
 		'mp-footer'   => [
 			'name'  => 'Подвал — меню',
-			'items' => (array) mp_data( 'menu', [] ),
+			'items' => $items,
 		],
 		'mp-services' => [
 			'name'     => 'Подвал — услуги',
@@ -184,14 +186,38 @@ function mp_seed_menus() {
 
 	set_theme_mod( 'nav_menu_locations', $locations );
 
-	// У меню, созданных раньше, пункты вели на «#» — проставляем адреса.
+	// Приводим уже созданные меню к актуальному составу: лишние пункты
+	// убираем, у остальных проставляем адреса.
+	$stale = [ 'О коллегии', 'Дела', 'Партнеры', 'Партнёры', 'Блог' ];
+
 	foreach ( $locations as $location => $menu_id ) {
 		if ( ! isset( $sets[ $location ] ) || ! $menu_id ) {
 			continue;
 		}
 
+		$services = 'mp-services' === $location;
+
+		if ( ! $services ) {
+			foreach ( (array) wp_get_nav_menu_items( $menu_id ) as $item ) {
+				if ( in_array( $item->title, $stale, true ) ) {
+					wp_delete_post( $item->ID, true );
+				}
+			}
+		}
+
+		$present = [];
+
 		foreach ( (array) wp_get_nav_menu_items( $menu_id ) as $item ) {
-			if ( '#' !== $item->url && '' !== $item->url ) {
+			$present[] = $item->title;
+			$target    = mp_menu_url_for( $item->title, isset( $sets[ $location ]['fallback'] ) ? $sets[ $location ]['fallback'] : '' );
+
+			// В меню услуг названия произвольные — там не трогаем рабочие
+			// ссылки; в шапке и подвале адреса приводим к актуальным страницам.
+			if ( $services && '#' !== $item->url && '' !== $item->url && $item->url !== home_url( '/' ) ) {
+				continue;
+			}
+
+			if ( $item->url === $target ) {
 				continue;
 			}
 
@@ -200,14 +226,82 @@ function mp_seed_menus() {
 				$item->ID,
 				[
 					'menu-item-title'  => $item->title,
-					'menu-item-url'    => mp_menu_url_for( $item->title, isset( $sets[ $location ]['fallback'] ) ? $sets[ $location ]['fallback'] : '' ),
+					'menu-item-url'    => $target,
 					'menu-item-status' => 'publish',
 					'menu-item-type'   => 'custom',
 				]
 			);
+		}
+
+		// Недостающие разделы добавляем — иначе после чистки меню окажется
+		// короче, чем нужно сайту.
+		if ( ! $services ) {
+			foreach ( $sets[ $location ]['items'] as $label ) {
+				if ( in_array( $label, $present, true ) ) {
+					continue;
+				}
+
+				wp_update_nav_menu_item(
+					$menu_id,
+					0,
+					[
+						'menu-item-title'  => $label,
+						'menu-item-url'    => mp_menu_url_for( $label ),
+						'menu-item-status' => 'publish',
+						'menu-item-type'   => 'custom',
+					]
+				);
+			}
+
+			// Порядок после чистки и добавления сбивается — выстраиваем
+			// пункты так же, как в списке разделов.
+			$order = array_flip( $sets[ $location ]['items'] );
+
+			foreach ( (array) wp_get_nav_menu_items( $menu_id ) as $item ) {
+				if ( ! isset( $order[ $item->title ] ) ) {
+					continue;
+				}
+
+				wp_update_post(
+					[
+						'ID'         => $item->ID,
+						'menu_order' => $order[ $item->title ] + 1,
+					]
+				);
+			}
 		}
 	}
 
 	update_option( 'mp_menus_version', MP_MENUS_VERSION );
 }
 add_action( 'admin_init', 'mp_seed_menus' );
+
+/**
+ * Адрес кнопки: сохранённая ссылка, иначе страница по слагу, иначе попап
+ * с формой — чтобы в вёрстке не оставалось «мёртвых» `#`.
+ *
+ * @param mixed  $href     Saved href (string or ['href' => …]).
+ * @param string $fallback Page slug.
+ * @return string
+ */
+function mp_link( $href, $fallback = '' ) {
+	if ( is_array( $href ) ) {
+		$href = isset( $href['href'] ) ? $href['href'] : '';
+	}
+
+	$href = (string) $href;
+
+	if ( '' !== $href && '#' !== $href ) {
+		return $href;
+	}
+
+	if ( $fallback ) {
+		$page = get_page_by_path( $fallback );
+
+		if ( $page ) {
+			return get_permalink( $page );
+		}
+	}
+
+	return '#form';
+}

@@ -8,7 +8,7 @@
  * @package MPartners
  */
 
-const MP_CF7_VERSION = '3';
+const MP_CF7_VERSION = '4';
 
 /**
  * Inline SVG as a string (иконки нужны внутри тела формы).
@@ -125,6 +125,89 @@ function mp_cf7_definitions() {
 		esc_attr( $home_form['consent'] )
 	);
 
+
+	// --- Квиз «Консультация специалиста» ------------------------------
+	$quiz       = mp_data( 'quiz' );
+	$quiz_steps = (array) $quiz['steps'];
+	$quiz_body  = '';
+	$quiz_lines = '';
+	$step_index = 0;
+
+	foreach ( $quiz_steps as $step ) {
+		$step_index++;
+		$options = '';
+
+		foreach ( (array) $step['answers'] as $answer ) {
+			// Кавычки внутри вариантов сломали бы шорткод CF7.
+			$options .= sprintf( ' "%s"', str_replace( '"', '', $answer ) );
+		}
+
+		$quiz_body .= sprintf(
+			'<fieldset class="quiz__step%1$s" data-quiz-step="%2$d"%3$s>
+<legend class="quiz__question"><span class="quiz__question-icon">%4$s</span><span>%5$s</span></legend>
+<div class="quiz__answers">[radio quiz-%2$d use_label_element%6$s]</div>
+</fieldset>',
+			1 === $step_index ? ' is-active' : '',
+			$step_index,
+			1 === $step_index ? '' : ' hidden',
+			mp_cf7_icon( 'question' ),
+			esc_html( $step['question'] ),
+			$options
+		);
+
+		$quiz_lines .= sprintf( "%s: [quiz-%d]\n", $step['question'], $step_index );
+	}
+
+	$quiz_body .= sprintf(
+		'<fieldset class="quiz__step quiz__step--contacts" data-quiz-step="%1$d" hidden>
+<legend class="quiz__question"><span class="quiz__question-icon">%2$s</span><span>%3$s</span></legend>
+<div class="quiz__contacts">
+<span class="field quiz__field">[text* name placeholder "%4$s"]</span>
+<span class="field quiz__field">[tel* phone placeholder "%5$s"]</span>
+</div>
+[submit class:btn class:btn--block class:quiz__submit "%6$s"]
+<span class="consent quiz__consent">[acceptance consent "%7$s"]</span>
+</fieldset>',
+		$step_index + 1,
+		mp_cf7_icon( 'question' ),
+		esc_html( $quiz['contacts']['question'] ),
+		esc_attr( $home_form['fields']['name'] ),
+		esc_attr( $home_form['fields']['phone'] ),
+		esc_attr( $quiz['contacts']['submit'] ),
+		esc_attr( $home_form['consent'] )
+	);
+
+	$quiz_bars = '';
+
+	for ( $i = 0; $i <= $step_index; $i++ ) {
+		$quiz_bars .= sprintf( '<span class="quiz__progress-item%s"></span>', 0 === $i ? ' is-active' : '' );
+	}
+
+	$quiz_form = sprintf(
+		'<div class="quiz__intro"><p class="h-section quiz__title">%1$s</p><p class="quiz__subtitle">%2$s</p></div>
+<div class="quiz__progress" role="progressbar" aria-valuemin="1" aria-valuemax="%3$d" aria-valuenow="1">%4$s</div>
+<div class="quiz__steps">%5$s</div>
+<div class="quiz__nav">
+<button class="quiz__nav-btn" type="button" data-quiz-prev aria-label="Назад" hidden>%6$s</button>
+<button class="quiz__nav-btn" type="button" data-quiz-next aria-label="Далее" disabled>%7$s</button>
+</div>',
+		esc_html( $quiz['title'] ),
+		esc_html( $quiz['subtitle'] ),
+		$step_index + 1,
+		$quiz_bars,
+		$quiz_body,
+		mp_cf7_icon( 'arrow-left' ),
+		mp_cf7_icon( 'arrow-right' )
+	);
+
+	$quiz_mail = array_merge(
+		$mail,
+		[
+			'subject' => 'Квиз с сайта M-PARTNERS',
+			'body'    => "Имя: [name]\nТелефон: [phone]\n\n" . $quiz_lines . "\nСтраница: [_post_title]\n[_url]\n",
+		]
+	);
+
 	return [
 		'practices' => [
 			'title' => 'M-PARTNERS — практики',
@@ -141,24 +224,68 @@ function mp_cf7_definitions() {
 			'form'  => $case,
 			'mail'  => $mail,
 		],
+		'quiz'      => [
+			'title' => 'M-PARTNERS — квиз',
+			'form'  => $quiz_form,
+			'mail'  => $quiz_mail,
+		],
 	];
 }
 
 /**
  * Создаёт/обновляет формы при смене версии разметки.
  */
+/**
+ * Сообщения формы по-русски: плагин создаёт их на языке админки, а нам
+ * нужен один и тот же русский текст независимо от настроек сайта.
+ *
+ * @return array
+ */
+function mp_cf7_messages() {
+	return [
+		'mail_sent_ok'             => 'Спасибо! Мы получили заявку и свяжемся с вами в ближайшее время.',
+		'mail_sent_ng'             => 'Не удалось отправить сообщение. Попробуйте позже или позвоните нам.',
+		'validation_error'         => 'Проверьте, пожалуйста, выделенные поля.',
+		'spam'                     => 'Не удалось отправить сообщение. Попробуйте позже или позвоните нам.',
+		'accept_terms'             => 'Подтвердите согласие с политикой конфиденциальности.',
+		'invalid_required'         => 'Заполните это поле.',
+		'invalid_too_long'         => 'Слишком длинное значение.',
+		'invalid_too_short'        => 'Слишком короткое значение.',
+		'invalid_date'             => 'Неверный формат даты.',
+		'date_too_early'           => 'Дата слишком ранняя.',
+		'date_too_late'            => 'Дата слишком поздняя.',
+		'upload_failed'            => 'Не удалось загрузить файл.',
+		'upload_file_type_invalid' => 'Такой тип файла загрузить нельзя.',
+		'upload_file_too_large'    => 'Файл слишком большой.',
+		'upload_failed_php_error'  => 'Произошла ошибка при загрузке файла.',
+		'invalid_number'           => 'Введите число.',
+		'number_too_small'         => 'Число слишком маленькое.',
+		'number_too_large'         => 'Число слишком большое.',
+		'quiz_answer_not_correct'  => 'Неверный ответ на проверочный вопрос.',
+		'invalid_email'            => 'Введите корректный адрес почты.',
+		'invalid_url'              => 'Введите корректную ссылку.',
+		'invalid_tel'              => 'Введите корректный номер телефона.',
+	];
+}
+
 function mp_cf7_sync() {
 	if ( ! class_exists( 'WPCF7_ContactForm' ) ) {
 		return;
 	}
 
-	if ( get_option( 'mp_cf7_version' ) === MP_CF7_VERSION ) {
+	$definitions = mp_cf7_definitions();
+
+	// Тексты форм берутся из контента, поэтому сверяем не только версию
+	// разметки, но и сами тела форм — правки в админке сразу попадают в CF7.
+	$signature = md5( MP_CF7_VERSION . wp_json_encode( $definitions ) );
+
+	if ( get_option( 'mp_cf7_signature' ) === $signature ) {
 		return;
 	}
 
 	$ids = (array) get_option( 'mp_cf7_ids', [] );
 
-	foreach ( mp_cf7_definitions() as $slug => $def ) {
+	foreach ( $definitions as $slug => $def ) {
 		$form = isset( $ids[ $slug ] ) ? WPCF7_ContactForm::get_instance( (int) $ids[ $slug ] ) : null;
 
 		if ( ! $form ) {
@@ -168,8 +295,9 @@ function mp_cf7_sync() {
 		$form->set_title( $def['title'] );
 		$form->set_properties(
 			[
-				'form' => $def['form'],
-				'mail' => array_merge( (array) $form->prop( 'mail' ), $def['mail'] ),
+				'form'     => $def['form'],
+				'mail'     => array_merge( (array) $form->prop( 'mail' ), $def['mail'] ),
+				'messages' => array_merge( (array) $form->prop( 'messages' ), mp_cf7_messages() ),
 			]
 		);
 
@@ -177,7 +305,7 @@ function mp_cf7_sync() {
 	}
 
 	update_option( 'mp_cf7_ids', $ids );
-	update_option( 'mp_cf7_version', MP_CF7_VERSION );
+	update_option( 'mp_cf7_signature', $signature );
 }
 add_action( 'init', 'mp_cf7_sync', 20 );
 
@@ -208,3 +336,26 @@ function mp_cf7( $slug, $class = '' ) {
 
 // Вёрстка форм своя — автоматические <p>/<br> от CF7 её ломают.
 add_filter( 'wpcf7_autop_or_not', '__return_false' );
+
+/**
+ * CF7 не умеет обязательные радио-группы, а в квизе ответ нужен на каждом
+ * шаге — проверяем сами.
+ *
+ * @param WPCF7_Validation $result Validation result.
+ * @param WPCF7_FormTag    $tag    Form tag.
+ * @return WPCF7_Validation
+ */
+function mp_cf7_validate_quiz( $result, $tag ) {
+	if ( 0 !== strpos( $tag->name, 'quiz-' ) ) {
+		return $result;
+	}
+
+	$value = isset( $_POST[ $tag->name ] ) ? sanitize_text_field( wp_unslash( $_POST[ $tag->name ] ) ) : ''; // phpcs:ignore WordPress.Security.NonceVerification.Missing
+
+	if ( '' === $value ) {
+		$result->invalidate( $tag, 'Выберите один из вариантов.' );
+	}
+
+	return $result;
+}
+add_filter( 'wpcf7_validate_radio', 'mp_cf7_validate_quiz', 10, 2 );

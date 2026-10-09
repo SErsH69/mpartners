@@ -26,7 +26,7 @@ $mp_help = mp_data( 'help' );
 						<h3 class="help-card__title"><?php echo esc_html( $mp_item['title'] ); ?></h3>
 						<div class="chip-list">
 							<?php foreach ( $mp_item['services'] as $mp_service ) : ?>
-								<a class="chip-link" href="#">
+								<a class="chip-link" href="<?php echo esc_url( mp_practice_link( $mp_service ) ); ?>">
 									<span><?php echo esc_html( $mp_service ); ?></span>
 									<?php mp_icon( 'arrow-ne' ); ?>
 								</a>

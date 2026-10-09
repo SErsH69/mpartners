@@ -1,0 +1,149 @@
+@use '../abstracts/variables' as *;
+@use '../abstracts/mixins' as *;
+
+// Полоса поиска под шапкой и поле на странице результатов.
+.search-panel {
+    position: relative;
+    z-index: 19;
+    padding: 12px 0 4px;
+
+    &[hidden] {
+        display: none;
+    }
+}
+
+.search-form {
+    @include container;
+
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 8px 8px 8px 16px;
+    background-color: $c-surface;
+    border-radius: $r-lg;
+
+    @include mobile {
+        gap: 8px;
+        padding: 7px 7px 7px 12px;
+    }
+}
+
+.search-form__icon {
+    display: flex;
+    flex: 0 0 auto;
+    color: $c-muted;
+
+    svg {
+        display: block;
+        width: 16px;
+        height: 16px;
+    }
+}
+
+.search-form__input {
+    flex: 1 1 auto;
+    min-width: 0;
+    height: 28px;
+    padding: 0;
+    font-family: inherit;
+    font-size: 16px;
+    line-height: 28px;
+    color: $c-dark;
+    background: none;
+    border: 0;
+    appearance: none;
+
+    &::placeholder {
+        color: $c-muted;
+    }
+
+    &:focus {
+        outline: none;
+    }
+
+    // Нативный крестик Safari ломает высоту поля.
+    &::-webkit-search-cancel-button {
+        display: none;
+    }
+
+    @include mobile {
+        font-size: 14px;
+    }
+}
+
+.search-form__submit {
+    flex: 0 0 auto;
+    padding: 0 20px;
+    height: 36px;
+
+    @include mobile {
+        padding: 0 14px;
+    }
+}
+
+.search-form__close {
+    flex: 0 0 auto;
+
+    svg {
+        width: 14px;
+        height: 14px;
+    }
+}
+
+// --- Страница результатов -----------------------------------
+.pr--search {
+    .search-form {
+        width: 100%;
+        max-width: none;
+        padding: 10px 10px 10px 18px;
+        margin: 20px 0 0;
+    }
+}
+
+.pr__summary {
+    margin: 14px 0 0;
+    font-size: 14px;
+    line-height: 20px;
+    color: $c-muted;
+}
+
+.pr__empty {
+    margin: 30px 0 0;
+    padding: 30px;
+    font-size: 16px;
+    line-height: 24px;
+    color: $c-muted;
+    background-color: $c-surface;
+    border-radius: $r-lg;
+
+    @include mobile {
+        padding: 20px;
+    }
+}
+
+.pr__pager {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    justify-content: center;
+    margin-top: 30px;
+
+    .page-numbers {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        min-width: 36px;
+        height: 36px;
+        padding: 0 10px;
+        font-size: 14px;
+        color: $c-dark;
+        text-decoration: none;
+        background-color: $c-surface;
+        border-radius: $r-sm;
+    }
+
+    .page-numbers.current {
+        color: $c-cream;
+        background-color: $c-dark;
+    }
+}

@@ -19,8 +19,8 @@ $mp_members = function_exists( 'mp_lawyer_cards' ) ? mp_lawyer_cards() : $mp_tea
 				<p class="note__text"><?php mp_nl2br( $mp_team['note'] ); ?></p>
 			</div>
 			<div class="btn-pair team__actions">
-				<a class="btn" href="<?php echo esc_url( $mp_team['cta']['href'] ); ?>"><?php echo esc_html( $mp_team['cta']['label'] ); ?></a>
-				<a class="btn-icon" href="<?php echo esc_url( $mp_team['cta']['href'] ); ?>" aria-hidden="true" tabindex="-1"><?php mp_icon( 'plus' ); ?></a>
+				<a class="btn" href="<?php echo esc_url( mp_link( $mp_team['cta'], 'lawyers' ) ); ?>"><?php echo esc_html( $mp_team['cta']['label'] ); ?></a>
+				<a class="btn-icon" href="<?php echo esc_url( mp_link( $mp_team['cta'], 'lawyers' ) ); ?>" aria-hidden="true" tabindex="-1"><?php mp_icon( 'plus' ); ?></a>
 			</div>
 		</div>
 

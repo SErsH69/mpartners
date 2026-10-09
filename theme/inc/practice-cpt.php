@@ -9,7 +9,7 @@
  * @package MPartners
  */
 
-const MP_PRACTICE_VERSION = '2';
+const MP_PRACTICE_VERSION = '3';
 const MP_PRACTICE_TYPE    = 'mp_practice';
 
 /**
@@ -302,9 +302,9 @@ function mp_lawyer_cards( $post_id = 0 ) {
 		]
 	);
 
-	// Для блока команды на главной нужен хотя бы пара адвокатов — иначе
-	// показываем карточки из макета, чтобы секция не выглядела пустой.
-	if ( ! $posts || ( ! $post_id && count( $posts ) < 2 ) ) {
+	// Карточки из макета показываем, только пока в админке нет ни одного
+	// адвоката — дальше везде выводим настоящие записи.
+	if ( ! $posts ) {
 		return (array) mp_data( 'team.members', [] );
 	}
 
@@ -329,7 +329,9 @@ function mp_lawyer_cards( $post_id = 0 ) {
  * Заводит адвоката из макета и прикрепляет его к услугам — один раз.
  */
 function mp_seed_lawyers() {
-	if ( ! is_admin() || get_option( 'mp_lawyer_version' ) === MP_PRACTICE_VERSION ) {
+	$cli = defined( 'WP_CLI' ) && WP_CLI;
+
+	if ( ( ! is_admin() && ! $cli ) || get_option( 'mp_lawyer_version' ) === MP_PRACTICE_VERSION ) {
 		return;
 	}
 
@@ -342,8 +344,34 @@ function mp_seed_lawyers() {
 		]
 	);
 
+	$data = mp_lawyer_data();
+
+	// В макете адвокат назывался «Имя Фамилия» — заменяем на настоящего.
+	if ( $existing ) {
+		$placeholder = get_posts(
+			[
+				'post_type'      => 'mp_lawyer',
+				'posts_per_page' => 1,
+				'post_status'    => 'any',
+				'title'          => 'Имя Фамилия',
+			]
+		);
+
+		if ( $placeholder ) {
+			wp_update_post(
+				[
+					'ID'         => $placeholder[0]->ID,
+					'post_title' => $data['name'],
+				]
+			);
+
+			if ( function_exists( 'update_field' ) ) {
+				update_field( 'lawyer_role', $data['role'], $placeholder[0]->ID );
+			}
+		}
+	}
+
 	if ( ! $existing ) {
-		$data = mp_lawyer_data();
 
 		$id = wp_insert_post(
 			[
@@ -387,3 +415,29 @@ function mp_seed_lawyers() {
 	update_option( 'mp_lawyer_version', MP_PRACTICE_VERSION );
 }
 add_action( 'admin_init', 'mp_seed_lawyers', 25 );
+
+/**
+ * Ссылка на услугу с таким названием. Если записи нет — страница услуг.
+ *
+ * @param string $title Service title.
+ * @return string
+ */
+function mp_practice_link( $title ) {
+	// `get_page_by_title()` объявлена устаревшей — ищем запросом по заголовку.
+	$posts = get_posts(
+		[
+			'post_type'        => MP_PRACTICE_TYPE,
+			'title'            => (string) $title,
+			'posts_per_page'   => 1,
+			'suppress_filters' => false,
+		]
+	);
+
+	if ( $posts ) {
+		return get_permalink( $posts[0] );
+	}
+
+	$page = get_page_by_path( 'practices' );
+
+	return $page ? get_permalink( $page ) : home_url( '/' );
+}
