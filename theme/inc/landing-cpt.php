@@ -300,7 +300,8 @@ function mp_seed_landing_page() {
 	update_option( 'mp_landing_version', MP_LANDING_VERSION );
 	flush_rewrite_rules();
 }
-add_action( 'init', 'mp_seed_landing_page', 20 );
+// Раньше сидирования меню: пункт «Услуги» должен найти готовый хаб.
+add_action( 'init', 'mp_seed_landing_page', 10 );
 
 /**
  * Латинский слаг из русского заголовка.

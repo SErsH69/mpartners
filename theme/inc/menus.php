@@ -10,7 +10,7 @@
  * @package MPartners
  */
 
-const MP_MENUS_VERSION = '8';
+const MP_MENUS_VERSION = '9';
 const MP_PAGES_VERSION = '5';
 
 /**
