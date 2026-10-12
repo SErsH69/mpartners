@@ -386,8 +386,12 @@ function mp_search_label( $post ) {
 		return '';
 	}
 
-	if ( 'mp_practice' === $post->post_type ) {
+	if ( 'mp_landing' === $post->post_type ) {
 		return 'Услуга';
+	}
+
+	if ( 'mp_hub' === $post->post_type ) {
+		return 'Услуги';
 	}
 
 	if ( 'mp_lawyer' === $post->post_type ) {

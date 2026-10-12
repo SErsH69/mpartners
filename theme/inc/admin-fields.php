@@ -10,7 +10,7 @@
  * @package MPartners
  */
 
-const MP_CONTENT_VERSION = '14';
+const MP_CONTENT_VERSION = '15';
 
 /**
  * Редактируемые разделы контента.
@@ -28,20 +28,6 @@ function mp_content_groups() {
 			'title'    => 'Контент главной',
 			'data'     => 'mp_home_page_data',
 			'location' => 'front_page',
-		],
-		'practices' => [
-			'title'     => 'Контент страницы «Практики»',
-			'data'      => 'mp_practices_data',
-			'templates' => [ 'page-practices.php' ],
-			// Карточки практик живут в записях «Практики», а не здесь.
-			'skip'      => [ 'cards' ],
-		],
-		'case'      => [
-			'title'      => 'Контент страницы услуги',
-			'data'       => 'mp_case_data',
-			'post_types' => [ 'mp_practice' ],
-			// Заголовок услуги — у самой записи.
-			'skip'       => [ 'hero' ],
 		],
 		'lawyer'    => [
 			'title'      => 'Карточка адвоката',

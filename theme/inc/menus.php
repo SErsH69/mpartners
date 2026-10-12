@@ -10,8 +10,8 @@
  * @package MPartners
  */
 
-const MP_MENUS_VERSION = '9';
-const MP_PAGES_VERSION = '5';
+const MP_MENUS_VERSION = '10';
+const MP_PAGES_VERSION = '6';
 
 /**
  * Места для меню.
@@ -101,7 +101,6 @@ function mp_menu_url_for( $label, $fallback = '' ) {
 	$map = [
 		'О компании'  => 'about',
 		'Партнерство' => 'partnership',
-		'Практики'    => 'practices',
 		'Адвокаты'    => 'lawyers',
 		'Мероприятия' => 'events',
 		'СМИ о нас'   => 'media',
@@ -142,7 +141,7 @@ function mp_seed_menus() {
 		return;
 	}
 
-	$items = [ 'Услуги', 'Практики', 'О компании', 'Адвокаты', 'Пресс-центр', 'Мероприятия', 'СМИ о нас', 'Партнерство', 'Контакты' ];
+	$items = [ 'Услуги', 'О компании', 'Адвокаты', 'Пресс-центр', 'Мероприятия', 'СМИ о нас', 'Партнерство', 'Контакты' ];
 
 	$sets = [
 		'mp-header'   => [
@@ -156,7 +155,7 @@ function mp_seed_menus() {
 		'mp-services' => [
 			'name'     => 'Подвал — услуги',
 			'items'    => (array) mp_data( 'footer.services', [] ),
-			'fallback' => 'practices',
+			'fallback' => '',
 		],
 	];
 
@@ -199,7 +198,7 @@ function mp_seed_menus() {
 
 	// Приводим уже созданные меню к актуальному составу: лишние пункты
 	// убираем, у остальных проставляем адреса.
-	$stale = [ 'О коллегии', 'Дела', 'Партнеры', 'Партнёры', 'Блог' ];
+	$stale = [ 'О коллегии', 'Дела', 'Партнеры', 'Партнёры', 'Блог', 'Практики' ];
 
 	foreach ( $locations as $location => $menu_id ) {
 		if ( ! isset( $sets[ $location ] ) || ! $menu_id ) {
@@ -329,7 +328,6 @@ function mp_seed_pages() {
 	}
 
 	$pages = [
-		'practices' => [ 'Практики', 'page-practices.php' ],
 		'lawyers'   => [ 'Адвокаты', 'page-lawyers.php' ],
 		'about'     => [ 'О компании', 'page-about.php' ],
 		'contacts'  => [ 'Контакты', 'page-contacts.php' ],

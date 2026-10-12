@@ -10,9 +10,22 @@ $mp_practice = mp_data( 'practice' );
 // Карточки — настоящие услуги; оформление и количество как в макете.
 $mp_cases = (array) $mp_practice['items'];
 
-if ( function_exists( 'mp_practice_cards' ) ) {
-	$mp_posts = mp_practice_cards();
-	$mp_cases = array_slice( $mp_posts ? $mp_posts : $mp_cases, 0, count( $mp_cases ) );
+if ( function_exists( 'mp_service_cards' ) ) {
+	$mp_posts = mp_service_cards();
+	$mp_names = wp_list_pluck( $mp_posts, 'title' );
+
+	// Сначала настоящие услуги, остальные места добираем карточками макета.
+	foreach ( $mp_cases as $mp_fallback ) {
+		if ( count( $mp_posts ) >= count( $mp_cases ) ) {
+			break;
+		}
+
+		if ( ! in_array( $mp_fallback['title'], $mp_names, true ) ) {
+			$mp_posts[] = $mp_fallback;
+		}
+	}
+
+	$mp_cases = array_slice( $mp_posts, 0, count( $mp_cases ) );
 }
 ?>
 <section class="practice">
@@ -27,7 +40,7 @@ if ( function_exists( 'mp_practice_cards' ) ) {
 
 		<ul class="practice__grid">
 			<?php foreach ( $mp_cases as $mp_index => $mp_case ) : ?>
-				<?php $mp_case_href = isset( $mp_case['href'] ) ? $mp_case['href'] : mp_practice_link( $mp_case['title'] ); ?>
+				<?php $mp_case_href = isset( $mp_case['href'] ) ? $mp_case['href'] : mp_service_link( $mp_case['title'] ); ?>
 				<li class="case-card">
 					<?php if ( 0 === $mp_index ) : ?>
 						<a class="case-card__more" href="<?php echo esc_url( $mp_case_href ); ?>"><?php echo esc_html( $mp_practice['more'] ); ?></a>
@@ -47,6 +60,6 @@ if ( function_exists( 'mp_practice_cards' ) ) {
 			<?php endforeach; ?>
 		</ul>
 
-		<a class="btn btn--block practice__all" href="<?php echo esc_url( mp_link( $mp_practice['all'], 'practices' ) ); ?>"><?php echo esc_html( $mp_practice['all']['label'] ); ?></a>
+		<a class="btn btn--block practice__all" href="<?php echo esc_url( mp_service_link( '' ) ); ?>"><?php echo esc_html( $mp_practice['all']['label'] ); ?></a>
 	</div>
 </section>

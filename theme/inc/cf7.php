@@ -52,70 +52,6 @@ function mp_cf7_definitions() {
 		'exclude_blank'      => false,
 	];
 
-	$form = mp_practices_data()['form'];
-
-	$practices = sprintf(
-		'<p class="pg-form__title">%1$s</p>
-<div class="pg-form__body">
-<div class="pg-form__rows">
-<div class="pg-form__row">
-<span class="field pg-form__field pg-form__field--name">[text* name placeholder "%2$s"]</span>
-<span class="field pg-form__field pg-form__field--phone">[tel* phone placeholder "%3$s"]</span>
-</div>
-<div class="pg-form__row">
-<span class="pg-form__messenger"><span class="pg-form__messenger-icon">%5$s</span>[select channel class:pg-form__select "Telegram" "MAX" "ВКонтакте" "WhatsApp"]<span class="pg-form__messenger-caret">%6$s</span></span>
-<span class="field pg-form__field pg-form__field--contact">[text contact placeholder "%4$s"]</span>
-</div>
-</div>
-<div class="pg-form__submit">
-[submit class:btn class:btn--light class:btn--block "%7$s"]
-<span class="consent pg-form__consent">[acceptance consent "%8$s"]</span>
-</div>
-</div>',
-		esc_html( $form['title'] ),
-		esc_attr( $form['fields']['name'] ),
-		esc_attr( $form['fields']['phone'] ),
-		esc_attr( $form['fields']['contact'] ),
-		mp_cf7_icon( 'telegram' ),
-		mp_cf7_icon( 'caret' ),
-		esc_attr( $form['submit'] ),
-		esc_attr( $form['consent'] )
-	);
-
-	$case_form = mp_case( 'form' );
-
-	// Форма дела: на десктопе узкая колонка, на планшете и мобилке — широкая,
-	// поэтому в разметке два заголовка, лишний скрывается стилями.
-	$case = sprintf(
-		'<p class="pg-form__title pg-form__title--narrow">%1$s</p>
-<p class="pg-form__title pg-form__title--wide">%2$s</p>
-<div class="pg-form__body">
-<div class="pg-form__rows">
-<div class="pg-form__row">
-<span class="field pg-form__field pg-form__field--name">[text* name placeholder "%3$s"]</span>
-<span class="field pg-form__field pg-form__field--phone">[tel* phone placeholder "%4$s"]</span>
-</div>
-<div class="pg-form__row">
-<span class="pg-form__messenger"><span class="pg-form__messenger-icon">%6$s</span>[select channel class:pg-form__select "Telegram" "MAX" "ВКонтакте" "WhatsApp"]<span class="pg-form__messenger-caret">%7$s</span></span>
-<span class="field pg-form__field pg-form__field--contact">[text contact placeholder "%5$s"]</span>
-</div>
-</div>
-<div class="pg-form__submit">
-[submit class:btn class:btn--light class:btn--block "%8$s"]
-<span class="consent pg-form__consent">[acceptance consent "%9$s"]</span>
-</div>
-</div>',
-		esc_html( $case_form['title'] ),
-		esc_html( $case_form['title_wide'] ),
-		esc_attr( $form['fields']['name'] ),
-		esc_attr( $form['fields']['phone'] ),
-		esc_attr( $form['fields']['contact'] ),
-		mp_cf7_icon( 'telegram' ),
-		mp_cf7_icon( 'caret' ),
-		esc_attr( $case_form['submit'] ),
-		esc_attr( $form['consent'] )
-	);
-
 	$home_form = mp_data( 'form' );
 
 	$home = sprintf(
@@ -267,20 +203,45 @@ function mp_cf7_definitions() {
 		esc_attr( $cons['consent'] )
 	);
 
+
+	// --- Попап с формой ------------------------------------------------
+	$modal = mp_data( 'modal' );
+
+	$modal_form = sprintf(
+		'<div class="pg-form__body">
+<div class="pg-form__rows">
+<div class="pg-form__row">
+<span class="field pg-form__field pg-form__field--name">[text* name placeholder "%1$s"]</span>
+<span class="field pg-form__field pg-form__field--phone">[tel* phone placeholder "%2$s"]</span>
+</div>
+<div class="pg-form__row">
+<span class="pg-form__messenger"><span class="pg-form__messenger-icon">%4$s</span>[select channel class:pg-form__select "Telegram" "MAX" "ВКонтакте" "WhatsApp"]<span class="pg-form__messenger-caret">%5$s</span></span>
+<span class="field pg-form__field pg-form__field--contact">[text contact placeholder "%3$s"]</span>
+</div>
+</div>
+<div class="pg-form__submit">
+[submit class:btn class:btn--light class:btn--block "%6$s"]
+<span class="consent pg-form__consent">[acceptance consent "%7$s"]</span>
+</div>
+</div>',
+		esc_attr( $modal['fields']['name'] ),
+		esc_attr( $modal['fields']['phone'] ),
+		esc_attr( $modal['fields']['contact'] ),
+		mp_cf7_icon( 'telegram' ),
+		mp_cf7_icon( 'caret' ),
+		esc_attr( $modal['submit'] ),
+		esc_attr( $modal['consent'] )
+	);
+
 	return [
-		'practices' => [
-			'title' => 'M-PARTNERS — практики',
-			'form'  => $practices,
+		'modal'     => [
+			'title' => 'M-PARTNERS — попап',
+			'form'  => $modal_form,
 			'mail'  => $mail,
 		],
 		'home'      => [
 			'title' => 'M-PARTNERS — главная',
 			'form'  => $home,
-			'mail'  => $mail,
-		],
-		'case'      => [
-			'title' => 'M-PARTNERS — карточка дела',
-			'form'  => $case,
 			'mail'  => $mail,
 		],
 		'quiz'      => [

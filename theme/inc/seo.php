@@ -7,7 +7,7 @@
  * @package MPartners
  */
 
-const MP_SEO_VERSION = '2';
+const MP_SEO_VERSION = '3';
 
 /**
  * Заголовок сайта и описание — из контактов в админке.
@@ -52,8 +52,8 @@ function mp_seo_yoast_titles() {
 		'company_name'                => 'Коллегия адвокатов M-PARTNERS',
 		'website_name'                => 'M-PARTNERS',
 
-		'title-mp_practice'           => '%%title%% %%sep%% %%sitename%%',
-		'title-ptarchive-mp_practice' => 'Услуги %%page%% %%sep%% %%sitename%%',
+		'title-mp_hub'                => '%%title%% %%sep%% %%sitename%%',
+		'title-mp_landing'            => '%%title%% %%sep%% %%sitename%%',
 		'title-mp_lawyer'             => '%%title%% %%sep%% %%sitename%%',
 		'title-ptarchive-mp_lawyer'   => 'Адвокаты %%page%% %%sep%% %%sitename%%',
 	];

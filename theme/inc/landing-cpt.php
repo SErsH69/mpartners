@@ -349,3 +349,99 @@ function mp_redirect_old_hub() {
 	}
 }
 add_action( 'template_redirect', 'mp_redirect_old_hub' );
+
+/**
+ * Карточки услуг для блока «Как мы решаем сложные ситуации».
+ *
+ * @return array Пустой массив, если лендингов ещё нет.
+ */
+function mp_service_cards() {
+	$posts = get_posts(
+		[
+			'post_type'      => MP_LANDING_TYPE,
+			'posts_per_page' => -1,
+			'orderby'        => [
+				'menu_order' => 'ASC',
+				'date'       => 'ASC',
+			],
+		]
+	);
+
+	$cards = [];
+
+	foreach ( $posts as $post ) {
+		$image = get_the_post_thumbnail_url( $post->ID, 'full' );
+
+		$cards[] = [
+			'title' => get_the_title( $post ),
+			'text'  => wp_strip_all_tags( get_the_excerpt( $post ) ),
+			'image' => $image ? $image : '',
+			'href'  => get_permalink( $post ),
+		];
+	}
+
+	return $cards;
+}
+
+/**
+ * Ссылка на услугу с таким названием. Если лендинга нет — хаб.
+ *
+ * @param string $title Название услуги.
+ * @return string
+ */
+function mp_service_link( $title ) {
+	$posts = get_posts(
+		[
+			'post_type'        => MP_LANDING_TYPE,
+			'title'            => (string) $title,
+			'posts_per_page'   => 1,
+			'suppress_filters' => false,
+		]
+	);
+
+	if ( $posts ) {
+		return get_permalink( $posts[0] );
+	}
+
+	$hub = mp_primary_hub();
+
+	return $hub ? get_permalink( $hub ) : home_url( '/' );
+}
+
+/**
+ * Удаление старого раздела «Практики».
+ *
+ * Записи и страница переносятся в корзину — при необходимости их можно
+ * восстановить в админке.
+ */
+const MP_CLEANUP_VERSION = '1';
+
+/**
+ * Разовая уборка старого раздела.
+ */
+function mp_cleanup_practices() {
+	if ( get_option( 'mp_cleanup_version' ) === MP_CLEANUP_VERSION ) {
+		return;
+	}
+
+	foreach ( get_posts(
+		[
+			'post_type'      => 'mp_practice',
+			'posts_per_page' => -1,
+			'post_status'    => 'any',
+			'fields'         => 'ids',
+		]
+	) as $id ) {
+		wp_trash_post( $id );
+	}
+
+	$page = get_page_by_path( 'practices' );
+
+	if ( $page && 'page' === $page->post_type ) {
+		wp_trash_post( $page->ID );
+	}
+
+	update_option( 'mp_cleanup_version', MP_CLEANUP_VERSION );
+	flush_rewrite_rules();
+}
+add_action( 'init', 'mp_cleanup_practices', 19 );

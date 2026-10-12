@@ -44,6 +44,16 @@ function mp_home_data() {
 	];
 
 	$data = [
+		'modal'    => [
+			'title'   => 'Нужна уголовная защита бизнеса, собственника или руководителя?',
+			'fields'  => [
+				'name'    => 'Ваше имя',
+				'phone'   => 'Номер телефона',
+				'contact' => '@ник или ссылка на профиль',
+			],
+			'submit'  => 'Обсудить ситуацию с адвокатом',
+			'consent' => 'Я соглашаюсь с политикой конфиденциальности',
+		],
 		'contacts' => [
 			'tagline' => "Эффективная защита в\nобласти уголовного права",
 			'email'   => 'bespalova@mpartners.law',
@@ -490,7 +500,7 @@ function mp_data( $path, $default = null ) {
 
 		// Контакты и подвал одинаковы на всех страницах, меню — в «Внешний
 		// вид → Меню», остальное принадлежит главной.
-		if ( in_array( $root, [ 'contacts', 'footer' ], true ) ) {
+		if ( in_array( $root, [ 'contacts', 'footer', 'modal' ], true ) ) {
 			return mp_content_get( 'common', $path, $default );
 		}
 
@@ -521,6 +531,7 @@ function mp_common_data() {
 	$data = mp_home_data();
 
 	return [
+		'modal'    => $data['modal'],
 		'contacts' => $data['contacts'],
 		'footer'   => $data['footer'],
 	];
