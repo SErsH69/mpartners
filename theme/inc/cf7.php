@@ -245,6 +245,28 @@ function mp_cf7_definitions() {
 		esc_attr( $hub['consent'] )
 	);
 
+
+	// --- Форма консультации на лендинге -------------------------------
+	$cons = mp_landing( 'consult.form' );
+
+	$consult = sprintf(
+		'<div class="ld-form__fields">
+<span class="field ld-form__field">[text* name placeholder "%1$s"]</span>
+<span class="field ld-form__field">[tel* phone placeholder "%2$s"]</span>
+</div>
+<p class="ld-form__label">%4$s</p>
+<div class="ld-form__channels">[radio channel use_label_element default:1 "Telegram" "ВКонтакте" "WhatsApp"]</div>
+<span class="field ld-form__field ld-form__field--contact">[text contact placeholder "%3$s"]</span>
+[submit class:btn class:btn--light class:ld-form__submit "%5$s"]
+<span class="consent ld-form__consent">[acceptance consent "%6$s"]</span>',
+		esc_attr( $cons['fields']['name'] ),
+		esc_attr( $cons['fields']['phone'] ),
+		esc_attr( $cons['fields']['contact'] ),
+		esc_html( $cons['channel'] ),
+		esc_attr( $cons['submit'] ),
+		esc_attr( $cons['consent'] )
+	);
+
 	return [
 		'practices' => [
 			'title' => 'M-PARTNERS — практики',
@@ -269,6 +291,11 @@ function mp_cf7_definitions() {
 		'landing'   => [
 			'title' => 'M-PARTNERS — хаб услуг',
 			'form'  => $landing,
+			'mail'  => $mail,
+		],
+		'consult'   => [
+			'title' => 'M-PARTNERS — консультация на лендинге',
+			'form'  => $consult,
 			'mail'  => $mail,
 		],
 	];
