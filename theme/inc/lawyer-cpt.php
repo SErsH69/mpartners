@@ -98,12 +98,6 @@ function mp_lawyer_cards( $post_id = 0 ) {
 		]
 	);
 
-	// Карточки из макета показываем, только пока в админке нет ни одного
-	// адвоката — дальше везде выводим настоящие записи.
-	if ( ! $posts ) {
-		return (array) mp_data( 'team.members', [] );
-	}
-
 	$cards = [];
 
 	foreach ( $posts as $post ) {
@@ -116,6 +110,21 @@ function mp_lawyer_cards( $post_id = 0 ) {
 			'more'  => 'Подробнее',
 			'href'  => get_permalink( $post ),
 		];
+	}
+
+	// Пока адвокатов меньше, чем мест в сетке, добираем карточками макета.
+	$names = wp_list_pluck( $cards, 'name' );
+
+	foreach ( (array) mp_data( 'team.members', [] ) as $member ) {
+		if ( count( $cards ) >= 4 ) {
+			break;
+		}
+
+		if ( in_array( $member['name'], $names, true ) ) {
+			continue;
+		}
+
+		$cards[] = $member;
 	}
 
 	return $cards;

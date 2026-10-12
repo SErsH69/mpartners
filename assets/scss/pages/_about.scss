@@ -8,6 +8,14 @@
 // --- Первый экран -------------------------------------------
 .ab-hero {
     padding-top: 15px;
+
+    @include tablet {
+        padding-top: 34px;
+    }
+
+    @include mobile {
+        padding-top: 15px;
+    }
 }
 
 .ab-hero__photo {
@@ -24,11 +32,11 @@
     }
 
     @include tablet {
-        height: 280px;
+        height: 273px;
     }
 
     @include mobile {
-        height: 200px;
+        height: 181px;
     }
 }
 
@@ -41,14 +49,9 @@
     font-weight: 400;
     line-height: 54px;
 
-    @include tablet {
-        font-size: 44px;
-        line-height: round(nearest, 0.9em, 1px);
-    }
-
     @include mobile {
-        font-size: 32px;
-        line-height: round(nearest, 0.92em, 1px);
+        font-size: 35px;
+        line-height: 31.5px;
     }
 }
 
@@ -61,8 +64,13 @@
     @include gradient-dark;
 
     @include tablet {
-        padding: 40px 0;
+        padding: 30px 0;
         margin-top: 80px;
+    }
+
+    @include mobile {
+        padding: 20px 0;
+        margin-top: 57px;
     }
 }
 
@@ -73,7 +81,7 @@
 
     @include tablet {
         flex-direction: column;
-        gap: 20px;
+        gap: 10px;
     }
 }
 
@@ -90,12 +98,11 @@
     @include tablet {
         flex: 0 0 auto;
         max-width: none;
-        font-size: 30px;
-        line-height: round(nearest, 0.92em, 1px);
     }
 
     @include mobile {
-        font-size: 24px;
+        font-size: 30px;
+        line-height: 27px;
     }
 }
 
@@ -125,11 +132,12 @@
     @include hide-scrollbar;
 
     @include tablet {
-        margin: 30px 0 0 $gutter-tablet;
+        gap: 9px;
+        margin: 45px 0 0 $gutter-tablet;
     }
 
     @include mobile {
-        margin-left: $gutter-mobile;
+        margin: 20px 0 0 $gutter-mobile;
     }
 }
 
@@ -147,10 +155,16 @@
         object-fit: cover;
     }
 
+    @include tablet {
+        flex-basis: 231px;
+        width: 231px;
+        height: 179px;
+    }
+
     @include mobile {
-        flex-basis: 280px;
-        width: 280px;
-        height: 217px;
+        flex-basis: 136px;
+        width: 136px;
+        height: 105px;
     }
 }
 
@@ -161,8 +175,12 @@
 
     @include tablet {
         width: auto;
+        margin-top: 70px;
         margin-left: 0;
-        margin-top: 30px;
+    }
+
+    @include mobile {
+        margin-top: 50px;
     }
 }
 
@@ -231,11 +249,11 @@
     @include hide-scrollbar;
 
     @include tablet {
-        margin-left: $gutter-tablet;
+        margin: 45px 0 0 $gutter-tablet;
     }
 
     @include mobile {
-        margin-left: $gutter-mobile;
+        margin: 34px 0 0 $gutter-mobile;
     }
 }
 
@@ -260,7 +278,7 @@
 
     @include tablet {
         flex-direction: column;
-        gap: 20px;
+        gap: 15px;
     }
 }
 
@@ -277,12 +295,11 @@
     @include tablet {
         flex: 0 0 auto;
         max-width: none;
-        font-size: 30px;
-        line-height: round(nearest, 0.92em, 1px);
     }
 
     @include mobile {
-        font-size: 24px;
+        font-size: 30px;
+        line-height: 27px;
     }
 }
 
@@ -329,16 +346,25 @@
     display: flex;
     gap: 35px;
     margin: 40px 0 0;
-    padding: 0 0 20px;
+    padding: 0;
     overflow-x: auto;
+
+    @include tablet {
+        gap: 35px;
+        margin-top: 45px;
+    }
+
+    @include mobile {
+        gap: 36px;
+        margin-top: 30px;
+    }
     list-style: none;
     border-bottom: 1px solid $c-beige-deep;
 
     @include hide-scrollbar;
 
-    @include upto(1919px) {
-        padding-left: max(#{$gutter-desktop}, calc((100vw - #{$container}) / 2));
-    }
+    // Лента начинается по левому краю контейнера и уходит за правый край.
+    padding-left: max(#{$gutter-desktop}, calc((100% - #{$container}) / 2));
 
     @include tablet {
         padding-left: $gutter-tablet;
@@ -357,8 +383,9 @@
     min-height: 161px; // высота из макета: по ней тянется линия под иконкой
 
     @include mobile {
-        flex-basis: 280px;
-        width: 280px;
+        flex-basis: 217px;
+        width: 217px;
+        min-height: 131px;
     }
 }
 
@@ -369,11 +396,20 @@
     justify-content: center;
     color: $c-muted;
 
+    @include mobile {
+        flex: 0 0 49px;
+    }
+
     img,
     svg {
         display: block;
         width: 74px;
         height: 72px;
+
+        @include mobile {
+            width: 41px;
+            height: 40px;
+        }
     }
 
     // Вертикальная линия под иконкой, как в макете.
@@ -429,7 +465,7 @@
 
     @include tablet {
         flex-direction: column;
-        gap: 20px;
+        gap: 15px;
     }
 }
 
@@ -447,12 +483,11 @@
         flex: 0 0 auto;
         max-width: none;
         margin-top: 0;
-        font-size: 30px;
-        line-height: round(nearest, 0.92em, 1px);
     }
 
     @include mobile {
-        font-size: 24px;
+        font-size: 30px;
+        line-height: 27px;
     }
 }
 
@@ -503,15 +538,27 @@
 
     @include tablet {
         grid-template-columns: repeat(2, 1fr);
+        gap: 20px;
     }
 
     @include mobile {
-        grid-template-columns: 1fr;
+        // В макете 375 карточки едут лентой по горизонтали.
+        display: flex;
+        gap: 30px;
+        margin-top: 15px;
+        overflow-x: auto;
+
+        @include hide-scrollbar;
     }
 }
 
 .ab-team__member {
     width: 100%;
+
+    @include mobile {
+        flex: 0 0 212px;
+        width: 212px;
+    }
 }
 
 // =============================================================
@@ -519,6 +566,10 @@
 // =============================================================
 .ct {
     padding-top: 15px;
+
+    @include tablet {
+        padding-top: 20px;
+    }
 }
 
 .ct__banner {
@@ -531,12 +582,12 @@
     @include gradient-dark;
 
     @include tablet {
-        min-height: 120px;
+        min-height: 114px;
         padding: 30px;
     }
 
     @include mobile {
-        min-height: 100px;
+        min-height: 71px;
         padding: 20px;
     }
 }
@@ -549,13 +600,9 @@
     font-weight: 400;
     line-height: 54px;
 
-    @include tablet {
-        font-size: 44px;
-        line-height: round(nearest, 0.9em, 1px);
-    }
-
     @include mobile {
-        font-size: 32px;
+        font-size: 35px;
+        line-height: 31.5px;
     }
 }
 
@@ -569,8 +616,13 @@
 
     @include tablet {
         grid-template-columns: 1fr;
-        gap: 15px;
-        margin-top: 30px;
+        gap: 20px;
+        margin-top: 40px;
+    }
+
+    @include mobile {
+        gap: 20px;
+        margin-top: 20px;
     }
 }
 
@@ -598,13 +650,9 @@
     font-weight: 400;
     line-height: 36px;
 
-    @include tablet {
-        font-size: 30px;
-        line-height: round(nearest, 0.92em, 1px);
-    }
-
     @include mobile {
-        font-size: 24px;
+        font-size: 30px;
+        line-height: 27px;
     }
 }
 
@@ -680,9 +728,13 @@
         border: 0;
     }
 
+    @include tablet {
+        height: 235px;
+        margin-top: 34px;
+    }
+
     @include mobile {
-        height: 160px;
-        margin-top: 25px;
+        margin-top: 20px;
     }
 }
 
@@ -720,6 +772,10 @@
 .pn {
     padding-top: 15px;
     overflow: hidden;
+
+    @include tablet {
+        padding-top: 20px;
+    }
 }
 
 .pn__head {
@@ -730,8 +786,12 @@
 
     @include tablet {
         flex-direction: column;
-        gap: 20px;
-        margin-top: 40px;
+        gap: 10px;
+        margin-top: 50px;
+    }
+
+    @include mobile {
+        margin-top: 30px;
     }
 }
 
@@ -749,12 +809,11 @@
         flex: 0 0 auto;
         max-width: none;
         margin-top: 0;
-        font-size: 30px;
-        line-height: round(nearest, 0.92em, 1px);
     }
 
     @include mobile {
-        font-size: 24px;
+        font-size: 30px;
+        line-height: 27px;
     }
 }
 
@@ -794,6 +853,11 @@
     font-size: 14px;
     font-weight: 400;
     line-height: round(nearest, 1.1em, 1px);
+
+    @include mobile {
+        font-size: 12px;
+        line-height: 13.2px;
+    }
 }
 
 .pn__logos {
@@ -807,24 +871,25 @@
     @include hide-scrollbar;
 
     @include tablet {
-        margin: 35px 0 0 $gutter-tablet;
+        margin: 40px 0 0 $gutter-tablet;
     }
 
     @include mobile {
-        margin-left: $gutter-mobile;
+        margin: 30px 0 0 $gutter-mobile;
     }
 }
 
 // --- Приглашение --------------------------------------------
 .pn-invite {
-    padding: 100px 0;
+    // Нижний отступ до подвала задаёт сам подвал.
+    padding: 100px 0 0;
 
     @include tablet {
-        padding: 60px 0;
+        padding-top: 80px;
     }
 
     @include mobile {
-        padding: 50px 0;
+        padding-top: 50px;
     }
 }
 
@@ -871,13 +936,9 @@
     font-weight: 400;
     line-height: 36px;
 
-    @include tablet {
-        font-size: 30px;
-        line-height: round(nearest, 0.92em, 1px);
-    }
-
     @include mobile {
-        font-size: 24px;
+        font-size: 30px;
+        line-height: 27px;
     }
 }
 
@@ -890,6 +951,11 @@
     font-size: 14px;
     font-weight: 400;
     line-height: round(nearest, 1.1em, 1px);
+
+    @include mobile {
+        font-size: 12px;
+        line-height: 13.2px;
+    }
 }
 
 .pn-invite__text {
@@ -923,6 +989,10 @@
     @include tablet {
         position: static;
         width: 100%;
-        margin-top: 25px;
+        margin-top: 30px;
+    }
+
+    @include mobile {
+        margin-top: 20px;
     }
 }

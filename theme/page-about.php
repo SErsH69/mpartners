@@ -16,6 +16,6 @@ get_template_part( 'template-parts/about/team' );
 get_template_part( 'template-parts/sections/awards' );
 get_template_part( 'template-parts/sections/reviews' );
 get_template_part( 'template-parts/sections/blog' );
-get_template_part( 'template-parts/sections/contact' );
+get_template_part( 'template-parts/sections/form' );
 
 get_footer();
