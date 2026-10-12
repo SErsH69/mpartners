@@ -18,7 +18,7 @@ function mp_contacts_data() {
 				'title'   => 'Офис в Москве',
 				'phone'   => '8 800 101 42 47',
 				'email'   => 'partners@mpartners.law',
-				'address' => '127006, Москва, Каланчевская, 47, пом. 6/1',
+				'address' => '129110, Москва, Каланчевская, 47, пом. 6/1',
 				'map'     => 'https://yandex.ru/map-widget/v1/?ll=37.646022%2C55.778613&z=17&pt=37.646022%2C55.778613%2Cpm2rdm',
 				'route'   => 'https://yandex.ru/maps/?ll=37.646022%2C55.778613&z=17&pt=37.646022%2C55.778613%2Cpm2rdm',
 			],

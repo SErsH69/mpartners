@@ -817,7 +817,7 @@ add_action( 'current_screen', 'mp_hide_page_editor' );
  * Разовые замены в уже сохранённом контенте: данные из файлов темы правятся
  * свободно, а то, что лежит в полях админки, нужно обновлять отдельно.
  */
-const MP_REPLACE_VERSION = '4';
+const MP_REPLACE_VERSION = '5';
 
 /**
  * Что на что меняем.
@@ -826,6 +826,7 @@ const MP_REPLACE_VERSION = '4';
  */
 function mp_content_replacements() {
 	return [
+		'127006, Москва' => '129110, Москва',
 		'8 800 350 40 15' => '8 800 101 42 47',
 		'tel:88003504015' => 'tel:88001014247',
 		'info@m-partners.ru' => 'bespalova@mpartners.law',
