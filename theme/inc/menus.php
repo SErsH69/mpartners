@@ -10,7 +10,7 @@
  * @package MPartners
  */
 
-const MP_MENUS_VERSION = '10';
+const MP_MENUS_VERSION = '11';
 const MP_PAGES_VERSION = '6';
 
 /**
@@ -221,10 +221,18 @@ function mp_seed_menus() {
 			$present[] = $item->title;
 			$target    = mp_menu_url_for( $item->title, isset( $sets[ $location ]['fallback'] ) ? $sets[ $location ]['fallback'] : '' );
 
-			// В меню услуг названия произвольные — там не трогаем рабочие
-			// ссылки; в шапке и подвале адреса приводим к актуальным страницам.
-			if ( $services && '#' !== $item->url && '' !== $item->url && $item->url !== home_url( '/' ) ) {
-				continue;
+			// В меню услуг названия произвольные: ведём их на лендинг с таким
+			// же названием, а рабочие ссылки не трогаем.
+			if ( $services ) {
+				$dead = '#' === $item->url || '' === $item->url
+					|| $item->url === home_url( '/' )
+					|| false !== strpos( $item->url, '/practices' );
+
+				if ( ! $dead ) {
+					continue;
+				}
+
+				$target = function_exists( 'mp_service_link' ) ? mp_service_link( $item->title ) : $target;
 			}
 
 			if ( $item->url === $target ) {
