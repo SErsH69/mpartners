@@ -10,7 +10,7 @@
  * @package MPartners
  */
 
-const MP_CONTENT_VERSION = '12';
+const MP_CONTENT_VERSION = '13';
 
 /**
  * Редактируемые разделы контента.
@@ -49,6 +49,11 @@ function mp_content_groups() {
 			'post_types' => [ 'mp_lawyer' ],
 			// Имя — заголовок записи, фото — изображение записи.
 			'skip'       => [ 'name', 'photo', 'pubs' ],
+		],
+		'partners'  => [
+			'title'     => 'Контент страницы «Партнерство»',
+			'data'      => 'mp_partners_data',
+			'templates' => [ 'page-partnership.php' ],
 		],
 		'contacts'  => [
 			'title'     => 'Контент страницы «Контакты»',

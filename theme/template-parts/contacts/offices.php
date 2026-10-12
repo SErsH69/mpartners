@@ -9,9 +9,7 @@ $mp_page = mp_contacts();
 ?>
 <section class="ct">
 	<div class="shell">
-		<div class="ct__banner">
-			<h1 class="ct__title"><?php echo esc_html( $mp_page['title'] ); ?></h1>
-		</div>
+		<?php get_template_part( 'template-parts/page-banner', null, [ 'title' => $mp_page['title'] ] ); ?>
 
 		<ul class="ct__grid">
 			<?php foreach ( (array) $mp_page['offices'] as $mp_office ) : ?>

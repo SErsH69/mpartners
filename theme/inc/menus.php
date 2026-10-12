@@ -10,8 +10,8 @@
  * @package MPartners
  */
 
-const MP_MENUS_VERSION = '6';
-const MP_PAGES_VERSION = '3';
+const MP_MENUS_VERSION = '7';
+const MP_PAGES_VERSION = '4';
 
 /**
  * Места для меню.
@@ -93,6 +93,7 @@ function mp_menu_url_for( $label, $fallback = '' ) {
 	$map = [
 		'Услуги'      => 'uslugi',
 		'О компании'  => 'about',
+		'Партнерство' => 'partnership',
 		'Практики'    => 'practices',
 		'Адвокаты'    => 'lawyers',
 		'Мероприятия' => 'events',
@@ -134,7 +135,7 @@ function mp_seed_menus() {
 		return;
 	}
 
-	$items = [ 'Услуги', 'Практики', 'О компании', 'Адвокаты', 'Пресс-центр', 'Мероприятия', 'СМИ о нас', 'Контакты' ];
+	$items = [ 'Услуги', 'Практики', 'О компании', 'Адвокаты', 'Пресс-центр', 'Мероприятия', 'СМИ о нас', 'Партнерство', 'Контакты' ];
 
 	$sets = [
 		'mp-header'   => [
@@ -325,6 +326,7 @@ function mp_seed_pages() {
 		'lawyers'   => [ 'Адвокаты', 'page-lawyers.php' ],
 		'about'     => [ 'О компании', 'page-about.php' ],
 		'contacts'  => [ 'Контакты', 'page-contacts.php' ],
+		'partnership' => [ 'Партнерство', 'page-partnership.php' ],
 		'press'     => [ 'Пресс-центр', 'page-press.php' ],
 		'events'    => [ 'Мероприятия', 'page-events.php' ],
 		'media'     => [ 'СМИ о нас', 'page-media.php' ],
