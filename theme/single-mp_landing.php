@@ -20,6 +20,8 @@ while ( have_posts() ) :
 	get_template_part( 'template-parts/landing/team' );
 	get_template_part( 'template-parts/sections/practice' );
 	get_template_part( 'template-parts/landing/deck' );
+	get_template_part( 'template-parts/sections/reviews' );
+	get_template_part( 'template-parts/landing/faq' );
 	get_template_part( 'template-parts/landing/cta' );
 endwhile;
 

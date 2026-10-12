@@ -2162,3 +2162,106 @@ $stage-height: 403px;
         width: 100%;
     }
 }
+
+// --- 13. Часто задаваемые вопросы ---------------------------
+.ld-faq {
+    padding-top: 100px;
+
+    @include tablet {
+        padding-top: 60px;
+    }
+
+    @include mobile {
+        padding-top: 50px;
+    }
+}
+
+.ld-faq__title {
+    margin: 0 0 32px;
+    color: $c-dark;
+    font-family: $font-display;
+    font-size: 40px;
+    font-weight: 400;
+    line-height: 36px;
+
+    @include tablet {
+        margin-bottom: 25px;
+        font-size: 30px;
+        line-height: round(nearest, 0.92em, 1px);
+    }
+
+    @include mobile {
+        font-size: 24px;
+    }
+}
+
+.ld-faq__columns {
+    display: grid;
+    gap: 0 40px;
+    grid-template-columns: repeat(2, 1fr);
+
+    @include tablet {
+        grid-template-columns: 1fr;
+    }
+}
+
+.ld-faq__column {
+    min-width: 0;
+}
+
+.ld-faq__item {
+    border-bottom: 1px solid #e9decf;
+}
+
+.ld-faq__question {
+    display: flex;
+    gap: 20px;
+    align-items: center;
+    justify-content: space-between;
+    // 20px иконки + 16px сверху и снизу = строка 52px, как в макете.
+    padding: 16px 0;
+    color: $c-dark;
+    font-size: 16px;
+    font-weight: 600;
+    line-height: round(nearest, 1.1em, 1px);
+    cursor: pointer;
+    list-style: none;
+
+    &::-webkit-details-marker {
+        display: none;
+    }
+
+    @include mobile {
+        font-size: 14px;
+    }
+}
+
+.ld-faq__toggle {
+    display: flex;
+    flex: 0 0 20px;
+    align-items: center;
+    justify-content: center;
+    width: 20px;
+    height: 20px;
+    color: $c-dark;
+    transition: transform 0.2s ease;
+
+    svg {
+        display: block;
+        width: 12px;
+        height: 12px;
+    }
+}
+
+.ld-faq__item[open] .ld-faq__toggle {
+    transform: rotate(45deg);
+}
+
+.ld-faq__answer {
+    margin: 0;
+    padding: 0 40px 16px 0;
+    color: $c-muted;
+    font-size: 14px;
+    font-weight: 400;
+    line-height: round(nearest, 1.2em, 1px);
+}
