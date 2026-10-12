@@ -1060,3 +1060,218 @@
     font-weight: 400;
     line-height: round(nearest, 1.1em, 1px);
 }
+
+// --- 04. Как проходит защита --------------------------------
+.ld-stages {
+    padding-top: 100px;
+
+    @include tablet {
+        padding-top: 60px;
+    }
+
+    @include mobile {
+        padding-top: 50px;
+    }
+}
+
+.ld-stages__head {
+    display: flex;
+    // Бокс заголовка в макете уже включает отступ до плашки.
+    gap: 0;
+    align-items: flex-start;
+
+    @include tablet {
+        flex-direction: column;
+        gap: 20px;
+    }
+}
+
+.ld-stages__title {
+    flex: 0 0 607px;
+    max-width: 607px;
+    margin: 0;
+    color: $c-dark;
+    font-family: $font-display;
+    font-size: 40px;
+    font-weight: 400;
+    line-height: 36px;
+
+    @include tablet {
+        flex: 0 0 auto;
+        max-width: none;
+        font-size: 30px;
+        line-height: round(nearest, 0.92em, 1px);
+    }
+
+    @include mobile {
+        font-size: 24px;
+    }
+}
+
+.ld-stages__note {
+    display: flex;
+    flex: 0 0 488px;
+    gap: 12px;
+    align-items: flex-start;
+    width: 488px;
+    min-height: 71px;
+    margin-top: 1px;
+    padding: 13px 15px;
+    background-color: $c-surface;
+    border-radius: $r-sm;
+
+    @include tablet {
+        flex: 0 0 auto;
+        width: 100%;
+        margin-top: 0;
+    }
+}
+
+.ld-stages__note-icon {
+    display: flex;
+    flex: 0 0 auto;
+    color: $c-muted;
+
+    svg {
+        display: block;
+        width: 17px;
+        height: 17px;
+    }
+}
+
+.ld-stages__note-text {
+    margin: 0;
+    color: $c-muted;
+    font-size: 14px;
+    font-weight: 400;
+    line-height: round(nearest, 1.1em, 1px);
+}
+
+// Колода: смещение пройденных этапов 58px, активная карточка 403px.
+$stage-step: 58px;
+$stage-height: 403px;
+
+.ld-stages__deck {
+    position: relative;
+    height: calc(#{$stage-height} + (var(--count) - 1) * #{$stage-step});
+    margin-top: 25px;
+
+    @include tablet {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        height: auto;
+        margin-top: 20px;
+    }
+}
+
+.ld-stage {
+    position: absolute;
+    top: calc(var(--i) * #{$stage-step});
+    right: 0;
+    left: 0;
+    z-index: calc(var(--i) + 1);
+    height: $stage-height;
+    overflow: hidden;
+    border-radius: $r-lg;
+    transition: top 0.35s ease;
+
+    @include gradient-dark;
+
+    @include tablet {
+        position: static;
+        height: auto;
+        transition: none;
+    }
+}
+
+.ld-stage__head {
+    display: block;
+    width: 100%;
+    padding: 50px;
+    text-align: left;
+    background: none;
+    border: 0;
+    cursor: pointer;
+
+    @include tablet {
+        padding: 25px 30px;
+        cursor: default;
+    }
+
+    @include mobile {
+        padding: 20px;
+    }
+}
+
+.ld-stage__title {
+    display: block;
+    max-width: 594px;
+    color: $c-cream;
+    font-family: $font-display;
+    font-size: 40px;
+    font-weight: 400;
+    line-height: 36px;
+
+    @include tablet {
+        font-size: 26px;
+        line-height: round(nearest, 0.92em, 1px);
+    }
+
+    @include mobile {
+        font-size: 22px;
+    }
+}
+
+.ld-stage__body {
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+    width: 557px;
+    min-height: 80px;
+    margin: 137px 50px 0; // плашка в макете стоит на 273px от верха карточки
+    padding: 13px 15px;
+    background-color: rgba($c-white, 0.06);
+    border-radius: $r-sm;
+    opacity: 0;
+    transition: opacity 0.25s ease;
+
+    @include tablet {
+        width: auto;
+        margin: 0 30px 25px;
+        opacity: 1;
+    }
+
+    @include mobile {
+        margin: 0 20px 20px;
+    }
+}
+
+// Содержимое видно только у карточки, поднятой вперёд.
+.ld-stage.is-active .ld-stage__body {
+    opacity: 1;
+}
+
+.ld-stage__body-icon {
+    display: flex;
+    flex: 0 0 auto;
+    color: $c-cream;
+
+    svg {
+        display: block;
+        width: 14px;
+        height: 16px;
+    }
+}
+
+.ld-stage__text {
+    margin: 0;
+    color: $c-cream;
+    font-size: 16px;
+    font-weight: 400;
+    line-height: round(nearest, 1.1em, 1px);
+
+    @include mobile {
+        font-size: 14px;
+    }
+}

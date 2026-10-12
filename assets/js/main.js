@@ -9,6 +9,7 @@ import initModal from './modules/modal'
 import initCards from './modules/cards'
 import initSearch from './modules/search'
 import initGallery from './modules/gallery'
+import initStages from './modules/stages'
 
 const boot = () => {
     initMenu()
@@ -22,6 +23,7 @@ const boot = () => {
     initCards()
     initSearch()
     initGallery()
+    initStages()
 }
 
 if ('loading' === document.readyState) {
