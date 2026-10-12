@@ -896,7 +896,7 @@ add_action( 'acf/init', 'mp_apply_content_replacements', 30 );
  * Разовый сброс отдельных полей: значение из макета поменялось, а в базе
  * лежит старое и перекрывает его. После сброса поле снова берётся из темы.
  */
-const MP_RESET_VERSION = '1';
+const MP_RESET_VERSION = '2';
 
 /**
  * Какие поля сбросить: группа => список ключей.
@@ -909,6 +909,8 @@ function mp_content_resets() {
 		'about'    => [ 'intro' ],
 		'partners' => [ 'logos' ],
 		'landings' => [],
+		// В карточках офисов появились карты.
+		'contacts' => [ 'offices' ],
 	];
 }
 

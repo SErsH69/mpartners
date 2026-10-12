@@ -34,14 +34,18 @@ $mp_page = mp_contacts();
 						<?php if ( ! empty( $mp_office['address'] ) ) : ?>
 							<li class="ct-office__line ct-office__line--address">
 								<span class="ct-office__icon"><?php mp_icon( 'pin' ); ?></span>
-								<span><?php echo esc_html( $mp_office['address'] ); ?></span>
+								<?php if ( ! empty( $mp_office['route'] ) ) : ?>
+									<a href="<?php echo esc_url( $mp_office['route'] ); ?>" target="_blank" rel="noopener"><?php echo esc_html( $mp_office['address'] ); ?></a>
+								<?php else : ?>
+									<span><?php echo esc_html( $mp_office['address'] ); ?></span>
+								<?php endif; ?>
 							</li>
 						<?php endif; ?>
 					</ul>
 
 					<?php if ( ! empty( $mp_office['map'] ) ) : ?>
 						<div class="ct-office__map">
-							<iframe src="<?php echo esc_url( $mp_office['map'] ); ?>" title="<?php echo esc_attr( $mp_office['title'] ); ?>" loading="lazy" allowfullscreen></iframe>
+							<iframe src="<?php echo esc_url( $mp_office['map'] ); ?>" title="<?php echo esc_attr( sprintf( 'Карта: %s', $mp_office['address'] ) ); ?>" loading="lazy" allowfullscreen></iframe>
 						</div>
 					<?php else : ?>
 						<?php // Карта не подключена — показываем ссылку на маршрут, без сторонних скриптов. ?>
