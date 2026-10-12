@@ -10,8 +10,8 @@
  * @package MPartners
  */
 
-const MP_MENUS_VERSION = '5';
-const MP_PAGES_VERSION = '2';
+const MP_MENUS_VERSION = '6';
+const MP_PAGES_VERSION = '3';
 
 /**
  * Места для меню.
@@ -109,7 +109,9 @@ function mp_menu_url_for( $label, $fallback = '' ) {
 	}
 
 	if ( 'Контакты' === $label ) {
-		return '#form'; // Открывает попап с формой.
+		$page = get_page_by_path( 'contacts' );
+
+		return $page && 'publish' === $page->post_status ? get_permalink( $page ) : '#form';
 	}
 
 	if ( $fallback ) {
@@ -322,6 +324,7 @@ function mp_seed_pages() {
 		'practices' => [ 'Практики', 'page-practices.php' ],
 		'lawyers'   => [ 'Адвокаты', 'page-lawyers.php' ],
 		'about'     => [ 'О компании', 'page-about.php' ],
+		'contacts'  => [ 'Контакты', 'page-contacts.php' ],
 		'press'     => [ 'Пресс-центр', 'page-press.php' ],
 		'events'    => [ 'Мероприятия', 'page-events.php' ],
 		'media'     => [ 'СМИ о нас', 'page-media.php' ],
