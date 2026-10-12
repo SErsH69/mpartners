@@ -2265,3 +2265,304 @@ $stage-height: 403px;
     font-weight: 400;
     line-height: round(nearest, 1.2em, 1px);
 }
+
+// --- 12. Рейтинги и партнёры --------------------------------
+.ld-ratings {
+    padding-top: 100px;
+
+    @include tablet {
+        padding-top: 60px;
+    }
+
+    @include mobile {
+        padding-top: 50px;
+    }
+}
+
+.ld-ratings__panel {
+    position: relative;
+    min-height: 353px;
+    padding: 30px 0;
+    overflow: hidden;
+    border-radius: $r-lg;
+
+    @include gradient-dark;
+
+    @include tablet {
+        min-height: 0;
+    }
+}
+
+.ld-ratings__decor {
+    position: absolute;
+    top: -77px;
+    left: -154px;
+    width: 679px;
+    height: 573px;
+    opacity: 0.5;
+    pointer-events: none;
+
+    @include tablet {
+        display: none;
+    }
+}
+
+.ld-ratings__copy {
+    position: relative;
+    z-index: 1;
+    width: 563px;
+    margin-left: 607px;
+
+    @include tablet {
+        width: auto;
+        margin: 0 30px;
+    }
+
+    @include mobile {
+        margin: 0 20px;
+    }
+}
+
+.ld-ratings__plate {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    gap: 20px;
+    min-height: 115px;
+    padding: 20px;
+    background-color: rgba($c-white, 0.06);
+    border-radius: $r-sm;
+}
+
+.ld-ratings__title {
+    margin: 0;
+    color: $c-cream;
+    font-family: $font-display;
+    font-size: 19px;
+    font-weight: 400;
+    line-height: round(nearest, 0.9em, 1px);
+}
+
+.ld-ratings__link {
+    display: inline-flex;
+    gap: 8px;
+    align-items: center;
+    color: $c-cream;
+    font-size: 14px;
+    font-weight: 400;
+    line-height: round(nearest, 1.1em, 1px);
+    text-decoration: none;
+
+    svg {
+        display: block;
+        width: 11px;
+        height: 11px;
+    }
+
+    &:hover {
+        opacity: 0.8;
+    }
+}
+
+.ld-ratings__label {
+    display: flex;
+    align-items: center;
+    min-height: 57px;
+    margin: 10px 0 0;
+    padding: 0 20px;
+    color: $c-cream;
+    font-family: $font-display;
+    font-size: 22px;
+    font-weight: 400;
+    line-height: round(nearest, 0.9em, 1px);
+    background-color: rgba($c-white, 0.06);
+    border-radius: $r-sm;
+}
+
+// Лента логотипов уходит за края панели.
+.ld-ratings__logos {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    gap: 8px;
+    // В макете лента начинается левее панели и уходит за правый край.
+    margin: 25px 0 0 -45px;
+    padding: 0;
+    overflow-x: auto;
+    list-style: none;
+
+    @include tablet {
+        margin-left: 30px;
+    }
+
+    @include mobile {
+        margin-left: 20px;
+    }
+
+    @include hide-scrollbar;
+}
+
+.ld-logo {
+    display: flex;
+    flex: 0 0 100px;
+    align-items: center;
+    justify-content: center;
+    width: 100px;
+    height: 86px;
+    padding: 12px;
+    background-color: #e9decf;
+    border-radius: $r-sm;
+
+    img {
+        display: block;
+        max-width: 100%;
+        max-height: 100%;
+        object-fit: contain;
+    }
+}
+
+// --- 14. Предварительный анализ -----------------------------
+.ld-analysis {
+    padding-top: 100px;
+
+    @include tablet {
+        padding-top: 60px;
+    }
+
+    @include mobile {
+        padding-top: 50px;
+    }
+}
+
+.ld-analysis__panel {
+    position: relative;
+    min-height: 246px;
+    padding: 54px 50px 0 30px;
+    overflow: hidden;
+    border-radius: $r-sm;
+
+    @include gradient-dark;
+
+    @include tablet {
+        min-height: 0;
+        padding: 30px;
+    }
+
+    @include mobile {
+        padding: 20px;
+    }
+}
+
+.ld-analysis__decor {
+    position: absolute;
+    top: -262px;
+    left: 465px;
+    width: 915px;
+    height: 915px;
+    pointer-events: none;
+}
+
+.ld-analysis__copy {
+    position: relative;
+    z-index: 1;
+    max-width: 536px;
+}
+
+.ld-analysis__title {
+    margin: 0;
+    color: $c-cream;
+    font-family: $font-display;
+    font-size: 40px;
+    font-weight: 400;
+    line-height: 36px;
+
+    @include tablet {
+        font-size: 30px;
+        line-height: round(nearest, 0.92em, 1px);
+    }
+
+    @include mobile {
+        font-size: 24px;
+    }
+}
+
+.ld-analysis__text {
+    max-width: 513px;
+    min-height: 56px;
+    margin: 10px 0 0;
+    color: $c-muted-light;
+    font-size: 14px;
+    font-weight: 500;
+    line-height: 14px;
+
+    @include tablet {
+        min-height: 0;
+        line-height: round(nearest, 1.2em, 1px);
+    }
+}
+
+.ld-analysis__note {
+    position: absolute;
+    top: 105px;
+    left: 773px; // по левому краю кнопки, как в макете
+    z-index: 1;
+    width: 249px;
+    margin: 0;
+    color: $c-muted-light;
+    font-size: 14px;
+    font-weight: 500;
+    line-height: 14px;
+
+    @include tablet {
+        position: static;
+        width: auto;
+        margin-top: 20px;
+        line-height: round(nearest, 1.2em, 1px);
+    }
+}
+
+.ld-analysis__button {
+    position: absolute;
+    top: 148px;
+    right: 50px;
+    z-index: 1;
+    width: 377px;
+    height: 47px;
+
+    @include tablet {
+        position: static;
+        width: 100%;
+        margin-top: 20px;
+    }
+}
+
+// --- 15. Другие услуги практики -----------------------------
+.ld-related {
+    padding: 100px 0;
+
+    @include tablet {
+        padding: 60px 0;
+    }
+
+    @include mobile {
+        padding: 50px 0;
+    }
+}
+
+.ld-related__title {
+    margin: 0 0 25px;
+    color: $c-dark;
+    font-family: $font-display;
+    font-size: 40px;
+    font-weight: 400;
+    line-height: 36px;
+
+    @include tablet {
+        font-size: 30px;
+        line-height: round(nearest, 0.92em, 1px);
+    }
+
+    @include mobile {
+        font-size: 24px;
+    }
+}

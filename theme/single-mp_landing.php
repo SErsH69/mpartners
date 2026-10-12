@@ -21,8 +21,10 @@ while ( have_posts() ) :
 	get_template_part( 'template-parts/sections/practice' );
 	get_template_part( 'template-parts/landing/deck' );
 	get_template_part( 'template-parts/sections/reviews' );
+	get_template_part( 'template-parts/landing/ratings' );
 	get_template_part( 'template-parts/landing/faq' );
-	get_template_part( 'template-parts/landing/cta' );
+	get_template_part( 'template-parts/landing/analysis' );
+	get_template_part( 'template-parts/landing/related' );
 endwhile;
 
 get_footer();
