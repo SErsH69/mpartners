@@ -230,12 +230,31 @@
         margin-bottom: 6px;
     }
 
-    a {
+    // Кнопки внутри текста оформление ссылок не перенимают.
+    a:not(.btn) {
         color: $c-dark;
         text-decoration: underline;
     }
 
     strong {
         font-weight: 500;
+    }
+
+    // Кнопки на странице 404.
+    .legal__actions {
+        margin-top: 30px;
+
+        .btn {
+            min-width: 240px;
+        }
+
+        @include mobile {
+            flex-wrap: wrap;
+
+            .btn {
+                flex: 1 1 100%;
+                min-width: 0;
+            }
+        }
     }
 }
