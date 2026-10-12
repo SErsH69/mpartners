@@ -18,6 +18,8 @@ while ( have_posts() ) :
 	get_template_part( 'template-parts/landing/results' );
 	get_template_part( 'template-parts/landing/consult' );
 	get_template_part( 'template-parts/landing/team' );
+	get_template_part( 'template-parts/sections/practice' );
+	get_template_part( 'template-parts/landing/deck' );
 	get_template_part( 'template-parts/landing/cta' );
 endwhile;
 

@@ -2072,3 +2072,93 @@ $stage-height: 403px;
     flex: 0 0 284px;
     width: 284px;
 }
+
+// --- 10. Презентация об аудите ------------------------------
+.ld-deck {
+    padding-top: 100px;
+
+    @include tablet {
+        padding-top: 60px;
+    }
+
+    @include mobile {
+        padding-top: 50px;
+    }
+}
+
+.ld-deck__panel {
+    position: relative;
+    display: flex;
+    gap: 30px;
+    align-items: flex-start;
+    min-height: 202px;
+    padding: 30px 40px;
+    border-radius: $r-sm;
+
+    @include gradient-dark;
+
+    @include tablet {
+        flex-direction: column;
+        gap: 25px;
+        min-height: 0;
+        padding: 30px;
+    }
+
+    @include mobile {
+        padding: 20px;
+    }
+}
+
+.ld-deck__copy {
+    flex: 0 0 557px;
+    width: 557px;
+
+    @include tablet {
+        flex: 0 0 auto;
+        width: 100%;
+    }
+}
+
+.ld-deck__title {
+    margin: 0;
+    color: $c-cream;
+    font-family: $font-display;
+    font-size: 40px;
+    font-weight: 400;
+    line-height: 36px;
+
+    @include tablet {
+        font-size: 30px;
+        line-height: round(nearest, 0.92em, 1px);
+    }
+
+    @include mobile {
+        font-size: 24px;
+    }
+}
+
+.ld-deck__text {
+    min-height: 60px; // бокс из макета
+    margin: 10px 0 0;
+    color: $c-muted-light;
+    font-size: 14px;
+    font-weight: 400;
+    line-height: round(nearest, 1.1em, 1px);
+
+    @include tablet {
+        min-height: 0;
+    }
+}
+
+.ld-deck__button {
+    position: absolute;
+    top: 124px;
+    right: 40px;
+    width: 377px;
+    height: 47px;
+
+    @include tablet {
+        position: static;
+        width: 100%;
+    }
+}
