@@ -9,9 +9,10 @@
 
 $mp_related = mp_landing( 'related' );
 $mp_group   = function_exists( 'get_field' ) ? (int) get_field( 'landing_group', get_the_ID() ) : 0;
+$mp_hub     = function_exists( 'get_field' ) ? (int) get_field( 'landing_hub', get_the_ID() ) : 0;
 $mp_items   = [];
 
-foreach ( mp_landing_groups() as $mp_index => $mp_block ) {
+foreach ( mp_landing_groups( $mp_hub ) as $mp_index => $mp_block ) {
 	if ( $mp_index !== $mp_group ) {
 		continue;
 	}
@@ -27,19 +28,15 @@ foreach ( mp_landing_groups() as $mp_index => $mp_block ) {
 
 // Пока других лендингов в разделе нет, показываем состав из макета.
 if ( ! $mp_items ) {
-	$mp_groups = (array) mp_landings( 'groups', [] );
-
-	if ( isset( $mp_groups[ $mp_group ]['items'] ) ) {
-		foreach ( (array) $mp_groups[ $mp_group ]['items'] as $mp_label ) {
-			if ( $mp_label === get_the_title() ) {
-				continue;
-			}
-
-			$mp_items[] = [
-				'label' => $mp_label,
-				'href'  => '',
-			];
+	foreach ( mp_landings_fallback_items( $mp_group ) as $mp_label ) {
+		if ( $mp_label === get_the_title() ) {
+			continue;
 		}
+
+		$mp_items[] = [
+			'label' => $mp_label,
+			'href'  => '',
+		];
 	}
 }
 

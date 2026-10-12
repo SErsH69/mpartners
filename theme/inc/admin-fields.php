@@ -10,7 +10,7 @@
  * @package MPartners
  */
 
-const MP_CONTENT_VERSION = '13';
+const MP_CONTENT_VERSION = '14';
 
 /**
  * Редактируемые разделы контента.
@@ -71,11 +71,9 @@ function mp_content_groups() {
 			'post_types' => [ 'mp_landing' ],
 		],
 		'landings'  => [
-			'title'     => 'Контент страницы услуг',
-			'data'      => 'mp_landings_data',
-			'templates' => [ 'page-landings.php' ],
-			// Состав разделов собирается из записей-лендингов.
-			'skip'      => [ 'groups' ],
+			'title'      => 'Контент хаба',
+			'data'       => 'mp_landings_data',
+			'post_types' => [ 'mp_hub' ],
 		],
 		'press'     => [
 			'title'     => 'Контент раздела',

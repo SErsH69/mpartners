@@ -10,8 +10,8 @@
  * @package MPartners
  */
 
-const MP_MENUS_VERSION = '7';
-const MP_PAGES_VERSION = '4';
+const MP_MENUS_VERSION = '8';
+const MP_PAGES_VERSION = '5';
 
 /**
  * Места для меню.
@@ -90,8 +90,15 @@ function mp_menu_items( $location, $fallback = [] ) {
  * @return string
  */
 function mp_menu_url_for( $label, $fallback = '' ) {
+	if ( 'Услуги' === $label && function_exists( 'mp_primary_hub' ) ) {
+		$hub = mp_primary_hub();
+
+		if ( $hub ) {
+			return get_permalink( $hub );
+		}
+	}
+
 	$map = [
-		'Услуги'      => 'uslugi',
 		'О компании'  => 'about',
 		'Партнерство' => 'partnership',
 		'Практики'    => 'practices',

@@ -1,6 +1,6 @@
 <?php
 /**
- * Template Name: Услуги хаб
+ * Страница хаба услуг.
  *
  * @package MPartners
  */

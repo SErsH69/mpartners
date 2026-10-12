@@ -8,8 +8,57 @@
  * @package MPartners
  */
 
-const MP_LANDING_VERSION = '4';
+const MP_LANDING_VERSION = '5';
 const MP_LANDING_TYPE    = 'mp_landing';
+const MP_HUB_TYPE        = 'mp_hub';
+
+
+/**
+ * Хаб услуг — отдельный тип записей: у каждого хаба своя страница
+ * с разделами, внутрь которых открываются лендинги услуг.
+ */
+function mp_register_hub_type() {
+	register_post_type(
+		MP_HUB_TYPE,
+		[
+			'labels'        => [
+				'name'          => 'Услуги хаб',
+				'singular_name' => 'Хаб услуг',
+				'add_new'       => 'Добавить хаб',
+				'add_new_item'  => 'Новый хаб',
+				'edit_item'     => 'Редактировать хаб',
+				'all_items'     => 'Все хабы',
+				'menu_name'     => 'Услуги хаб',
+				'not_found'     => 'Хабов пока нет',
+			],
+			'public'        => true,
+			'show_in_rest'  => true,
+			'menu_icon'     => 'dashicons-portfolio',
+			'menu_position' => 22,
+			'has_archive'   => false,
+			'rewrite'       => [ 'slug' => 'uslugi', 'with_front' => false ],
+			'supports'      => [ 'title', 'page-attributes' ],
+		]
+	);
+}
+add_action( 'init', 'mp_register_hub_type', 5 );
+
+/**
+ * Первый опубликованный хаб — на него ведёт пункт меню «Услуги».
+ *
+ * @return WP_Post|null
+ */
+function mp_primary_hub() {
+	$hubs = get_posts(
+		[
+			'post_type'      => MP_HUB_TYPE,
+			'posts_per_page' => 1,
+			'orderby'        => [ 'menu_order' => 'ASC', 'date' => 'ASC' ],
+		]
+	);
+
+	return $hubs ? $hubs[0] : null;
+}
 
 /**
  * Регистрация типа записей.
@@ -61,6 +110,16 @@ function mp_register_landing_fields() {
 			'title'    => 'Размещение в хабе',
 			'fields'   => [
 				[
+					'key'          => 'field_mp_landing_hub',
+					'label'        => 'Хаб услуг',
+					'name'         => 'landing_hub',
+					'type'         => 'post_object',
+					'post_type'    => [ MP_HUB_TYPE ],
+					'return_format' => 'id',
+					'allow_null'   => 1,
+					'instructions' => 'К какому хабу относится услуга.',
+				],
+				[
 					'key'           => 'field_mp_landing_group',
 					'label'         => 'Раздел хаба',
 					'name'          => 'landing_group',
@@ -89,7 +148,14 @@ add_action( 'acf/init', 'mp_register_landing_fields' );
  *
  * @return array Список разделов с ключами `title` и `items` (label + href).
  */
-function mp_landing_groups() {
+function mp_landing_groups( $hub_id = 0 ) {
+	$hub_id = $hub_id ? (int) $hub_id : ( is_singular( MP_HUB_TYPE ) ? get_the_ID() : 0 );
+
+	if ( ! $hub_id ) {
+		$hub    = mp_primary_hub();
+		$hub_id = $hub ? $hub->ID : 0;
+	}
+
 	$groups = (array) mp_landings( 'groups', [] );
 	$posts  = get_posts(
 		[
@@ -105,7 +171,18 @@ function mp_landing_groups() {
 	$byGroup = [];
 
 	foreach ( $posts as $post ) {
-		$index = function_exists( 'get_field' ) ? (int) get_field( 'landing_group', $post->ID ) : 0;
+		if ( ! function_exists( 'get_field' ) ) {
+			continue;
+		}
+
+		// Лендинг показываем только в своём хабе.
+		$own = (int) get_field( 'landing_hub', $post->ID );
+
+		if ( $hub_id && $own && $own !== $hub_id ) {
+			continue;
+		}
+
+		$index = (int) get_field( 'landing_group', $post->ID );
 
 		$byGroup[ $index ][] = [
 			'label' => get_the_title( $post ),
@@ -120,7 +197,7 @@ function mp_landing_groups() {
 
 		// Пока лендингов нет, показываем состав из макета.
 		if ( ! $items ) {
-			foreach ( (array) $group['items'] as $label ) {
+			foreach ( mp_landings_fallback_items( $index ) as $label ) {
 				$items[] = [
 					'label' => $label,
 					'href'  => '',
@@ -138,41 +215,41 @@ function mp_landing_groups() {
 }
 
 /**
- * Заводит страницу хаба.
+ * Заводит хаб услуг и первый лендинг.
  */
 function mp_seed_landing_page() {
-	// Разовая миграция: выполняется на первом же запросе после выкатки,
-	// чтобы страница появилась без захода в админку.
 	if ( get_option( 'mp_landing_version' ) === MP_LANDING_VERSION ) {
 		return;
 	}
 
-	$page = get_page_by_path( 'uslugi' );
+	$hub = mp_primary_hub();
 
-	if ( ! $page ) {
-		$id = wp_insert_post(
+	if ( ! $hub ) {
+		$hub_id = wp_insert_post(
 			[
-				'post_type'   => 'page',
-				'post_name'   => 'uslugi',
-				'post_title'  => 'Услуги',
+				'post_type'   => MP_HUB_TYPE,
+				'post_title'  => 'Уголовная защита бизнеса',
+				'post_name'   => 'ugolovnaya-zashhita-biznesa',
 				'post_status' => 'publish',
+				'menu_order'  => 1,
 			]
 		);
-
-		if ( $id && ! is_wp_error( $id ) ) {
-			update_post_meta( $id, '_wp_page_template', 'page-landings.php' );
-		}
-	} elseif ( get_page_template_slug( $page ) !== 'page-landings.php' ) {
-		update_post_meta( $page->ID, '_wp_page_template', 'page-landings.php' );
+	} else {
+		$hub_id = $hub->ID;
 	}
 
-	// Первый лендинг из макета, чтобы страница услуги была на что открывать.
+	// Старая страница-хаб больше не нужна: её адрес занимает тип записей.
+	$page = get_page_by_path( 'uslugi' );
+
+	if ( $page && 'page' === $page->post_type && 'publish' === $page->post_status ) {
+		wp_update_post( [ 'ID' => $page->ID, 'post_status' => 'draft' ] );
+	}
+
 	$existing = get_posts(
 		[
 			'post_type'      => MP_LANDING_TYPE,
-			'posts_per_page' => 1,
+			'posts_per_page' => -1,
 			'post_status'    => 'any',
-			'fields'         => 'ids',
 		]
 	);
 
@@ -188,20 +265,34 @@ function mp_seed_landing_page() {
 			]
 		);
 
-		if ( $landing && ! is_wp_error( $landing ) && function_exists( 'update_field' ) ) {
-			update_field( 'landing_group', '1', $landing );
+		if ( $landing && ! is_wp_error( $landing ) ) {
+			$existing = [ get_post( $landing ) ];
 		}
 	}
 
-	// Кириллический слаг отдавал бы длинный %-адрес — переводим в латиницу.
-	foreach ( get_posts( [ 'post_type' => MP_LANDING_TYPE, 'posts_per_page' => -1, 'post_status' => 'any' ] ) as $post ) {
+	// Привязываем лендинги к хабу и приводим слаги к латинице.
+	foreach ( (array) $existing as $post ) {
+		if ( ! $post instanceof WP_Post ) {
+			continue;
+		}
+
+		if ( function_exists( 'update_field' ) ) {
+			if ( ! get_field( 'landing_hub', $post->ID ) && $hub_id ) {
+				update_field( 'landing_hub', $hub_id, $post->ID );
+			}
+
+			if ( '' === (string) get_field( 'landing_group', $post->ID ) ) {
+				update_field( 'landing_group', '1', $post->ID );
+			}
+		}
+
 		if ( preg_match( '~^[a-z0-9-]+$~', $post->post_name ) ) {
 			continue;
 		}
 
 		$slug = mp_translit_slug( $post->post_title );
 
-		if ( $slug && preg_match( '~^[a-z0-9-]+$~', $slug ) ) {
+		if ( $slug ) {
 			wp_update_post( [ 'ID' => $post->ID, 'post_name' => $slug ] );
 		}
 	}
@@ -234,3 +325,26 @@ function mp_translit_slug( $title ) {
 
 	return trim( (string) $slug, '-' );
 }
+
+/**
+ * Старый адрес страницы услуг ведёт на хаб, чтобы ссылка не умерла.
+ */
+function mp_redirect_old_hub() {
+	if ( ! is_404() ) {
+		return;
+	}
+
+	$path = trim( (string) wp_parse_url( add_query_arg( [] ), PHP_URL_PATH ), '/' );
+
+	if ( 'uslugi' !== $path ) {
+		return;
+	}
+
+	$hub = mp_primary_hub();
+
+	if ( $hub ) {
+		wp_safe_redirect( get_permalink( $hub ), 301 );
+		exit;
+	}
+}
+add_action( 'template_redirect', 'mp_redirect_old_hub' );
