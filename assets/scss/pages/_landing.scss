@@ -1275,3 +1275,226 @@ $stage-height: 403px;
         font-size: 14px;
     }
 }
+
+// --- 05. С кем мы работаем ----------------------------------
+.ld-clients {
+    padding-top: 100px;
+
+    @include tablet {
+        padding-top: 60px;
+    }
+
+    @include mobile {
+        padding-top: 50px;
+    }
+}
+
+.ld-clients__head {
+    display: flex;
+    gap: 13px;
+    align-items: flex-start;
+
+    @include tablet {
+        flex-direction: column;
+        gap: 20px;
+    }
+}
+
+.ld-clients__title {
+    flex: 0 0 594px;
+    max-width: 594px;
+    margin: 18px 0 0; // в макете заголовок выровнен по центру плашки
+    color: $c-dark;
+    font-family: $font-display;
+    font-size: 40px;
+    font-weight: 400;
+    line-height: 36px;
+
+    @include tablet {
+        flex: 0 0 auto;
+        max-width: none;
+        margin-top: 0;
+        font-size: 30px;
+        line-height: round(nearest, 0.92em, 1px);
+    }
+
+    @include mobile {
+        font-size: 24px;
+    }
+}
+
+.ld-clients__note {
+    display: flex;
+    flex: 0 0 593px;
+    gap: 12px;
+    align-items: flex-start;
+    width: 593px;
+    min-height: 71px;
+    padding: 13px 15px;
+    background-color: $c-surface;
+    border-radius: $r-sm;
+
+    @include tablet {
+        flex: 0 0 auto;
+        width: 100%;
+    }
+}
+
+.ld-clients__note-icon {
+    display: flex;
+    flex: 0 0 auto;
+    color: $c-muted;
+
+    svg {
+        display: block;
+        width: 17px;
+        height: 17px;
+    }
+}
+
+.ld-clients__note-text {
+    margin: 0;
+    color: $c-muted;
+    font-size: 14px;
+    font-weight: 400;
+    line-height: round(nearest, 1.1em, 1px);
+}
+
+// Сетка мозаики: четыре колонки по 285px, ряды 225px.
+.ld-clients__grid {
+    display: grid;
+    gap: 15px 20px;
+    grid-template-areas:
+        'a a b b'
+        'c d e f';
+    grid-template-columns: repeat(4, 1fr);
+    grid-template-rows: 225px 225px;
+    margin-top: 25px;
+
+    @include tablet {
+        grid-template-areas:
+            'a a'
+            'b b'
+            'c d'
+            'e f';
+        grid-template-columns: repeat(2, 1fr);
+        grid-template-rows: none;
+        gap: 10px;
+    }
+
+    @include mobile {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+    }
+}
+
+.ld-client {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    min-height: 106px;
+    padding: 25px 20px;
+    overflow: hidden;
+    background-color: #e9decf;
+    border-radius: $r-sm;
+
+    @include mobile {
+        min-height: 150px;
+    }
+}
+
+.ld-client--1 { grid-area: a; }
+.ld-client--2 { grid-area: b; }
+.ld-client--3 { grid-area: c; }
+.ld-client--4 { grid-area: d; }
+.ld-client--cta { grid-area: f; }
+
+// Две узкие карточки делят одну колонку: в макете между ними 13px.
+.ld-client-stack {
+    display: flex;
+    flex-direction: column;
+    gap: 13px;
+    grid-area: e;
+    min-width: 0;
+
+    .ld-client {
+        flex: 1 1 0;
+    }
+
+    @include mobile {
+        display: contents;
+    }
+}
+
+.ld-client__photo {
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    width: auto;
+    height: 100%;
+    max-width: 60%;
+    object-fit: cover;
+    object-position: left bottom;
+    pointer-events: none;
+
+    @include mobile {
+        max-width: 50%;
+    }
+}
+
+.ld-client__title {
+    position: relative;
+    z-index: 1;
+    max-width: 293px;
+    margin: 0;
+    color: $c-dark;
+    font-size: 18px;
+    font-weight: 500;
+    line-height: round(nearest, 1.1em, 1px);
+
+    @include mobile {
+        font-size: 16px;
+    }
+}
+
+.ld-client__mark {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    margin-top: auto;
+    padding-top: 20px;
+    color: $c-dark;
+
+    svg {
+        display: block;
+        width: 12px;
+        height: 12px;
+    }
+}
+
+.ld-client--cta {
+    justify-content: space-between;
+    background: none;
+
+    @include gradient-dark;
+}
+
+.ld-client__cta-title {
+    position: relative;
+    z-index: 1;
+    max-width: 235px;
+    margin: 0;
+    color: $c-cream;
+    font-size: 18px;
+    font-weight: 500;
+    line-height: round(nearest, 1.1em, 1px);
+}
+
+.ld-client__button {
+    position: relative;
+    z-index: 1;
+    width: 100%;
+    height: 47px;
+    margin-top: 20px;
+}
