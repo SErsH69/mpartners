@@ -195,14 +195,18 @@ function mp_landing_groups( $hub_id = 0 ) {
 	foreach ( $groups as $index => $group ) {
 		$items = isset( $byGroup[ $index ] ) ? $byGroup[ $index ] : [];
 
-		// Пока лендингов нет, показываем состав из макета.
-		if ( ! $items ) {
-			foreach ( mp_landings_fallback_items( $index ) as $label ) {
-				$items[] = [
-					'label' => $label,
-					'href'  => '',
-				];
+		// Состав группы из макета: уже готовые лендинги идут первыми.
+		$names = wp_list_pluck( $items, 'label' );
+
+		foreach ( mp_landings_fallback_items( $index ) as $label ) {
+			if ( in_array( $label, $names, true ) ) {
+				continue;
 			}
+
+			$items[] = [
+				'label' => $label,
+				'href'  => '',
+			];
 		}
 
 		$result[] = [

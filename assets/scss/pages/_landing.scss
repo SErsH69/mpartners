@@ -9,6 +9,10 @@
 // --- Первый экран -------------------------------------------
 .hub-hero {
     padding-top: 15px; // от шапки до панели
+
+    @include tablet {
+        padding-top: 20px;
+    }
 }
 
 .hub-hero__panel {
@@ -24,13 +28,13 @@
 
     @include tablet {
         flex-direction: column;
-        gap: 30px;
+        gap: 70px;
         min-height: 0;
         padding: 30px;
     }
 
     @include mobile {
-        gap: 25px;
+        gap: 38px;
         padding: 20px;
     }
 }
@@ -60,7 +64,7 @@
 
     @include tablet {
         flex: 0 0 auto;
-        gap: 25px;
+        gap: 15px;
         width: 100%;
     }
 }
@@ -73,14 +77,9 @@
     font-weight: 400;
     line-height: 49px;
 
-    @include tablet {
-        font-size: 44px;
-        line-height: round(nearest, 0.9em, 1px);
-    }
-
     @include mobile {
-        font-size: 32px;
-        line-height: round(nearest, 0.92em, 1px);
+        font-size: 35px;
+        line-height: 31.5px;
     }
 }
 
@@ -96,6 +95,7 @@
 
     @include tablet {
         width: 100%;
+        min-height: 0;
     }
 }
 
@@ -117,6 +117,11 @@
     font-size: 14px;
     font-weight: 400;
     line-height: round(nearest, 1.1em, 1px);
+
+    @include mobile {
+        font-size: 12px;
+        line-height: 13.2px;
+    }
 }
 
 // --- Форма первого экрана -----------------------------------
@@ -148,6 +153,11 @@
     font-size: 18px;
     font-weight: 500;
     line-height: round(nearest, 1.1em, 1px);
+
+    @include mobile {
+        font-size: 14px;
+        line-height: 15.4px;
+    }
 }
 
 .hub-form__body {
@@ -318,6 +328,7 @@
 
     @include tablet {
         grid-template-columns: repeat(2, 1fr);
+        margin-top: 20px;
     }
 
     @include mobile {
@@ -363,10 +374,10 @@
 
 // --- Разделы с услугами -------------------------------------
 .hub-groups {
-    padding-top: 100px;
+    padding-top: 60px; // в макете блок групп ближе к первому экрану
 
     @include tablet {
-        padding-top: 60px;
+        padding-top: 80px;
     }
 
     @include mobile {
@@ -378,7 +389,7 @@
     margin-top: 45px;
 
     @include tablet {
-        margin-top: 35px;
+        margin-top: 30px;
     }
 }
 
@@ -391,14 +402,9 @@
     font-weight: 400;
     line-height: 36px;
 
-    @include tablet {
-        margin-bottom: 20px;
-        font-size: 30px;
-        line-height: round(nearest, 0.92em, 1px);
-    }
-
     @include mobile {
-        font-size: 24px;
+        font-size: 25px;
+        line-height: 22.5px;
     }
 }
 
@@ -435,8 +441,8 @@
     text-decoration: none;
 
     @include mobile {
-        min-height: 80px;
-        padding: 18px 20px;
+        min-height: 55px;
+        padding: 20px;
     }
 }
 
@@ -447,7 +453,8 @@
     line-height: round(nearest, 1.1em, 1px);
 
     @include mobile {
-        font-size: 16px;
+        font-size: 14px;
+        line-height: 15.4px;
     }
 }
 
@@ -464,14 +471,15 @@
 
 // --- Запись на консультацию ---------------------------------
 .hub-cta {
-    padding: 100px 0;
+    // Нижний отступ до подвала задаёт сам подвал.
+    padding: 100px 0 0;
 
     @include tablet {
-        padding: 60px 0;
+        padding-top: 80px;
     }
 
     @include mobile {
-        padding: 50px 0;
+        padding-top: 50px;
     }
 }
 
@@ -489,12 +497,13 @@
 
     @include tablet {
         flex-direction: column;
-        gap: 25px;
+        gap: 40px;
         min-height: 0;
         padding: 30px;
     }
 
     @include mobile {
+        gap: 20px;
         padding: 20px;
     }
 }
@@ -528,12 +537,13 @@
     line-height: 36px;
 
     @include tablet {
-        font-size: 30px;
-        line-height: round(nearest, 0.92em, 1px);
+        font-size: 33px;
+        line-height: 29.7px;
     }
 
     @include mobile {
-        font-size: 24px;
+        font-size: 25px;
+        line-height: 22.5px;
     }
 }
 
@@ -572,15 +582,15 @@
 // --- 01. Первый экран ---------------------------------------
 .ld-hero {
     position: relative;
-    padding: 256px 0 0; // заголовок начинается на 349 от верха страницы
+    padding: 271px 0 0; // заголовок начинается на 349 от верха страницы
     overflow: hidden;
 
     @include tablet {
-        padding-top: 60px;
+        padding-top: 387px; // заголовок на 450 от верха страницы
     }
 
     @include mobile {
-        padding-top: 40px;
+        padding-top: 299px; // заголовок на 353 от верха страницы
     }
 }
 
@@ -591,7 +601,12 @@
     pointer-events: none;
 
     @include tablet {
-        height: 100%;
+        height: 585px; // высота картинки из макета 640
+    }
+
+    @include mobile {
+        top: -17px;
+        height: 411px; // высота картинки из макета 375
     }
 }
 
@@ -647,14 +662,9 @@
     font-weight: 400;
     line-height: 54px;
 
-    @include tablet {
-        font-size: 44px;
-        line-height: round(nearest, 0.9em, 1px);
-    }
-
     @include mobile {
-        font-size: 32px;
-        line-height: round(nearest, 0.92em, 1px);
+        font-size: 35px;
+        line-height: round(nearest, 0.9em, 1px);
     }
 }
 
@@ -662,14 +672,21 @@
     max-width: 709px;
     min-height: 60px; // бокс из макета, по нему выравнивается кнопка
     margin: 10px 0 0;
-
-    @include tablet {
-        min-height: 0;
-    }
     color: $c-dark;
     font-size: 14px;
     font-weight: 400;
     line-height: round(nearest, 1.1em, 1px);
+
+    @include tablet {
+        max-width: 482px;
+        min-height: 0;
+        font-weight: 500;
+    }
+
+    @include mobile {
+        max-width: none;
+        margin-top: 5px;
+    }
 }
 
 .ld-hero__actions {
@@ -700,7 +717,11 @@
 
     @include tablet {
         grid-template-columns: 1fr;
-        margin-top: 30px;
+        margin-top: 15px;
+    }
+
+    @include mobile {
+        margin-top: 20px;
     }
 }
 
@@ -710,6 +731,11 @@
     align-items: center;
     min-height: 78px;
     padding: 20px;
+
+    @include mobile {
+        min-height: 58px;
+        padding: 15px;
+    }
     background-color: #e9decf;
     border-radius: $r-sm;
 }
@@ -747,8 +773,13 @@
     @include gradient-dark;
 
     @include tablet {
-        padding: 40px 0;
-        margin-top: 60px;
+        padding: 60px 0;
+        margin-top: 80px;
+    }
+
+    @include mobile {
+        padding: 30px 0;
+        margin-top: 50px;
     }
 }
 
@@ -759,7 +790,7 @@
 
     @include tablet {
         flex-direction: column;
-        gap: 20px;
+        gap: 15px;
     }
 }
 
@@ -776,12 +807,11 @@
     @include tablet {
         flex: 0 0 auto;
         max-width: none;
-        font-size: 30px;
-        line-height: round(nearest, 0.92em, 1px);
     }
 
     @include mobile {
-        font-size: 24px;
+        font-size: 30px;
+        line-height: 27px;
     }
 }
 
@@ -897,7 +927,7 @@
     padding-top: 100px;
 
     @include tablet {
-        padding-top: 60px;
+        padding-top: 80px;
     }
 
     @include mobile {
@@ -940,13 +970,9 @@
     font-weight: 400;
     line-height: 36px;
 
-    @include tablet {
-        font-size: 30px;
-        line-height: round(nearest, 0.92em, 1px);
-    }
-
     @include mobile {
-        font-size: 24px;
+        font-size: 30px;
+        line-height: 27px;
     }
 }
 
@@ -1019,23 +1045,16 @@
 }
 
 .ld-scope__grid {
-    display: flex;
+    display: grid;
     flex: 1 1 auto;
-    gap: 9px;
+    gap: 10px 9px;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    align-content: start;
     min-width: 0;
 
     @include mobile {
-        flex-direction: column;
-        gap: 10px;
+        grid-template-columns: minmax(0, 1fr);
     }
-}
-
-.ld-scope__column {
-    display: flex;
-    flex: 1 1 0;
-    flex-direction: column;
-    gap: 10px;
-    min-width: 0;
 }
 
 .ld-scope-card {
@@ -1066,7 +1085,7 @@
     padding-top: 100px;
 
     @include tablet {
-        padding-top: 60px;
+        padding-top: 80px;
     }
 
     @include mobile {
@@ -1082,7 +1101,7 @@
 
     @include tablet {
         flex-direction: column;
-        gap: 20px;
+        gap: 15px;
     }
 }
 
@@ -1099,12 +1118,11 @@
     @include tablet {
         flex: 0 0 auto;
         max-width: none;
-        font-size: 30px;
-        line-height: round(nearest, 0.92em, 1px);
     }
 
     @include mobile {
-        font-size: 24px;
+        font-size: 30px;
+        line-height: 27px;
     }
 }
 
@@ -1161,7 +1179,7 @@ $stage-height: 403px;
         flex-direction: column;
         gap: 10px;
         height: auto;
-        margin-top: 20px;
+        margin-top: 30px;
     }
 }
 
@@ -1181,7 +1199,12 @@ $stage-height: 403px;
     @include tablet {
         position: static;
         height: auto;
+        min-height: 237px;
         transition: none;
+    }
+
+    @include mobile {
+        min-height: 0;
     }
 }
 
@@ -1195,12 +1218,12 @@ $stage-height: 403px;
     cursor: pointer;
 
     @include tablet {
-        padding: 25px 30px;
+        padding: 30px 30px 0;
         cursor: default;
     }
 
     @include mobile {
-        padding: 20px;
+        padding: 20px 20px 0;
     }
 }
 
@@ -1214,12 +1237,13 @@ $stage-height: 403px;
     line-height: 36px;
 
     @include tablet {
-        font-size: 26px;
-        line-height: round(nearest, 0.92em, 1px);
+        font-size: 30px;
+        line-height: 27px;
     }
 
     @include mobile {
-        font-size: 22px;
+        font-size: 20px;
+        line-height: 18px;
     }
 }
 
@@ -1238,12 +1262,12 @@ $stage-height: 403px;
 
     @include tablet {
         width: auto;
-        margin: 0 30px 25px;
+        margin: 70px 30px 30px;
         opacity: 1;
     }
 
     @include mobile {
-        margin: 0 20px 20px;
+        margin: 25px 20px 20px;
     }
 }
 
@@ -1281,7 +1305,7 @@ $stage-height: 403px;
     padding-top: 100px;
 
     @include tablet {
-        padding-top: 60px;
+        padding-top: 80px;
     }
 
     @include mobile {
@@ -1296,7 +1320,7 @@ $stage-height: 403px;
 
     @include tablet {
         flex-direction: column;
-        gap: 20px;
+        gap: 15px;
     }
 }
 
@@ -1314,12 +1338,11 @@ $stage-height: 403px;
         flex: 0 0 auto;
         max-width: none;
         margin-top: 0;
-        font-size: 30px;
-        line-height: round(nearest, 0.92em, 1px);
     }
 
     @include mobile {
-        font-size: 24px;
+        font-size: 30px;
+        line-height: 27px;
     }
 }
 
@@ -1379,7 +1402,7 @@ $stage-height: 403px;
             'e f';
         grid-template-columns: repeat(2, 1fr);
         grid-template-rows: none;
-        gap: 10px;
+        gap: 14px 10px;
     }
 
     @include mobile {
@@ -1401,6 +1424,12 @@ $stage-height: 403px;
 
     @include mobile {
         min-height: 150px;
+    }
+}
+
+.ld-clients__grid > .ld-client {
+    @include tablet {
+        min-height: 225px;
     }
 }
 
@@ -1504,7 +1533,7 @@ $stage-height: 403px;
     padding-top: 100px;
 
     @include tablet {
-        padding-top: 60px;
+        padding-top: 80px;
     }
 
     @include mobile {
@@ -1517,7 +1546,7 @@ $stage-height: 403px;
     display: flex;
     gap: 36px;
     align-items: flex-start;
-    min-height: 571px;
+    height: 571px;
     // Снизу отступа нет: в макете последняя плашка упирается в край панели.
     padding: 50px 50px 0;
     overflow: hidden;
@@ -1527,8 +1556,8 @@ $stage-height: 403px;
 
     @include tablet {
         flex-direction: column;
-        gap: 25px;
-        min-height: 0;
+        gap: 30px;
+        height: auto;
         padding: 30px;
     }
 
@@ -1565,12 +1594,11 @@ $stage-height: 403px;
     @include tablet {
         flex: 0 0 auto;
         max-width: none;
-        font-size: 30px;
-        line-height: round(nearest, 0.92em, 1px);
     }
 
     @include mobile {
-        font-size: 24px;
+        font-size: 30px;
+        line-height: 27px;
     }
 }
 
@@ -1585,6 +1613,10 @@ $stage-height: 403px;
     margin: 0;
     padding: 0;
     list-style: none;
+
+    @include tablet {
+        gap: 15px;
+    }
 }
 
 .ld-result {
@@ -1600,7 +1632,14 @@ $stage-height: 403px;
     }
 
     @include tablet {
-        gap: 20px;
+        // На планшете панель не обрезает плашки — последняя такая же.
+        &:last-child {
+            min-height: 176px;
+        }
+    }
+
+    @include mobile {
+        gap: 15px;
         min-height: 0;
         padding: 20px;
 
@@ -1623,14 +1662,10 @@ $stage-height: 403px;
     -webkit-background-clip: text;
     color: transparent;
 
-    @include tablet {
-        flex: 0 0 auto;
-        font-size: 64px;
-        line-height: round(nearest, 1.1em, 1px);
-    }
-
     @include mobile {
-        font-size: 48px;
+        flex: 0 0 auto;
+        font-size: 77px;
+        line-height: 85px;
     }
 }
 
@@ -1651,7 +1686,7 @@ $stage-height: 403px;
     padding-top: 100px;
 
     @include tablet {
-        padding-top: 60px;
+        padding-top: 80px;
     }
 
     @include mobile {
@@ -1673,7 +1708,7 @@ $stage-height: 403px;
 
     @include tablet {
         flex-direction: column;
-        gap: 30px;
+        gap: 20px;
         min-height: 0;
     }
 
@@ -1710,7 +1745,7 @@ $stage-height: 403px;
 
     @include tablet {
         flex: 0 0 auto;
-        gap: 25px;
+        gap: 30px;
         width: 100%;
         min-height: 0;
         padding-top: 0;
@@ -1725,13 +1760,9 @@ $stage-height: 403px;
     font-weight: 400;
     line-height: 36px;
 
-    @include tablet {
-        font-size: 30px;
-        line-height: round(nearest, 0.92em, 1px);
-    }
-
     @include mobile {
-        font-size: 24px;
+        font-size: 30px;
+        line-height: 27px;
     }
 }
 
@@ -1944,7 +1975,7 @@ $stage-height: 403px;
     overflow: hidden; // лента карточек в макете уходит за правый край
 
     @include tablet {
-        padding-top: 60px;
+        padding-top: 80px;
     }
 
     @include mobile {
@@ -1959,7 +1990,7 @@ $stage-height: 403px;
 
     @include tablet {
         flex-direction: column;
-        gap: 25px;
+        gap: 15px;
     }
 }
 
@@ -1971,9 +2002,8 @@ $stage-height: 403px;
     min-height: 395px;
 
     @include tablet {
-        flex: 0 0 auto;
-        width: 100%;
-        min-height: 0;
+        // В макете кнопки стоят под лентой карточек.
+        display: contents;
     }
 }
 
@@ -1985,13 +2015,9 @@ $stage-height: 403px;
     font-weight: 400;
     line-height: 36px;
 
-    @include tablet {
-        font-size: 30px;
-        line-height: round(nearest, 0.92em, 1px);
-    }
-
     @include mobile {
-        font-size: 24px;
+        font-size: 30px;
+        line-height: 27px;
     }
 }
 
@@ -2007,6 +2033,7 @@ $stage-height: 403px;
 
     @include tablet {
         min-height: 0;
+        margin-top: 15px;
     }
 }
 
@@ -2045,7 +2072,8 @@ $stage-height: 403px;
     }
 
     @include tablet {
-        margin-top: 0;
+        order: 3;
+        margin-top: 15px;
         padding-top: 0;
 
         .btn {
@@ -2066,6 +2094,10 @@ $stage-height: 403px;
     list-style: none;
 
     @include hide-scrollbar;
+
+    @include tablet {
+        margin-top: 15px; // вместе с зазором колонки даёт 30, как в макете
+    }
 }
 
 .ld-team__member {
@@ -2075,14 +2107,14 @@ $stage-height: 403px;
 
 // --- 10. Презентация об аудите ------------------------------
 .ld-deck {
-    padding-top: 100px;
+    padding-top: 50px; // в макете отступ до презентации меньше обычных 100px
 
     @include tablet {
-        padding-top: 60px;
+        padding-top: 50px;
     }
 
     @include mobile {
-        padding-top: 50px;
+        padding-top: 30px;
     }
 }
 
@@ -2099,7 +2131,7 @@ $stage-height: 403px;
 
     @include tablet {
         flex-direction: column;
-        gap: 25px;
+        gap: 40px;
         min-height: 0;
         padding: 30px;
     }
@@ -2128,12 +2160,13 @@ $stage-height: 403px;
     line-height: 36px;
 
     @include tablet {
-        font-size: 30px;
-        line-height: round(nearest, 0.92em, 1px);
+        font-size: 33px;
+        line-height: 29.7px;
     }
 
     @include mobile {
-        font-size: 24px;
+        font-size: 25px;
+        line-height: 22.5px;
     }
 }
 
@@ -2168,7 +2201,7 @@ $stage-height: 403px;
     padding-top: 100px;
 
     @include tablet {
-        padding-top: 60px;
+        padding-top: 80px;
     }
 
     @include mobile {
@@ -2185,13 +2218,12 @@ $stage-height: 403px;
     line-height: 36px;
 
     @include tablet {
-        margin-bottom: 25px;
-        font-size: 30px;
-        line-height: round(nearest, 0.92em, 1px);
+        margin-bottom: 30px;
     }
 
     @include mobile {
-        font-size: 24px;
+        font-size: 30px;
+        line-height: 27px;
     }
 }
 
@@ -2211,6 +2243,20 @@ $stage-height: 403px;
 
 .ld-faq__item {
     border-bottom: 1px solid #e9decf;
+
+    &:last-child {
+        border-bottom: 0;
+    }
+
+    @include tablet {
+        padding-bottom: 10px;
+        margin-bottom: 10px;
+
+        &:last-child {
+            padding-bottom: 0;
+            margin-bottom: 0;
+        }
+    }
 }
 
 .ld-faq__question {
@@ -2271,7 +2317,7 @@ $stage-height: 403px;
     padding-top: 100px;
 
     @include tablet {
-        padding-top: 60px;
+        padding-top: 80px;
     }
 
     @include mobile {
@@ -2290,6 +2336,11 @@ $stage-height: 403px;
 
     @include tablet {
         min-height: 0;
+        padding-bottom: 85px;
+    }
+
+    @include mobile {
+        padding-bottom: 50px;
     }
 }
 
@@ -2314,12 +2365,9 @@ $stage-height: 403px;
     margin-left: 607px;
 
     @include tablet {
+        // Плашки занимают всю ширину панели, как в макетах 640 и 375.
         width: auto;
-        margin: 0 30px;
-    }
-
-    @include mobile {
-        margin: 0 20px;
+        margin: 0;
     }
 }
 
@@ -2332,6 +2380,14 @@ $stage-height: 403px;
     padding: 20px;
     background-color: rgba($c-white, 0.06);
     border-radius: $r-sm;
+
+    @include tablet {
+        padding: 30px;
+    }
+
+    @include mobile {
+        padding: 20px;
+    }
 }
 
 .ld-ratings__title {
@@ -2370,6 +2426,15 @@ $stage-height: 403px;
     min-height: 57px;
     margin: 10px 0 0;
     padding: 0 20px;
+
+    @include tablet {
+        padding: 0 30px;
+    }
+
+    @include mobile {
+        padding: 0 20px;
+    }
+
     color: $c-cream;
     font-family: $font-display;
     font-size: 22px;
@@ -2392,11 +2457,11 @@ $stage-height: 403px;
     list-style: none;
 
     @include tablet {
-        margin-left: 30px;
+        margin: 85px 0 0 30px;
     }
 
     @include mobile {
-        margin-left: 20px;
+        margin: 50px 0 0 20px;
     }
 
     @include hide-scrollbar;
@@ -2413,6 +2478,12 @@ $stage-height: 403px;
     background-color: #e9decf;
     border-radius: $r-sm;
 
+    @include tablet {
+        flex: 0 0 133px;
+        width: 133px;
+        height: 114px;
+    }
+
     img {
         display: block;
         max-width: 100%;
@@ -2426,7 +2497,7 @@ $stage-height: 403px;
     padding-top: 100px;
 
     @include tablet {
-        padding-top: 60px;
+        padding-top: 80px;
     }
 
     @include mobile {
@@ -2477,12 +2548,13 @@ $stage-height: 403px;
     line-height: 36px;
 
     @include tablet {
-        font-size: 30px;
-        line-height: round(nearest, 0.92em, 1px);
+        font-size: 33px;
+        line-height: 29.7px;
     }
 
     @include mobile {
-        font-size: 24px;
+        font-size: 25px;
+        line-height: 22.5px;
     }
 }
 
@@ -2516,7 +2588,7 @@ $stage-height: 403px;
     @include tablet {
         position: static;
         width: auto;
-        margin-top: 20px;
+        margin-top: 40px;
         line-height: round(nearest, 1.2em, 1px);
     }
 }
@@ -2532,20 +2604,20 @@ $stage-height: 403px;
     @include tablet {
         position: static;
         width: 100%;
-        margin-top: 20px;
+        margin-top: 10px;
     }
 }
 
 // --- 15. Другие услуги практики -----------------------------
 .ld-related {
-    padding: 100px 0;
+    padding: 100px 0 0;
 
     @include tablet {
-        padding: 60px 0;
+        padding-top: 80px;
     }
 
     @include mobile {
-        padding: 50px 0;
+        padding-top: 50px;
     }
 }
 
@@ -2557,12 +2629,240 @@ $stage-height: 403px;
     font-weight: 400;
     line-height: 36px;
 
-    @include tablet {
-        font-size: 30px;
-        line-height: round(nearest, 0.92em, 1px);
+    @include mobile {
+        font-size: 25px;
+        line-height: 22.5px;
+    }
+}
+
+// --- Мобильный макет 375: размеры и отступы из Figma -------------
+@include mobile {
+    // 03. Состав услуг
+    .ld-scope__inner {
+        gap: 20px;
     }
 
-    @include mobile {
-        font-size: 24px;
+    .ld-scope__aside {
+        gap: 20px;
+    }
+
+    .ld-scope__intro {
+        display: flex;
+        flex-direction: column;
+        gap: 15px;
+    }
+
+    .ld-scope__note {
+        margin-top: 0;
+    }
+
+    .ld-scope__note-text,
+    .ld-clients__note-text,
+    .ld-stages__note-text,
+    .ld-cases__note-text,
+    .ld-team__note-text,
+    .ld-scope__promise {
+        font-size: 12px;
+        line-height: 13.2px;
+    }
+
+    .ld-scope__actions {
+        flex-wrap: nowrap;
+    }
+
+    .ld-scope__button {
+        flex: 1 1 auto;
+        min-width: 0;
+    }
+
+    .ld-scope__grid {
+        gap: 5px;
+    }
+
+    .ld-scope-card {
+        padding: 20px;
+    }
+
+    .ld-scope-card__title {
+        font-size: 16px;
+        line-height: 17.6px;
+    }
+
+    .ld-scope-card__text {
+        margin-top: 10px;
+        font-size: 12px;
+        line-height: 13.2px;
+    }
+
+    .ld-scope__note,
+    .ld-clients__note,
+    .ld-stages__note,
+    .ld-cases__note,
+    .ld-team__note {
+        min-height: 0;
+    }
+
+    // 04. Этапы защиты
+    .ld-stages__deck {
+        gap: 5px;
+        margin-top: 20px;
+    }
+
+    .ld-stage {
+        min-height: 197px;
+    }
+
+    .ld-stage__head {
+        min-height: 86px;
+        padding: 20px 20px 0;
+    }
+
+    .ld-stage__body {
+        margin: 0 20px 20px;
+    }
+
+    .ld-stage__text {
+        font-size: 12px;
+        line-height: 13.2px;
+    }
+
+    // 05. С кем мы работаем
+    .ld-clients__grid {
+        gap: 5px;
+    }
+
+    .ld-clients__grid > .ld-client {
+        min-height: 225px;
+    }
+
+    .ld-client-stack .ld-client {
+        min-height: 86px;
+    }
+
+    .ld-clients__grid > .ld-client--cta {
+        min-height: 147px;
+    }
+
+    .ld-client__title,
+    .ld-client__cta-title {
+        font-size: 16px;
+        line-height: 17.6px;
+    }
+
+    // 06. Что получает клиент
+    .ld-results__list {
+        gap: 5px;
+    }
+
+    .ld-result {
+        gap: 0;
+        min-height: 125px;
+        padding: 0 20px 0 10px;
+
+        &:last-child {
+            min-height: 125px;
+        }
+    }
+
+    .ld-result__number {
+        flex: 0 0 102px;
+    }
+
+    .ld-result__text {
+        font-size: 14px;
+    }
+
+    // 07. Форма консультации
+    .ld-consult__copy {
+        gap: 17px;
+    }
+
+    .ld-form {
+        padding: 15px;
+    }
+
+    // 08. Команда
+    .ld-team__track,
+    .ld-team__actions {
+        margin-top: 5px; // вместе с зазором колонки 15 даёт 20, как в макете
+    }
+
+    .ld-team__member {
+        flex: 0 0 212px;
+        width: 212px;
+    }
+
+    // 10. Презентация
+    .ld-deck__panel {
+        gap: 20px;
+    }
+
+    // 12. Рейтинги и партнёры
+    .ld-ratings__panel {
+        padding-bottom: 30px;
+    }
+
+    .ld-ratings__copy {
+        margin: 0;
+    }
+
+    .ld-ratings__label {
+        font-size: 20px;
+        line-height: 18px;
+    }
+
+    .ld-ratings__logos {
+        gap: 8px;
+        margin-top: 34px;
+    }
+
+    .ld-logo {
+        flex: 0 0 85px;
+        width: 85px;
+        height: 73px;
+        padding: 8px;
+    }
+
+    // 13. Вопросы
+    .ld-faq__title {
+        margin-bottom: 20px;
+    }
+
+    .ld-faq__item {
+        padding-bottom: 5px;
+        margin-bottom: 5px;
+    }
+
+    .ld-faq__question {
+        font-size: 12px;
+        line-height: 13.2px;
+    }
+
+    // 14. Предварительный анализ
+    .ld-analysis__note {
+        margin-top: 20px;
+    }
+
+    .ld-analysis__button {
+        margin-top: 5px;
+    }
+
+    // 15. Другие услуги
+    .ld-related__title {
+        margin-bottom: 25px;
+    }
+
+    .ld-related__grid {
+        gap: 10px;
+
+        .hub-card__link {
+            min-height: 70px;
+            padding: 20px;
+        }
+
+        .hub-card__title {
+            font-size: 14px;
+            line-height: 15.4px;
+        }
     }
 }

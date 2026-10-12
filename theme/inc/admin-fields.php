@@ -10,7 +10,7 @@
  * @package MPartners
  */
 
-const MP_CONTENT_VERSION = '15';
+const MP_CONTENT_VERSION = '17';
 
 /**
  * Редактируемые разделы контента.

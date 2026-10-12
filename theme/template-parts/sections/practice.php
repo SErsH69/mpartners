@@ -7,6 +7,15 @@
 
 $mp_practice = mp_data( 'practice' );
 
+// На лендинге услуги у секции своя подводка — как в макете.
+if ( is_singular( 'mp_landing' ) && function_exists( 'mp_landing' ) ) {
+	$mp_note = mp_landing( 'practice.note' );
+
+	if ( $mp_note ) {
+		$mp_practice['note'] = $mp_note;
+	}
+}
+
 // Карточки — настоящие услуги; оформление и количество как в макете.
 $mp_cases = (array) $mp_practice['items'];
 

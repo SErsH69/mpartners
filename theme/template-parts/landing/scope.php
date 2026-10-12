@@ -7,13 +7,6 @@
 
 $mp_scope = mp_landing( 'scope' );
 $mp_items = (array) $mp_scope['items'];
-
-// В макете карточки разложены в две колонки сверху вниз.
-$mp_columns = [ [], [] ];
-
-foreach ( $mp_items as $mp_index => $mp_item ) {
-	$mp_columns[ $mp_index % 2 ][] = $mp_item;
-}
 ?>
 <section class="ld-scope">
 	<div class="shell">
@@ -45,16 +38,13 @@ foreach ( $mp_items as $mp_index => $mp_item ) {
 				</div>
 			</div>
 
+			<?php // В макете карточки лежат строками по две: высота строки общая. ?>
 			<div class="ld-scope__grid">
-				<?php foreach ( $mp_columns as $mp_column ) : ?>
-					<div class="ld-scope__column">
-						<?php foreach ( $mp_column as $mp_card ) : ?>
-							<article class="ld-scope-card">
-								<h3 class="ld-scope-card__title"><?php echo esc_html( $mp_card['title'] ); ?></h3>
-								<p class="ld-scope-card__text"><?php mp_nl2br( $mp_card['text'] ); ?></p>
-							</article>
-						<?php endforeach; ?>
-					</div>
+				<?php foreach ( $mp_items as $mp_card ) : ?>
+					<article class="ld-scope-card">
+						<h3 class="ld-scope-card__title"><?php echo esc_html( $mp_card['title'] ); ?></h3>
+						<p class="ld-scope-card__text"><?php mp_nl2br( $mp_card['text'] ); ?></p>
+					</article>
 				<?php endforeach; ?>
 			</div>
 		</div>
