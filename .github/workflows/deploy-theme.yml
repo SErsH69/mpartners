@@ -86,7 +86,7 @@ jobs:
         run: |
           # Сайт работает по HTTPS и уводит http на https, поэтому идём
           # сразу по защищённому адресу и проверяем ключевые разделы.
-          for path in / /practices/ /lawyers/ /press/ /events/ /media/; do
+          for path in / /about/ /contacts/ /partnership/ /lawyers/ /press/ /events/ /media/; do
             code=$(curl -sL -o /dev/null -w '%{http_code}' "https://mpartners.law$path")
             echo "$path ответил $code"
             test "$code" = "200"
