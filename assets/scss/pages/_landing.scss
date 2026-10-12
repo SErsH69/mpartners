@@ -583,7 +583,9 @@
 .ld-hero {
     position: relative;
     padding: 271px 0 0; // заголовок начинается на 349 от верха страницы
-    overflow: hidden;
+    // Картинка в макете начинается выше первого экрана, поэтому не режем;
+    // горизонтальный вылет снимает .site (overflow-x: clip).
+    overflow: visible;
 
     @include tablet {
         padding-top: 387px; // заголовок на 450 от верха страницы
@@ -594,44 +596,62 @@
     }
 }
 
+// Картинка первого экрана: в макете это кадр фиксированного размера по
+// центру экрана, а не растянутый фон. Координаты из Figma — от верха
+// страницы, поэтому подложка выходит за верх секции (шапка 78px).
 .ld-hero__backdrop {
     position: absolute;
-    inset: 0 0 auto;
+    top: -78px;
+    right: 0;
+    left: 0;
     height: 715px;
     pointer-events: none;
 
+    @include upto(1439px) {
+        top: -34px;
+        height: 585px;
+    }
+
     @include tablet {
-        height: 585px; // высота картинки из макета 640
+        top: 0;
+        height: 585px;
     }
 
     @include mobile {
         top: -17px;
-        height: 411px; // высота картинки из макета 375
+        height: 411px;
     }
 }
 
 .ld-hero__image {
+    position: relative;
+    left: 50%;
     display: block;
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    object-position: center top;
+    width: 1739px;
+    height: 715px;
+    max-width: none;
+    object-fit: fill; // в макете кадр растянут по рамке
+    transform: translateX(-50%);
+
+    @include upto(1439px) {
+        width: 1352px;
+        height: 585px;
+    }
+
+    @include mobile {
+        width: 950px;
+        height: 411px;
+    }
 }
 
 .ld-hero__veil {
-    // Подложка из макета: слева непрозрачная, справа открывает картинку.
+    // Подложка из макета: прозрачная сверху, к низу закрывает картинку.
+    // Две одинаковые заливки друг на друге дают кривую 1 − (1 − p)².
     position: absolute;
     inset: 0;
     background:
-        linear-gradient(180deg, rgba($c-page, 0) 70%, $c-page 100%),
-        linear-gradient(to left, rgba(232, 224, 207, 0) 0%, #e8e0cf 100%),
-        linear-gradient(to left, rgba(232, 224, 207, 0) 0%, $c-page 100%);
-
-    @include tablet {
-        // На узких экранах текст идёт поверх картинки целиком.
-        background:
-            linear-gradient(180deg, rgba($c-page, 0.92) 0%, rgba($c-page, 0.92) 70%, $c-page 100%);
-    }
+        linear-gradient(180deg, rgba($c-page, 0) 0%, $c-page 100%),
+        linear-gradient(180deg, rgba(232, 224, 207, 0) 0%, #e8e0cf 100%);
 }
 
 .ld-hero__main {
