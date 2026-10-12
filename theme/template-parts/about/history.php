@@ -22,7 +22,9 @@ $mp_history = mp_about( 'history' );
 	<ul class="ab-history__track" data-drag-scroll>
 		<?php foreach ( (array) $mp_history['items'] as $mp_item ) : ?>
 			<li class="ab-step">
-				<span class="ab-step__icon" aria-hidden="true"><?php mp_icon( 'shield' ); ?></span>
+				<span class="ab-step__icon" aria-hidden="true">
+					<img src="<?php echo esc_url( mp_img( ! empty( $mp_item['icon'] ) ? $mp_item['icon'] : 'history-1', 'svg' ) ); ?>" alt="" loading="lazy" decoding="async">
+				</span>
 				<div class="ab-step__body">
 					<p class="ab-step__year"><?php echo esc_html( $mp_item['year'] ); ?></p>
 					<p class="ab-step__text"><?php echo esc_html( $mp_item['text'] ); ?></p>

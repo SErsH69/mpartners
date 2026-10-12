@@ -907,3 +907,47 @@ function mp_apply_content_replacements() {
 	update_option( 'mp_content_replace_version', MP_REPLACE_VERSION );
 }
 add_action( 'acf/init', 'mp_apply_content_replacements', 30 );
+
+/**
+ * Разовый сброс отдельных полей: значение из макета поменялось, а в базе
+ * лежит старое и перекрывает его. После сброса поле снова берётся из темы.
+ */
+const MP_RESET_VERSION = '1';
+
+/**
+ * Какие поля сбросить: группа => список ключей.
+ *
+ * @return array
+ */
+function mp_content_resets() {
+	return [
+		// Логотипы рейтингов выгружены из макета вместо партнёрских.
+		'about'    => [ 'intro' ],
+		'partners' => [ 'logos' ],
+		'landings' => [],
+	];
+}
+
+/**
+ * Удаляет перечисленные поля, чтобы они вернулись к значениям из темы.
+ */
+function mp_apply_content_resets() {
+	if ( ! function_exists( 'delete_field' ) || get_option( 'mp_content_reset_version' ) === MP_RESET_VERSION ) {
+		return;
+	}
+
+	foreach ( mp_content_resets() as $group => $keys ) {
+		foreach ( $keys as $key ) {
+			foreach ( mp_content_targets( $group ) as $target ) {
+				delete_field( $group . '_' . $key, $target );
+			}
+		}
+	}
+
+	update_option( 'mp_content_reset_version', MP_RESET_VERSION );
+
+	// Сразу заполняем заново значениями из темы.
+	delete_option( 'mp_content_version' );
+	mp_seed_content_fields();
+}
+add_action( 'acf/init', 'mp_apply_content_resets', 25 );
