@@ -1,0 +1,514 @@
+@use '../abstracts/variables' as *;
+@use '../abstracts/mixins' as *;
+
+// =============================================================
+// Страница «О компании» — макет «(р) M-partners (Copy) (Copy)».
+// =============================================================
+
+// --- Первый экран -------------------------------------------
+.ab-hero {
+    padding-top: 15px;
+}
+
+.ab-hero__photo {
+    height: 395px;
+    overflow: hidden;
+    background-color: #e9decf;
+    border-radius: $r-sm;
+
+    img {
+        display: block;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+
+    @include tablet {
+        height: 280px;
+    }
+
+    @include mobile {
+        height: 200px;
+    }
+}
+
+.ab-hero__title {
+    max-width: 923px;
+    margin: 15px 0 0;
+    color: $c-dark;
+    font-family: $font-display;
+    font-size: 60px;
+    font-weight: 400;
+    line-height: 54px;
+
+    @include tablet {
+        font-size: 44px;
+        line-height: round(nearest, 0.9em, 1px);
+    }
+
+    @include mobile {
+        font-size: 32px;
+        line-height: round(nearest, 0.92em, 1px);
+    }
+}
+
+// --- Тёмная полоса ------------------------------------------
+.ab-intro {
+    padding: 60px 0;
+    margin-top: 100px;
+    overflow: hidden;
+
+    @include gradient-dark;
+
+    @include tablet {
+        padding: 40px 0;
+        margin-top: 60px;
+    }
+}
+
+.ab-intro__head {
+    display: flex;
+    gap: 13px;
+    align-items: flex-start;
+
+    @include tablet {
+        flex-direction: column;
+        gap: 20px;
+    }
+}
+
+.ab-intro__title {
+    flex: 0 0 594px;
+    max-width: 594px;
+    margin: 0;
+    color: $c-cream;
+    font-family: $font-display;
+    font-size: 40px;
+    font-weight: 400;
+    line-height: 36px;
+
+    @include tablet {
+        flex: 0 0 auto;
+        max-width: none;
+        font-size: 30px;
+        line-height: round(nearest, 0.92em, 1px);
+    }
+
+    @include mobile {
+        font-size: 24px;
+    }
+}
+
+.ab-intro__text {
+    flex: 0 0 593px;
+    width: 593px;
+    margin: 0;
+    color: $c-muted-light;
+    font-size: 14px;
+    font-weight: 400;
+    line-height: round(nearest, 1.1em, 1px);
+
+    @include tablet {
+        flex: 0 0 auto;
+        width: 100%;
+    }
+}
+
+.ab-intro__photos {
+    display: flex;
+    gap: 13px;
+    margin: 45px 0 0 -102px;
+    padding: 0;
+    overflow-x: auto;
+    list-style: none;
+
+    @include hide-scrollbar;
+
+    @include tablet {
+        margin: 30px 0 0 $gutter-tablet;
+    }
+
+    @include mobile {
+        margin-left: $gutter-mobile;
+    }
+}
+
+.ab-intro__photo {
+    flex: 0 0 343px;
+    width: 343px;
+    height: 266px;
+    overflow: hidden;
+    border-radius: $r-sm;
+
+    img {
+        display: block;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+
+    @include mobile {
+        flex-basis: 280px;
+        width: 280px;
+        height: 217px;
+    }
+}
+
+.ab-intro__plates {
+    width: 593px;
+    margin-top: 60px;
+    margin-left: 607px;
+
+    @include tablet {
+        width: auto;
+        margin-left: 0;
+        margin-top: 30px;
+    }
+}
+
+.ab-intro__plate {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    gap: 20px;
+    min-height: 115px;
+    padding: 20px;
+    background-color: rgba($c-white, 0.06);
+    border-radius: $r-sm;
+}
+
+.ab-intro__rating {
+    margin: 0;
+    color: $c-cream;
+    font-family: $font-display;
+    font-size: 19px;
+    font-weight: 400;
+    line-height: round(nearest, 0.9em, 1px);
+}
+
+.ab-intro__link {
+    display: inline-flex;
+    gap: 8px;
+    align-items: center;
+    color: $c-cream;
+    font-size: 14px;
+    text-decoration: none;
+
+    svg {
+        display: block;
+        width: 11px;
+        height: 11px;
+    }
+
+    &:hover {
+        opacity: 0.8;
+    }
+}
+
+.ab-intro__label {
+    display: flex;
+    align-items: center;
+    min-height: 57px;
+    margin: 12px 0 0;
+    padding: 0 20px;
+    color: $c-cream;
+    font-family: $font-display;
+    font-size: 22px;
+    font-weight: 400;
+    line-height: round(nearest, 0.9em, 1px);
+    background-color: rgba($c-white, 0.06);
+    border-radius: $r-sm;
+}
+
+.ab-intro__logos {
+    display: flex;
+    gap: 8px;
+    margin: 25px 0 0 -333px;
+    padding: 0;
+    overflow-x: auto;
+    list-style: none;
+
+    @include hide-scrollbar;
+
+    @include tablet {
+        margin-left: $gutter-tablet;
+    }
+
+    @include mobile {
+        margin-left: $gutter-mobile;
+    }
+}
+
+// --- История ------------------------------------------------
+.ab-history {
+    padding-top: 100px;
+    overflow: hidden;
+
+    @include tablet {
+        padding-top: 60px;
+    }
+
+    @include mobile {
+        padding-top: 50px;
+    }
+}
+
+.ab-history__head {
+    display: flex;
+    gap: 13px;
+    align-items: flex-start;
+
+    @include tablet {
+        flex-direction: column;
+        gap: 20px;
+    }
+}
+
+.ab-history__title {
+    flex: 0 0 594px;
+    max-width: 594px;
+    margin: 0;
+    color: $c-dark;
+    font-family: $font-display;
+    font-size: 40px;
+    font-weight: 400;
+    line-height: 36px;
+
+    @include tablet {
+        flex: 0 0 auto;
+        max-width: none;
+        font-size: 30px;
+        line-height: round(nearest, 0.92em, 1px);
+    }
+
+    @include mobile {
+        font-size: 24px;
+    }
+}
+
+.ab-history__note {
+    display: flex;
+    flex: 0 0 593px;
+    gap: 12px;
+    align-items: flex-start;
+    width: 593px;
+    min-height: 71px;
+    margin-top: 1px;
+    padding: 13px 15px;
+    background-color: $c-surface;
+    border-radius: $r-sm;
+
+    @include tablet {
+        flex: 0 0 auto;
+        width: 100%;
+        margin-top: 0;
+    }
+}
+
+.ab-history__note-icon {
+    display: flex;
+    flex: 0 0 auto;
+    color: $c-muted;
+
+    svg {
+        display: block;
+        width: 17px;
+        height: 17px;
+    }
+}
+
+.ab-history__note-text {
+    margin: 0;
+    color: $c-muted;
+    font-size: 14px;
+    font-weight: 400;
+    line-height: round(nearest, 1.1em, 1px);
+}
+
+.ab-history__track {
+    display: flex;
+    gap: 35px;
+    margin: 40px 0 0;
+    padding: 0 0 20px;
+    overflow-x: auto;
+    list-style: none;
+    border-bottom: 1px solid $c-beige-deep;
+
+    @include hide-scrollbar;
+
+    @include upto(1919px) {
+        padding-left: max(#{$gutter-desktop}, calc((100vw - #{$container}) / 2));
+    }
+
+    @include tablet {
+        padding-left: $gutter-tablet;
+    }
+
+    @include mobile {
+        padding-left: $gutter-mobile;
+    }
+}
+
+.ab-step {
+    display: flex;
+    flex: 0 0 332px;
+    gap: 5px;
+    width: 332px;
+    min-height: 161px; // высота из макета: по ней тянется линия под иконкой
+
+    @include mobile {
+        flex-basis: 280px;
+        width: 280px;
+    }
+}
+
+.ab-step__icon {
+    position: relative;
+    display: flex;
+    flex: 0 0 89px;
+    justify-content: center;
+    color: $c-muted;
+
+    svg {
+        display: block;
+        width: 74px;
+        height: 72px;
+    }
+
+    // Вертикальная линия под иконкой, как в макете.
+    &::after {
+        content: '';
+        position: absolute;
+        top: 72px;
+        bottom: 0;
+        left: 50%;
+        width: 1px;
+        background-color: $c-beige-deep;
+    }
+}
+
+.ab-step__body {
+    flex: 1 1 auto;
+    min-width: 0;
+}
+
+.ab-step__year {
+    margin: 0;
+    color: $c-dark;
+    font-size: 18px;
+    font-weight: 500;
+    line-height: round(nearest, 1.1em, 1px);
+}
+
+.ab-step__text {
+    margin: 10px 0 0;
+    color: $c-muted;
+    font-size: 14px;
+    font-weight: 400;
+    line-height: round(nearest, 1.1em, 1px);
+}
+
+// --- Команда ------------------------------------------------
+.ab-team {
+    padding-top: 100px;
+
+    @include tablet {
+        padding-top: 60px;
+    }
+
+    @include mobile {
+        padding-top: 50px;
+    }
+}
+
+.ab-team__head {
+    display: flex;
+    gap: 13px;
+    align-items: flex-start;
+
+    @include tablet {
+        flex-direction: column;
+        gap: 20px;
+    }
+}
+
+.ab-team__title {
+    flex: 0 0 594px;
+    max-width: 594px;
+    margin: 18px 0 0;
+    color: $c-dark;
+    font-family: $font-display;
+    font-size: 40px;
+    font-weight: 400;
+    line-height: 36px;
+
+    @include tablet {
+        flex: 0 0 auto;
+        max-width: none;
+        margin-top: 0;
+        font-size: 30px;
+        line-height: round(nearest, 0.92em, 1px);
+    }
+
+    @include mobile {
+        font-size: 24px;
+    }
+}
+
+.ab-team__note {
+    display: flex;
+    flex: 0 0 593px;
+    gap: 12px;
+    align-items: flex-start;
+    width: 593px;
+    min-height: 71px;
+    padding: 13px 15px;
+    background-color: $c-surface;
+    border-radius: $r-sm;
+
+    @include tablet {
+        flex: 0 0 auto;
+        width: 100%;
+    }
+}
+
+.ab-team__note-icon {
+    display: flex;
+    flex: 0 0 auto;
+    color: $c-muted;
+
+    svg {
+        display: block;
+        width: 17px;
+        height: 17px;
+    }
+}
+
+.ab-team__note-text {
+    margin: 0;
+    color: $c-muted;
+    font-size: 14px;
+    font-weight: 400;
+    line-height: round(nearest, 1.1em, 1px);
+}
+
+.ab-team__grid {
+    display: grid;
+    gap: 15px;
+    grid-template-columns: repeat(4, 1fr);
+    margin: 25px 0 0;
+    padding: 0;
+    list-style: none;
+
+    @include tablet {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    @include mobile {
+        grid-template-columns: 1fr;
+    }
+}
+
+.ab-team__member {
+    width: 100%;
+}

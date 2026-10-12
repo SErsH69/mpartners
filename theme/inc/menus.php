@@ -320,6 +320,7 @@ function mp_seed_pages() {
 	$pages = [
 		'practices' => [ 'Практики', 'page-practices.php' ],
 		'lawyers'   => [ 'Адвокаты', 'page-lawyers.php' ],
+		'about'     => [ 'О компании', 'page-about.php' ],
 		'press'     => [ 'Пресс-центр', 'page-press.php' ],
 		'events'    => [ 'Мероприятия', 'page-events.php' ],
 		'media'     => [ 'СМИ о нас', 'page-media.php' ],

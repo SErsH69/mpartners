@@ -17,6 +17,7 @@ require_once get_template_directory() . '/inc/lawyer-data.php';
 require_once get_template_directory() . '/inc/press-data.php';
 require_once get_template_directory() . '/inc/article-data.php';
 require_once get_template_directory() . '/inc/admin-fields.php';
+require_once get_template_directory() . '/inc/about-data.php';
 require_once get_template_directory() . '/inc/landing-data.php';
 require_once get_template_directory() . '/inc/landing-cpt.php';
 require_once get_template_directory() . '/inc/legal-data.php';
