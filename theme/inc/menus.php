@@ -10,7 +10,8 @@
  * @package MPartners
  */
 
-const MP_MENUS_VERSION = '4';
+const MP_MENUS_VERSION = '5';
+const MP_PAGES_VERSION = '2';
 
 /**
  * Места для меню.
@@ -91,6 +92,7 @@ function mp_menu_items( $location, $fallback = [] ) {
 function mp_menu_url_for( $label, $fallback = '' ) {
 	$map = [
 		'Услуги'      => 'uslugi',
+		'О компании'  => 'about',
 		'Практики'    => 'practices',
 		'Адвокаты'    => 'lawyers',
 		'Мероприятия' => 'events',
@@ -130,7 +132,7 @@ function mp_seed_menus() {
 		return;
 	}
 
-	$items = [ 'Услуги', 'Практики', 'Адвокаты', 'Пресс-центр', 'Мероприятия', 'СМИ о нас', 'Контакты' ];
+	$items = [ 'Услуги', 'Практики', 'О компании', 'Адвокаты', 'Пресс-центр', 'Мероприятия', 'СМИ о нас', 'Контакты' ];
 
 	$sets = [
 		'mp-header'   => [
@@ -311,9 +313,8 @@ function mp_link( $href, $fallback = '' ) {
  * на любом сервере.
  */
 function mp_seed_pages() {
-	$cli = defined( 'WP_CLI' ) && WP_CLI;
-
-	if ( ! is_admin() && ! $cli ) {
+	// Разовая миграция: отрабатывает на первом же запросе после выкатки.
+	if ( get_option( 'mp_pages_version' ) === MP_PAGES_VERSION ) {
 		return;
 	}
 
@@ -350,8 +351,10 @@ function mp_seed_pages() {
 			update_post_meta( $id, '_wp_page_template', $page[1] );
 		}
 	}
+
+	update_option( 'mp_pages_version', MP_PAGES_VERSION );
 }
-add_action( 'admin_init', 'mp_seed_pages', 5 );
+add_action( 'init', 'mp_seed_pages', 12 );
 
 if ( defined( 'WP_CLI' ) && WP_CLI ) {
 	add_action( 'init', 'mp_seed_pages', 5 );
