@@ -477,6 +477,20 @@
         width: auto;
     }
 
+    // Фотографии адвокатов вертикальные: в макетной рамке 274×243 от них
+    // оставалась узкая полоса, поэтому на странице раздела кадр выше.
+    .member__photo {
+        height: auto;
+        aspect-ratio: 3 / 4;
+    }
+
+    .member__portrait {
+        width: 100%;
+        max-width: none;
+        height: 100%;
+        margin: 0;
+    }
+
     @include tablet {
         grid-template-columns: repeat(2, 1fr);
         margin-top: 80px;
