@@ -5,7 +5,7 @@
  * @package MPartners
  */
 
-$mp_members = function_exists( 'mp_lawyer_cards' ) ? mp_lawyer_cards() : mp_data( 'team.members', [] );
+$mp_members = function_exists( 'mp_lawyer_cards' ) ? mp_lawyer_cards( 0, -1 ) : mp_data( 'team.members', [] );
 ?>
 <section class="pr lw-list">
 	<div class="shell">

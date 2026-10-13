@@ -6,7 +6,7 @@
  */
 
 $mp_team    = mp_about( 'team' );
-$mp_members = function_exists( 'mp_lawyer_cards' ) ? mp_lawyer_cards() : [];
+$mp_members = function_exists( 'mp_lawyer_cards' ) ? mp_lawyer_cards( 0, 8 ) : [];
 ?>
 <section class="ab-team">
 	<div class="shell">
