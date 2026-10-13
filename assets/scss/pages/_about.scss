@@ -555,6 +555,20 @@
 .ab-team__member {
     width: 100%;
 
+    // Фотографии адвокатов вертикальные: в макетной рамке 274×243 от них
+    // оставалась узкая полоса, поэтому кадр выше.
+    .member__photo {
+        height: auto;
+        aspect-ratio: 3 / 4;
+    }
+
+    .member__portrait {
+        width: 100%;
+        max-width: none;
+        height: 100%;
+        margin: 0;
+    }
+
     @include mobile {
         flex: 0 0 212px;
         width: 212px;

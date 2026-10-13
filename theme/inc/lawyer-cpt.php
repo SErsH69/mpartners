@@ -212,7 +212,7 @@ function mp_seed_lawyers() {
 }
 add_action( 'init', 'mp_seed_lawyers', 18 );
 
-const MP_LAWYER_PEOPLE_VERSION = '2';
+const MP_LAWYER_PEOPLE_VERSION = '3';
 
 /**
  * Состав коллегии: порядок карточек и файлы фотографий в теме.
@@ -242,6 +242,11 @@ function mp_lawyer_people() {
 			'role'  => 'Адвокат',
 		],
 		[
+			'name'  => 'Павлов Александр Владимирович',
+			'photo' => 'lawyer-pavlov',
+			'role'  => 'Адвокат',
+		],
+		[
 			'name'  => 'Водолазский Роман Сергеевич',
 			'photo' => 'lawyer-vodolazskiy',
 			'role'  => 'Адвокат',
@@ -259,6 +264,16 @@ function mp_lawyer_people() {
 		[
 			'name'  => 'Поташов Александр Сергеевич',
 			'photo' => 'lawyer-potashov',
+			'role'  => 'Адвокат',
+		],
+		[
+			'name'  => 'Кльован Светлана Петровна',
+			'photo' => 'lawyer-klovan',
+			'role'  => 'Адвокат',
+		],
+		[
+			'name'  => 'Майер Амира Ахматовна',
+			'photo' => 'lawyer-majer',
 			'role'  => 'Адвокат',
 		],
 	];
