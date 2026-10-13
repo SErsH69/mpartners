@@ -16,26 +16,9 @@ if ( is_singular( 'mp_landing' ) && function_exists( 'mp_landing' ) ) {
 	}
 }
 
-// Карточки — настоящие услуги; оформление и количество как в макете.
+// Карточки из макета: картинка и описание свои, ссылка — на одноимённую
+// услугу (mp_service_link подбирает лендинг и по близкому названию).
 $mp_cases = (array) $mp_practice['items'];
-
-if ( function_exists( 'mp_service_cards' ) ) {
-	$mp_posts = mp_service_cards();
-	$mp_names = wp_list_pluck( $mp_posts, 'title' );
-
-	// Сначала настоящие услуги, остальные места добираем карточками макета.
-	foreach ( $mp_cases as $mp_fallback ) {
-		if ( count( $mp_posts ) >= count( $mp_cases ) ) {
-			break;
-		}
-
-		if ( ! in_array( $mp_fallback['title'], $mp_names, true ) ) {
-			$mp_posts[] = $mp_fallback;
-		}
-	}
-
-	$mp_cases = array_slice( $mp_posts, 0, count( $mp_cases ) );
-}
 ?>
 <section class="practice">
 	<div class="practice__inner">

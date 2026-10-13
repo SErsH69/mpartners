@@ -195,18 +195,14 @@ function mp_landing_groups( $hub_id = 0 ) {
 	foreach ( $groups as $index => $group ) {
 		$items = isset( $byGroup[ $index ] ) ? $byGroup[ $index ] : [];
 
-		// Состав группы из макета: уже готовые лендинги идут первыми.
-		$names = wp_list_pluck( $items, 'label' );
-
-		foreach ( mp_landings_fallback_items( $index ) as $label ) {
-			if ( in_array( $label, $names, true ) ) {
-				continue;
+		// Пока в разделе нет ни одной записи, показываем состав из макета.
+		if ( ! $items ) {
+			foreach ( mp_landings_fallback_items( $index ) as $label ) {
+				$items[] = [
+					'label' => $label,
+					'href'  => '',
+				];
 			}
-
-			$items[] = [
-				'label' => $label,
-				'href'  => '',
-			];
 		}
 
 		$result[] = [
@@ -393,6 +389,26 @@ function mp_service_cards() {
  * @param string $title Название услуги.
  * @return string
  */
+function mp_title_words( $title ) {
+	$title = mb_strtolower( (string) $title );
+	$parts = preg_split( '~[^\p{L}\p{N}]+~u', $title, -1, PREG_SPLIT_NO_EMPTY );
+
+	return array_values(
+		array_filter(
+			(array) $parts,
+			static function ( $word ) {
+				return mb_strlen( $word ) > 3;
+			}
+		)
+	);
+}
+
+/**
+ * Ссылка на услугу с таким названием. Если лендинга нет — хаб.
+ *
+ * @param string $title Название услуги.
+ * @return string
+ */
 function mp_service_link( $title ) {
 	$posts = get_posts(
 		[
@@ -405,6 +421,31 @@ function mp_service_link( $title ) {
 
 	if ( $posts ) {
 		return get_permalink( $posts[0] );
+	}
+
+	// Названия в макете и у лендинга могут отличаться на пару слов
+	// («Защита при доследственных проверках» и «Защита бизнеса при…»),
+	// поэтому ищем по совпадению слов.
+	$words = mp_title_words( $title );
+
+	if ( $words ) {
+		$best = 0;
+		$href = '';
+
+		foreach ( mp_service_cards() as $card ) {
+			$other = mp_title_words( $card['title'] );
+			$same  = count( array_intersect( $words, $other ) );
+			$score = $same / max( count( $words ), 1 );
+
+			if ( $score > $best ) {
+				$best = $score;
+				$href = $card['href'];
+			}
+		}
+
+		if ( $best >= 0.6 && $href ) {
+			return $href;
+		}
 	}
 
 	$hub = mp_primary_hub();
@@ -449,3 +490,107 @@ function mp_cleanup_practices() {
 	flush_rewrite_rules();
 }
 add_action( 'init', 'mp_cleanup_practices', 19 );
+
+const MP_LANDINGS_SEED_VERSION = '2';
+
+/**
+ * Значение поля пустое: пустая строка, пустой массив или структура из них.
+ *
+ * @param mixed $value Значение поля ACF.
+ * @return bool
+ */
+function mp_acf_is_empty( $value ) {
+	if ( is_array( $value ) ) {
+		foreach ( $value as $item ) {
+			if ( ! mp_acf_is_empty( $item ) ) {
+				return false;
+			}
+		}
+
+		return true;
+	}
+
+	return null === $value || false === $value || '' === $value || 0 === $value;
+}
+
+/**
+ * Заводит лендинги услуг из макета — по одному разу на запись.
+ *
+ * Поля, которые уже заполнены в админке, не трогаем: миграция только
+ * добавляет недостающее.
+ */
+function mp_seed_landings_content() {
+	if ( get_option( 'mp_landings_seed_version' ) === MP_LANDINGS_SEED_VERSION ) {
+		return;
+	}
+
+	if ( ! function_exists( 'mp_landings_content' ) ) {
+		return;
+	}
+
+	$hub = mp_primary_hub();
+
+	if ( ! $hub ) {
+		return;
+	}
+
+	foreach ( mp_landings_content() as $index => $item ) {
+		$post = get_page_by_path( $item['slug'], OBJECT, MP_LANDING_TYPE );
+
+		if ( ! $post ) {
+			$found = get_posts(
+				[
+					'post_type'      => MP_LANDING_TYPE,
+					'post_status'    => 'any',
+					'posts_per_page' => 1,
+					'title'          => $item['title'],
+				]
+			);
+
+			$post = $found ? $found[0] : null;
+		}
+
+		$id = $post ? (int) $post->ID : wp_insert_post(
+			[
+				'post_type'   => MP_LANDING_TYPE,
+				'post_title'  => $item['title'],
+				'post_name'   => $item['slug'],
+				'post_status' => 'publish',
+				'menu_order'  => $index + 2,
+			]
+		);
+
+		if ( ! $id || is_wp_error( $id ) ) {
+			continue;
+		}
+
+		if ( ! function_exists( 'update_field' ) ) {
+			continue;
+		}
+
+		if ( ! get_field( 'landing_hub', $id ) ) {
+			update_field( 'landing_hub', $hub->ID, $id );
+		}
+
+		$group = get_field( 'landing_group', $id );
+
+		if ( null === $group || '' === $group ) {
+			update_field( 'landing_group', (string) $item['group'], $id );
+		}
+
+		foreach ( $item['content'] as $key => $value ) {
+			$name = 'landing_' . $key;
+
+			// ACF возвращает пустую структуру группы, а не null, поэтому
+			// проверяем, есть ли в ней хоть что-то заполненное.
+			if ( ! mp_acf_is_empty( get_field( $name, $id ) ) ) {
+				continue;
+			}
+
+			update_field( $name, mp_content_to_acf( $value ), $id );
+		}
+	}
+
+	update_option( 'mp_landings_seed_version', MP_LANDINGS_SEED_VERSION );
+}
+add_action( 'init', 'mp_seed_landings_content', 20 );

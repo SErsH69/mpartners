@@ -95,38 +95,43 @@ function mp_content_groups() {
 function mp_content_target( $group ) {
 	static $cache = [];
 
-	if ( isset( $cache[ $group ] ) ) {
-		return $cache[ $group ];
+	// Ключ с текущей записью: на init запрос ещё не разобран, и закэшировать
+	// «цели нет» нельзя — иначе на странице покажется чужой контент.
+	$current = function_exists( 'get_queried_object_id' ) ? (int) get_queried_object_id() : 0;
+	$key     = $group . '|' . $current;
+
+	if ( isset( $cache[ $key ] ) ) {
+		return $cache[ $key ];
 	}
 
 	$groups = mp_content_groups();
 	$meta   = isset( $groups[ $group ] ) ? $groups[ $group ] : [];
 
 	if ( isset( $meta['location'] ) && 'options' === $meta['location'] ) {
-		$cache[ $group ] = 'option';
+		$cache[ $key ] = 'option';
 
 		return 'option';
 	}
 
 	if ( isset( $meta['location'] ) && 'front_page' === $meta['location'] ) {
-		$cache[ $group ] = (int) get_option( 'page_on_front' );
+		$cache[ $key ] = (int) get_option( 'page_on_front' );
 
-		return $cache[ $group ];
+		return $cache[ $key ];
 	}
 
 	$current = function_exists( 'get_queried_object_id' ) ? (int) get_queried_object_id() : 0;
 
 	if ( isset( $meta['post_types'] ) ) {
-		$cache[ $group ] = ( $current && in_array( get_post_type( $current ), $meta['post_types'], true ) ) ? $current : 0;
+		$cache[ $key ] = ( $current && in_array( get_post_type( $current ), $meta['post_types'], true ) ) ? $current : 0;
 
-		return $cache[ $group ];
+		return $cache[ $key ];
 	}
 
 	$templates = isset( $meta['templates'] ) ? $meta['templates'] : [];
 
 	// На самой странице берём её же значения — у каждого материала свои.
 	if ( $current && in_array( (string) get_page_template_slug( $current ), $templates, true ) ) {
-		$cache[ $group ] = $current;
+		$cache[ $key ] = $current;
 
 		return $current;
 	}
@@ -147,9 +152,9 @@ function mp_content_target( $group ) {
 		]
 	);
 
-	$cache[ $group ] = $pages ? (int) $pages[0] : 0;
+	$cache[ $key ] = $pages ? (int) $pages[0] : 0;
 
-	return $cache[ $group ];
+	return $cache[ $key ];
 }
 
 /**
@@ -385,16 +390,26 @@ function mp_default_row( $default, $row, $index ) {
 		return null;
 	}
 
-	foreach ( [ 'number', 'title', 'label', 'name' ] as $key ) {
+	$named = false;
+
+	foreach ( [ 'number', 'title', 'label', 'name', 'question' ] as $key ) {
 		if ( ! isset( $row[ $key ] ) || '' === $row[ $key ] ) {
 			continue;
 		}
+
+		$named = true;
 
 		foreach ( $default as $item ) {
 			if ( is_array( $item ) && isset( $item[ $key ] ) && $item[ $key ] === $row[ $key ] ) {
 				return $item;
 			}
 		}
+	}
+
+	// Строку с собственным заголовком не дополняем соседней из макета:
+	// иначе к чужому вопросу подставится чужой ответ.
+	if ( $named ) {
+		return null;
 	}
 
 	return isset( $default[ $index ] ) && is_array( $default[ $index ] ) ? $default[ $index ] : null;
@@ -696,10 +711,6 @@ function mp_merge_content( $default, $saved ) {
 function mp_content( $group ) {
 	static $cache = [];
 
-	if ( isset( $cache[ $group ] ) ) {
-		return $cache[ $group ];
-	}
-
 	$groups = mp_content_groups();
 
 	if ( ! isset( $groups[ $group ] ) || ! function_exists( $groups[ $group ]['data'] ) ) {
@@ -709,6 +720,11 @@ function mp_content( $group ) {
 	$data = call_user_func( $groups[ $group ]['data'] );
 
 	$target = mp_content_target( $group );
+	$key    = $group . '|' . ( is_scalar( $target ) ? $target : 0 );
+
+	if ( isset( $cache[ $key ] ) ) {
+		return $cache[ $key ];
+	}
 
 	if ( $target && function_exists( 'get_field' ) ) {
 		foreach ( $data as $key => $default ) {
@@ -720,7 +736,7 @@ function mp_content( $group ) {
 		}
 	}
 
-	$cache[ $group ] = $data;
+	$cache[ $key ] = $data;
 
 	return $data;
 }

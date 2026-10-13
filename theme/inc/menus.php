@@ -10,7 +10,7 @@
  * @package MPartners
  */
 
-const MP_MENUS_VERSION = '11';
+const MP_MENUS_VERSION = '12';
 const MP_PAGES_VERSION = '6';
 
 /**
@@ -224,9 +224,13 @@ function mp_seed_menus() {
 			// В меню услуг названия произвольные: ведём их на лендинг с таким
 			// же названием, а рабочие ссылки не трогаем.
 			if ( $services ) {
+				$hub  = function_exists( 'mp_primary_hub' ) ? mp_primary_hub() : null;
 				$dead = '#' === $item->url || '' === $item->url
 					|| $item->url === home_url( '/' )
-					|| false !== strpos( $item->url, '/practices' );
+					|| false !== strpos( $item->url, '/practices' )
+					// Ссылка на хаб — временная заглушка: если лендинг с таким
+					// названием появился, ведём пункт на него.
+					|| ( $hub && $item->url === get_permalink( $hub ) );
 
 				if ( ! $dead ) {
 					continue;

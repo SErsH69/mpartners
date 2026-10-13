@@ -19,6 +19,7 @@ require_once get_template_directory() . '/inc/about-data.php';
 require_once get_template_directory() . '/inc/contacts-data.php';
 require_once get_template_directory() . '/inc/partners-data.php';
 require_once get_template_directory() . '/inc/landing-data.php';
+require_once get_template_directory() . '/inc/landings-content.php';
 require_once get_template_directory() . '/inc/landing-cpt.php';
 require_once get_template_directory() . '/inc/legal-data.php';
 require_once get_template_directory() . '/inc/menus.php';
@@ -121,3 +122,4 @@ function webula_add_block_category( $categories ) {
 
 	return array_merge( $custom_category, $categories );
 }
+

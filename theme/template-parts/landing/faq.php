@@ -8,10 +8,24 @@
  * @package MPartners
  */
 
-$mp_faq   = mp_landing( 'faq' );
-$mp_items = array_values( (array) $mp_faq['items'] );
-$mp_half  = (int) ceil( count( $mp_items ) / 2 );
-$mp_cols  = [ array_slice( $mp_items, 0, $mp_half ), array_slice( $mp_items, $mp_half ) ];
+$mp_faq = mp_landing( 'faq' );
+
+// Вопрос без ответа не показываем: пустая «гармошка» только раздражает.
+$mp_items = array_values(
+	array_filter(
+		(array) $mp_faq['items'],
+		static function ( $item ) {
+			return ! empty( $item['question'] ) && ! empty( $item['answer'] );
+		}
+	)
+);
+
+if ( ! $mp_items ) {
+	return;
+}
+
+$mp_half = (int) ceil( count( $mp_items ) / 2 );
+$mp_cols = [ array_slice( $mp_items, 0, $mp_half ), array_slice( $mp_items, $mp_half ) ];
 ?>
 <section class="ld-faq">
 	<div class="shell">
