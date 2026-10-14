@@ -54,8 +54,10 @@ const initStages = () => {
         }
 
         const onScroll = () => {
+            // Не копим кадры: последний запрос отменяет предыдущий — иначе
+            // во вкладке без отрисовки очередь зависает на первом кадре.
             if (frame) {
-                return
+                window.cancelAnimationFrame(frame)
             }
 
             frame = window.requestAnimationFrame(update)
@@ -94,6 +96,8 @@ const initStages = () => {
 
         window.addEventListener('scroll', onScroll, { passive: true })
         window.addEventListener('resize', apply)
+        // Картинки выше догружаются и сдвигают секцию — пересчитываем.
+        window.addEventListener('load', apply)
 
         if (media.addEventListener) {
             media.addEventListener('change', apply)
