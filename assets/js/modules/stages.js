@@ -63,14 +63,27 @@ const initStages = () => {
             frame = window.requestAnimationFrame(update)
         }
 
+        // Закреплённый блок (заголовок + колода) ставим по центру экрана и
+        // отдаём его высоту обёртке — от неё считается длина прокрутки.
+        const measure = () => {
+            const height = pin.offsetHeight
+            const top = Math.max(24, Math.round((window.innerHeight - height) / 2))
+
+            scroll.style.setProperty('--pin-height', `${height}px`)
+            scroll.style.setProperty('--pin-top', `${top}px`)
+        }
+
         const apply = () => {
             if (!media.matches) {
                 reset()
+                scroll.style.removeProperty('--pin-height')
+                scroll.style.removeProperty('--pin-top')
 
                 return
             }
 
             deck.classList.add('is-scrolly')
+            measure()
             update()
         }
 

@@ -1199,27 +1199,19 @@ $stage-travel: 40vh;
 .ld-stages__scroll {
     position: relative;
     height: calc(
-        #{$stage-height} + (var(--count) - 1) * #{$stage-step} + (var(--count) - 1) * #{$stage-travel}
+        var(--pin-height, #{$stage-height}) + (var(--count) - 1) * #{$stage-travel}
     );
-    margin-top: 25px;
 
     @include tablet {
         height: auto;
-        margin-top: 30px;
-    }
-
-    @include mobile {
-        margin-top: 20px;
     }
 }
 
 .ld-stages__pin {
     position: sticky;
-    // Колода по центру экрана, но не выше шапки.
-    top: max(
-        100px,
-        calc((100vh - (#{$stage-height} + (var(--count) - 1) * #{$stage-step})) / 2)
-    );
+    // Отступ сверху считает скрипт: блок (заголовок + колода) встаёт по
+    // центру экрана. Без скрипта — просто сверху.
+    top: var(--pin-top, 24px);
 
     @include tablet {
         position: static;
@@ -1229,8 +1221,10 @@ $stage-travel: 40vh;
 .ld-stages__deck {
     position: relative;
     height: calc(#{$stage-height} + (var(--count) - 1) * #{$stage-step});
+    margin-top: 25px;
 
     @include tablet {
+        margin-top: 30px;
         display: flex;
         flex-direction: column;
         gap: 10px;
@@ -1299,7 +1293,22 @@ $stage-travel: 40vh;
     opacity: 0;
 }
 
+.ld-stage__decor {
+    position: absolute;
+    top: -42px;
+    right: -30px;
+    width: 382px;
+    height: 489px;
+    pointer-events: none;
+
+    // В мобильном макете декор уходит за правый край карточки целиком.
+    @include tablet {
+        display: none;
+    }
+}
+
 .ld-stage__head {
+    position: relative;
     display: flex;
     gap: 20px;
     align-items: flex-start;
@@ -2861,6 +2870,7 @@ $stage-travel: 40vh;
     // 04. Этапы защиты
     .ld-stages__deck {
         gap: 5px;
+        margin-top: 20px;
     }
 
     .ld-stage {
