@@ -1207,6 +1207,10 @@ $stage-travel: 40vh;
         height: auto;
         margin-top: 30px;
     }
+
+    @include mobile {
+        margin-top: 20px;
+    }
 }
 
 .ld-stages__pin {
@@ -1348,8 +1352,9 @@ $stage-travel: 40vh;
     letter-spacing: 0.04em;
     transition: opacity 0.25s ease;
 
-    @include mobile {
-        font-size: 12px;
+    // В мобильном макете номера нет, да и колода там развёрнута в список.
+    @include tablet {
+        display: none;
     }
 }
 
@@ -2856,7 +2861,6 @@ $stage-travel: 40vh;
     // 04. Этапы защиты
     .ld-stages__deck {
         gap: 5px;
-        margin-top: 20px;
     }
 
     .ld-stage {

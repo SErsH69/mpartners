@@ -115,3 +115,67 @@ add_action( 'admin_init', 'mp_seo_configure', 40 );
 if ( defined( 'WP_CLI' ) && WP_CLI ) {
 	add_action( 'init', 'mp_seo_configure', 40 );
 }
+
+/**
+ * Иконка сайта из макета: лежит в теме, поэтому разворачивается вместе с ней
+ * и не зависит от медиатеки.
+ *
+ * @param string $size Запрошенный размер.
+ * @return string
+ */
+function mp_favicon_url( $size = 'favicon.ico' ) {
+	return get_template_directory_uri() . '/dist/img/favicon/' . $size;
+}
+
+/**
+ * Подменяет иконку сайта, если она не загружена через «Настройки».
+ *
+ * Заодно включает has_site_icon(), и WordPress сам печатает теги иконки
+ * и отвечает на запрос /favicon.ico.
+ *
+ * @param string $url  Адрес иконки.
+ * @param int    $size Размер в пикселях.
+ * @return string
+ */
+function mp_site_icon_url( $url, $size = 512 ) {
+	if ( $url ) {
+		return $url;
+	}
+
+	$size = (int) $size;
+
+	if ( $size <= 32 ) {
+		return mp_favicon_url( 'icon-32.png' );
+	}
+
+	if ( $size <= 96 ) {
+		return mp_favicon_url( 'icon-96.png' );
+	}
+
+	if ( $size <= 180 ) {
+		return mp_favicon_url( 'icon-180.png' );
+	}
+
+	if ( $size <= 192 ) {
+		return mp_favicon_url( 'icon-192.png' );
+	}
+
+	return mp_favicon_url( 'icon-512.png' );
+}
+add_filter( 'get_site_icon_url', 'mp_site_icon_url', 10, 2 );
+
+/**
+ * Векторная иконка и .ico — их WordPress сам не печатает.
+ */
+function mp_favicon_tags() {
+	printf(
+		'<link rel="icon" href="%s" sizes="32x32">' . "\n",
+		esc_url( mp_favicon_url( 'favicon.ico' ) )
+	);
+	printf(
+		'<link rel="icon" href="%s" type="image/svg+xml">' . "\n",
+		esc_url( mp_favicon_url( 'favicon.svg' ) )
+	);
+	echo '<meta name="theme-color" content="#f3ede1">' . "\n";
+}
+add_action( 'wp_head', 'mp_favicon_tags', 2 );
