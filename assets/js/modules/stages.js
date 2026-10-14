@@ -1,49 +1,105 @@
 /**
  * Колода этапов защиты на лендинге.
  *
- * Карточки лежат стопкой: клик по верхнему краю поднимает этап вперёд.
- * Без скрипта видна последняя карточка — как в макете.
+ * Пока высокая обёртка проходит через экран, колода закреплена, а карточки
+ * по очереди выезжают снизу и встают в стопку — листается обычным скроллом.
+ * Клик по карточке прокручивает страницу к её шагу. Ниже 1025px колода
+ * превращается в обычный список, и скрипт в неё не вмешивается.
  */
 
-const initStages = () => {
-    document.querySelectorAll('[data-stages]').forEach((deck) => {
-        const cards = [...deck.querySelectorAll('[data-stage]')]
+const DESKTOP = '(min-width: 1025px)'
 
-        if (!cards.length) {
+const initStages = () => {
+    document.querySelectorAll('[data-stages]').forEach((scroll) => {
+        const deck = scroll.querySelector('[data-stages-deck]')
+        const cards = [...scroll.querySelectorAll('[data-stage]')]
+
+        if (!deck || cards.length < 2) {
             return
         }
 
-        // Порядок в колоде: чем дальше в списке, тем ближе к зрителю.
-        let order = cards.map((card, index) => index)
+        const media = window.matchMedia(DESKTOP)
+        const pin = scroll.firstElementChild
+        let frame = 0
 
-        const render = () => {
-            order.forEach((cardIndex, position) => {
-                const card = cards[cardIndex]
+        // Длина прокрутки, за которую колода пролистывается целиком.
+        const travel = () => Math.max(scroll.offsetHeight - pin.offsetHeight, 0)
 
-                card.style.setProperty('--i', String(position))
-                card.classList.toggle('is-active', position === order.length - 1)
+        const reset = () => {
+            deck.classList.remove('is-scrolly')
+            cards.forEach((card) => {
+                card.style.removeProperty('--p')
+                card.classList.remove('is-front')
             })
+        }
+
+        const update = () => {
+            frame = 0
+
+            if (!media.matches) {
+                return
+            }
+
+            const total = travel()
+            const passed = Math.min(Math.max(-scroll.getBoundingClientRect().top, 0), total)
+            const position = total > 0 ? (passed / total) * (cards.length - 1) : cards.length - 1
+            const front = Math.round(position)
+
+            cards.forEach((card, index) => {
+                const progress = Math.min(Math.max(position - index + 1, 0), 1)
+
+                card.style.setProperty('--p', progress.toFixed(3))
+                card.classList.toggle('is-front', index === front)
+            })
+        }
+
+        const onScroll = () => {
+            if (frame) {
+                return
+            }
+
+            frame = window.requestAnimationFrame(update)
+        }
+
+        const apply = () => {
+            if (!media.matches) {
+                reset()
+
+                return
+            }
+
+            deck.classList.add('is-scrolly')
+            update()
         }
 
         deck.addEventListener('click', (event) => {
             const head = event.target.closest('[data-stage-open]')
 
-            if (!head) {
+            if (!head || !media.matches) {
                 return
             }
 
-            const card = head.closest('[data-stage]')
-            const cardIndex = cards.indexOf(card)
+            const index = cards.indexOf(head.closest('[data-stage]'))
+            const total = travel()
 
-            if (cardIndex < 0 || order[order.length - 1] === cardIndex) {
+            if (index < 0 || 0 === total) {
                 return
             }
 
-            order = order.filter((item) => item !== cardIndex).concat(cardIndex)
-            render()
+            window.scrollTo({
+                top: scroll.getBoundingClientRect().top + window.scrollY + (total * index) / (cards.length - 1),
+                behavior: 'smooth',
+            })
         })
 
-        render()
+        window.addEventListener('scroll', onScroll, { passive: true })
+        window.addEventListener('resize', apply)
+
+        if (media.addEventListener) {
+            media.addEventListener('change', apply)
+        }
+
+        apply()
     })
 }
 

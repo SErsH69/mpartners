@@ -1191,18 +1191,46 @@
 // Колода: смещение пройденных этапов 58px, активная карточка 403px.
 $stage-step: 58px;
 $stage-height: 403px;
+// Сколько страницы «стоит» одна карточка, пока колода закреплена на экране.
+$stage-travel: 40vh;
+
+// Высокая обёртка: пока она проходит через экран, колода стоит на месте,
+// а карточки по очереди выезжают снизу.
+.ld-stages__scroll {
+    position: relative;
+    height: calc(
+        #{$stage-height} + (var(--count) - 1) * #{$stage-step} + (var(--count) - 1) * #{$stage-travel}
+    );
+    margin-top: 25px;
+
+    @include tablet {
+        height: auto;
+        margin-top: 30px;
+    }
+}
+
+.ld-stages__pin {
+    position: sticky;
+    // Колода по центру экрана, но не выше шапки.
+    top: max(
+        100px,
+        calc((100vh - (#{$stage-height} + (var(--count) - 1) * #{$stage-step})) / 2)
+    );
+
+    @include tablet {
+        position: static;
+    }
+}
 
 .ld-stages__deck {
     position: relative;
     height: calc(#{$stage-height} + (var(--count) - 1) * #{$stage-step});
-    margin-top: 25px;
 
     @include tablet {
         display: flex;
         flex-direction: column;
         gap: 10px;
         height: auto;
-        margin-top: 30px;
     }
 }
 
@@ -1215,7 +1243,6 @@ $stage-height: 403px;
     height: $stage-height;
     overflow: hidden;
     border-radius: $r-lg;
-    transition: top 0.35s ease;
 
     @include gradient-dark;
 
@@ -1223,7 +1250,6 @@ $stage-height: 403px;
         position: static;
         height: auto;
         min-height: 237px;
-        transition: none;
     }
 
     @include mobile {
@@ -1231,8 +1257,46 @@ $stage-height: 403px;
     }
 }
 
+// --p: 0 — карточка ещё едет снизу, 1 — встала в стопку. Значение ставит
+// скрипт по положению страницы, поэтому переход короткий — только чтобы
+// сгладить шаг прокрутки.
+.ld-stages__deck.is-scrolly .ld-stage {
+    opacity: var(--p, 1);
+    transform: translate3d(0, calc((1 - var(--p, 1)) * #{$stage-travel}), 0);
+    transition:
+        transform 0.12s linear,
+        opacity 0.12s linear;
+}
+
+// Тонкая линия по верхнему краю: по ней видно, что это стопка карточек,
+// а не одна тёмная плашка.
+.ld-stages__deck.is-scrolly .ld-stage::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    right: 0;
+    left: 0;
+    height: 1px;
+    background-color: rgba($c-cream, 0.14);
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .ld-stages__deck.is-scrolly .ld-stage {
+        transform: none;
+        transition: none;
+    }
+}
+
+.ld-stages__deck.is-scrolly .ld-stage:not(.is-front) .ld-stage__title,
+.ld-stages__deck.is-scrolly .ld-stage:not(.is-front) .ld-stage__step {
+    opacity: 0;
+}
+
 .ld-stage__head {
-    display: block;
+    display: flex;
+    gap: 20px;
+    align-items: flex-start;
+    justify-content: space-between;
     width: 100%;
     padding: 50px;
     text-align: left;
@@ -1258,6 +1322,7 @@ $stage-height: 403px;
     font-size: 40px;
     font-weight: 400;
     line-height: 36px;
+    transition: opacity 0.25s ease;
 
     @include tablet {
         font-size: 30px;
@@ -1268,6 +1333,25 @@ $stage-height: 403px;
         font-size: 20px;
         line-height: 18px;
     }
+}
+
+// Номер шага: по нему видно, сколько этапов всего.
+.ld-stage__step {
+    flex: 0 0 auto;
+    color: rgba($c-cream, 0.75);
+    font-size: 14px;
+    font-weight: 500;
+    line-height: 1.2;
+    letter-spacing: 0.04em;
+    transition: opacity 0.25s ease;
+
+    @include mobile {
+        font-size: 12px;
+    }
+}
+
+.ld-stage__step-all {
+    color: rgba($c-cream, 0.4);
 }
 
 .ld-stage__body {
@@ -1294,10 +1378,10 @@ $stage-height: 403px;
     }
 }
 
-// Содержимое видно только у карточки, поднятой вперёд. Последняя карточка
-// открыта и без скрипта — иначе в колоде из одного этапа пусто.
-.ld-stage.is-active .ld-stage__body,
-.ld-stage:last-child .ld-stage__body {
+// Содержимое видно у карточки, стоящей первой в колоде. Без скрипта
+// открыта последняя — иначе в колоде из одного этапа пусто.
+.ld-stage.is-front .ld-stage__body,
+.ld-stages__deck:not(.is-scrolly) .ld-stage:last-child .ld-stage__body {
     opacity: 1;
 }
 
