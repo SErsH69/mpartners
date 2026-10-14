@@ -22,6 +22,7 @@ $mp_total  = count( $mp_quiz['steps'] );
 
 		<aside class="quiz__expert">
 			<img class="quiz__expert-decor" src="<?php echo esc_url( mp_img( 'decor-quiz-glow1', 'svg' ) ); ?>" alt="" aria-hidden="true" loading="lazy" decoding="async">
+			<img class="quiz__expert-decor quiz__expert-decor--second" src="<?php echo esc_url( mp_img( 'decor-quiz-glow2', 'svg' ) ); ?>" alt="" aria-hidden="true" loading="lazy" decoding="async">
 
 			<div class="quiz__expert-top">
 				<div class="quiz__expert-person">

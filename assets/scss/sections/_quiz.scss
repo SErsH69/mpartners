@@ -385,6 +385,14 @@
     pointer-events: none;
 }
 
+// Вторая завитушка из макета: лежит левее и ниже первой.
+.quiz__expert-decor--second {
+    right: auto;
+    bottom: -28px;
+    left: 134px;
+    width: 268px;
+}
+
 .quiz__expert-top,
 .quiz__expert-bottom {
     position: relative;
@@ -443,7 +451,8 @@
 }
 
 .quiz__expert-quote {
-    margin-top: 0;
+    // В макете цитата опущена под строкой с именем.
+    margin-top: 25px;
     padding: 31px 15px;
     color: $c-cream;
     font-size: 14px;
