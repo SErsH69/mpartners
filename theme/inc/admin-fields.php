@@ -914,7 +914,7 @@ add_action( 'acf/init', 'mp_apply_content_replacements', 30 );
  * Разовый сброс отдельных полей: значение из макета поменялось, а в базе
  * лежит старое и перекрывает его. После сброса поле снова берётся из темы.
  */
-const MP_RESET_VERSION = '4';
+const MP_RESET_VERSION = '5';
 
 /**
  * Какие поля сбросить: группа => список ключей.
@@ -943,10 +943,22 @@ function mp_apply_content_resets() {
 		return;
 	}
 
+	$groups = mp_content_groups();
+
 	foreach ( mp_content_resets() as $group => $keys ) {
+		$meta = isset( $groups[ $group ] ) ? $groups[ $group ] : [];
+		$data = isset( $meta['data'] ) && function_exists( $meta['data'] ) ? (array) call_user_func( $meta['data'] ) : [];
+
 		foreach ( $keys as $key ) {
 			foreach ( mp_content_targets( $group ) as $target ) {
 				delete_field( $group . '_' . $key, $target );
+
+				// У групп ACF подполя хранятся отдельно, и delete_field их не
+				// трогает: поле так и останется «непустым» и перекроет тему.
+				// Поэтому сразу записываем значение из макета.
+				if ( array_key_exists( $key, $data ) && function_exists( 'update_field' ) ) {
+					update_field( $group . '_' . $key, mp_content_to_acf( $data[ $key ] ), $target );
+				}
 			}
 		}
 	}
