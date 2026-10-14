@@ -44,7 +44,7 @@ const BLOCKS = [
     '.help-card',
     '.industries__marquee',
     '.case-card',
-    '.letter',
+    '.rating',
     '.post-card',
     '.award',
     '.contact__text',

@@ -40,6 +40,31 @@
 
 }
 
+// Строка-ссылка ведёт на страницу рейтинга в издании.
+.awards__item {
+    display: block;
+}
+
+.award--link {
+    text-decoration: none;
+    transition: background-color 0.2s ease;
+
+    &:hover,
+    &:focus-visible {
+        background-color: rgba($c-dark, 0.04);
+    }
+
+    &:hover .award__title,
+    &:focus-visible .award__title {
+        text-decoration: underline;
+        text-underline-offset: 3px;
+    }
+
+    .award__year::after {
+        content: ' \2197';
+    }
+}
+
 .award__source {
     color: $c-dark;
     font-size: 14px;

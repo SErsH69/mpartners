@@ -1,6 +1,7 @@
 /**
- * Просмотр рекомендательных писем: клик по скану открывает lightGallery
- * с переключением между всеми письмами ленты.
+ * Просмотр дипломов: клик по скану открывает lightGallery с переключением
+ * между всеми сканами ленты. Обычные ссылки в карточках не трогаем —
+ * поэтому выбираем только отмеченные `data-lg-item`.
  */
 
 import lightGallery from 'lightgallery'
@@ -13,13 +14,13 @@ import 'lightgallery/css/lg-thumbnail.css'
 
 const initGallery = () => {
     document.querySelectorAll('[data-gallery]').forEach((track) => {
-        if (!track.querySelector('a[href]')) {
+        if (!track.querySelector('a[data-lg-item]')) {
             return
         }
 
         lightGallery(track, {
             plugins: [lgZoom, lgThumbnail],
-            selector: 'a[href]',
+            selector: 'a[data-lg-item]',
             speed: 400,
             download: false,
             counter: true,

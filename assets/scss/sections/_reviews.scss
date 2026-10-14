@@ -1,7 +1,7 @@
 @use '../abstracts/variables' as *;
 @use '../abstracts/mixins' as *;
 
-// 10. Отзывы — тёмная полоса во всю ширину с лентой писем 594×347.
+// 10. Рейтинги — тёмная полоса во всю ширину с лентой карточек 594×347.
 .reviews {
     @include gradient-dark(103deg);
 
@@ -73,78 +73,109 @@
     }
 }
 
-.letter {
+// Карточка рейтинга: текстовая колонка 390 + скан диплома, если он есть.
+// Ширину скана задаёт его пропорция — дипломы бывают и горизонтальные.
+.rating {
     display: flex;
     flex: 0 0 auto;
     gap: 6px;
-    width: 594px;
     height: 347px;
+}
 
+.rating--plain {
+    width: 390px;
 }
 
 // Клик по скану открывает lightGallery — ссылка повторяет бокс картинки.
-.letter__link {
+.rating__link {
     display: flex;
     flex: 0 0 auto;
+    max-width: 440px;
     height: 100%;
     cursor: zoom-in;
 }
 
-.letter__scan {
-    flex: 0 0 auto;
-    width: 259px;
+.rating__scan {
+    width: auto;
+    max-width: 100%;
     height: 100%;
-    object-fit: cover;
-    border-radius: $r-sm;
-}
-
-.letter__body {
-    display: flex;
-    flex: 1 1 auto;
-    flex-direction: column;
-    justify-content: space-between;
-    gap: 50px;
-    min-width: 0;
-    padding: 15px;
+    object-fit: contain;
     background-color: $c-page;
     border-radius: $r-sm;
-
 }
 
-.letter__logo {
+.rating__body {
+    display: flex;
+    flex: 0 0 390px;
+    flex-direction: column;
+    gap: 20px;
+    min-width: 0;
+    padding: 20px;
+    background-color: $c-page;
+    border-radius: $r-sm;
+}
+
+.rating__source {
     flex: 0 0 auto;
-    width: 135px;
-    height: 82px; // бокс логотипа из макета
-    object-fit: cover;
-    object-position: center;
+    color: $c-dark;
+    font-family: $font-display;
+    font-size: 22px;
+    font-weight: 400;
+    line-height: 1.1;
 }
 
-.letter__content {
+.rating__content {
     display: flex;
     flex-direction: column;
     gap: 10px;
 }
 
-.letter__company {
+.rating__award {
     color: $c-dark;
     font-size: 16px;
     font-weight: 500;
-    line-height: 1;
+    line-height: round(nearest, 1.2em, 1px);
 }
 
-.letter__quote {
-    color: $c-dark;
+.rating__text {
+    color: $c-muted;
     font-size: 14px;
     font-weight: 400;
-    line-height: round(nearest, 1.1em, 1px);
+    line-height: round(nearest, 1.2em, 1px);
 }
 
-.letter__date {
+.rating__foot {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 15px;
     margin-top: auto;
+}
+
+.rating__year {
     color: $c-muted;
     font-size: 12px;
     font-weight: 400;
     line-height: 1.4;
+}
+
+.rating__more {
+    color: $c-dark;
+    font-size: 14px;
+    font-weight: 500;
+    line-height: 1.2;
+    text-decoration: underline;
+    text-underline-offset: 3px;
+    transition: opacity 0.2s ease;
+
+    &::after {
+        content: ' \2197';
+    }
+
+    &:hover,
+    &:focus-visible {
+        opacity: 0.6;
+    }
 }
 
 // Отступ точек от ленты
@@ -160,7 +191,7 @@
 }
 
 // ---------------------------------------------------------------
-// Мобильный макет (375): письмо 404×273 — скан 188 + текст 210.
+// Мобильный макет (375): карточка 404×273 — скан 188 + текст 210.
 // ---------------------------------------------------------------
 @include mobile {
     .reviews__head {
@@ -171,42 +202,43 @@
         font-size: 12px;
     }
 
-    .letter {
-        width: 404px;
+    .rating {
         height: 273px;
     }
 
-    .letter__scan {
-        display: block;
-        width: 188px;
+    .rating--plain,
+    .rating__body {
+        flex-basis: 290px;
+        width: 290px;
     }
 
-    .letter__body {
-        gap: 26px;
-        width: 210px;
+    .rating__link {
+        max-width: 300px;
     }
 
-    .letter__logo {
-        width: 82px;
-        height: 49px;
+    .rating__body {
+        gap: 12px;
+        padding: 15px;
     }
 
-    .letter__content {
+    .rating__source {
+        font-size: 18px;
+    }
+
+    .rating__content {
         flex: 1 1 auto;
         gap: 5px;
     }
 
-    .letter__company {
+    .rating__award {
         font-size: 14px;
-        line-height: 1;
     }
 
-    .letter__quote {
+    .rating__text {
         font-size: 12px;
     }
 
-    // В макете дата отстоит от цитаты на 21px, а общий gap колонки — 26px.
-    .letter__date {
-        margin-top: -5px;
+    .rating__more {
+        font-size: 12px;
     }
 }
