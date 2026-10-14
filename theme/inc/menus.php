@@ -10,7 +10,7 @@
  * @package MPartners
  */
 
-const MP_MENUS_VERSION = '12';
+const MP_MENUS_VERSION = '14';
 const MP_PAGES_VERSION = '6';
 
 /**
@@ -256,8 +256,9 @@ function mp_seed_menus() {
 		}
 
 		// Недостающие разделы добавляем — иначе после чистки меню окажется
-		// короче, чем нужно сайту.
-		if ( ! $services ) {
+		// короче, чем нужно сайту. Для услуг это ещё и способ подхватить
+		// новые лендинги.
+		if ( true ) {
 			foreach ( $sets[ $location ]['items'] as $label ) {
 				if ( in_array( $label, $present, true ) ) {
 					continue;

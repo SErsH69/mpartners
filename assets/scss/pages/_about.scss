@@ -19,7 +19,9 @@
 }
 
 .ab-hero__photo {
-    height: 395px;
+    // Иллюстрация 4096×2286: держим её пропорции, иначе кадр срезает головы.
+    height: auto;
+    aspect-ratio: 4096 / 2286;
     overflow: hidden;
     background-color: #e9decf;
     border-radius: $r-sm;
@@ -28,15 +30,7 @@
         display: block;
         width: 100%;
         height: 100%;
-        object-fit: cover;
-    }
-
-    @include tablet {
-        height: 273px;
-    }
-
-    @include mobile {
-        height: 181px;
+        object-fit: contain;
     }
 }
 
@@ -241,19 +235,21 @@
 .ab-intro__logos {
     display: flex;
     gap: 8px;
-    margin: 25px 0 0 -333px;
-    padding: 0;
+    margin: 25px 0 0;
+    padding-left: max(#{$gutter-desktop}, calc((100% - #{$container}) / 2));
     overflow-x: auto;
     list-style: none;
 
     @include hide-scrollbar;
 
     @include tablet {
-        margin: 45px 0 0 $gutter-tablet;
+        margin-top: 45px;
+        padding-left: $gutter-tablet;
     }
 
     @include mobile {
-        margin: 34px 0 0 $gutter-mobile;
+        margin-top: 34px;
+        padding-left: $gutter-mobile;
     }
 }
 
@@ -877,19 +873,21 @@
 .pn__logos {
     display: flex;
     gap: 8px;
-    margin: 55px 0 0 -334px;
-    padding: 0;
+    margin: 55px 0 0;
+    padding-left: max(#{$gutter-desktop}, calc((100% - #{$container}) / 2));
     overflow-x: auto;
     list-style: none;
 
     @include hide-scrollbar;
 
     @include tablet {
-        margin: 40px 0 0 $gutter-tablet;
+        margin-top: 40px;
+        padding-left: $gutter-tablet;
     }
 
     @include mobile {
-        margin: 30px 0 0 $gutter-mobile;
+        margin-top: 30px;
+        padding-left: $gutter-mobile;
     }
 }
 

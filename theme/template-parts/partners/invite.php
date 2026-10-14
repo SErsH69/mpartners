@@ -15,10 +15,15 @@ $mp_invite = mp_partners( 'invite' );
 			<h2 class="pn-invite__title"><?php echo esc_html( $mp_invite['title'] ); ?></h2>
 
 			<div class="pn-invite__body">
-				<p class="pn-invite__text"><?php echo esc_html( $mp_invite['text'] ); ?></p>
+				<p class="pn-invite__text"><?php mp_nl2br( $mp_invite['text'] ); ?></p>
 
 				<?php foreach ( [ $mp_invite['who'], $mp_invite['gain'] ] as $mp_block ) : ?>
-					<p class="pn-invite__label"><?php echo esc_html( $mp_block['label'] ); ?></p>
+					<?php if ( empty( $mp_block['items'] ) ) { continue; } ?>
+
+					<?php if ( ! empty( $mp_block['label'] ) ) : ?>
+						<p class="pn-invite__label"><?php echo esc_html( $mp_block['label'] ); ?></p>
+					<?php endif; ?>
+
 					<ul class="pn-invite__list">
 						<?php foreach ( (array) $mp_block['items'] as $mp_item ) : ?>
 							<li><?php echo esc_html( $mp_item ); ?></li>

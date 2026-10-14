@@ -8,7 +8,7 @@
  */
 
 $mp_team    = mp_landing( 'team' );
-$mp_members = function_exists( 'mp_lawyer_cards' ) ? mp_lawyer_cards() : [];
+$mp_members = function_exists( 'mp_lawyer_cards' ) ? mp_lawyer_cards( 0, -1 ) : [];
 ?>
 <section class="ld-team">
 	<div class="shell">

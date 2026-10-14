@@ -9,7 +9,7 @@ const initStages = () => {
     document.querySelectorAll('[data-stages]').forEach((deck) => {
         const cards = [...deck.querySelectorAll('[data-stage]')]
 
-        if (cards.length < 2) {
+        if (!cards.length) {
             return
         }
 

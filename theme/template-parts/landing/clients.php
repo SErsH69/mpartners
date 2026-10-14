@@ -11,6 +11,10 @@
 $mp_clients = mp_landing( 'clients' );
 $mp_items   = array_values( (array) $mp_clients['items'] );
 $mp_cta     = $mp_clients['cta'];
+
+// Фотографии в мозаике одни и те же на всех услугах: если у карточки
+// своей картинки нет, ставим макетную по её месту в сетке.
+$mp_photos = [ 'client-1', 'client-4', 'client-3', 'client-2' ];
 ?>
 <section class="ld-clients">
 	<div class="shell">
@@ -33,9 +37,16 @@ $mp_cta     = $mp_clients['cta'];
 					echo '<div class="ld-client-stack">';
 				}
 				?>
+				<?php
+				$mp_photo = ! empty( $mp_item['image'] ) ? $mp_item['image'] : '';
+
+				if ( '' === $mp_photo && isset( $mp_photos[ $mp_index ] ) ) {
+					$mp_photo = $mp_photos[ $mp_index ];
+				}
+				?>
 				<article class="ld-client ld-client--<?php echo esc_attr( $mp_number ); ?>">
-					<?php if ( ! empty( $mp_item['image'] ) ) : ?>
-						<img class="ld-client__photo" src="<?php echo esc_url( mp_img( $mp_item['image'] ) ); ?>" alt="" aria-hidden="true" loading="lazy" decoding="async">
+					<?php if ( $mp_photo ) : ?>
+						<img class="ld-client__photo" src="<?php echo esc_url( mp_img( $mp_photo ) ); ?>" alt="" aria-hidden="true" loading="lazy" decoding="async">
 					<?php endif; ?>
 
 					<h3 class="ld-client__title"><?php mp_nl2br( $mp_item['title'] ); ?></h3>

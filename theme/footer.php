@@ -63,10 +63,11 @@ $mp_menu     = (array) mp_data( 'menu', [] );
 					<p class="footer__col-title"><?php echo esc_html( $mp_footer['services_title'] ); ?></p>
 					<div class="footer__services">
 						<?php
-						// В макете две независимые колонки: 8 и 6 пунктов.
+						// В макете две колонки: делим список пополам.
 						$mp_services = mp_menu_items( 'mp-services', $mp_footer['services'] );
+						$mp_half     = (int) ceil( count( $mp_services ) / 2 );
 						?>
-						<?php foreach ( [ array_slice( $mp_services, 0, 8 ), array_slice( $mp_services, 8 ) ] as $mp_column ) : ?>
+						<?php foreach ( [ array_slice( $mp_services, 0, $mp_half ), array_slice( $mp_services, $mp_half ) ] as $mp_column ) : ?>
 							<ul class="footer__list">
 								<?php foreach ( $mp_column as $mp_service ) : ?>
 									<li><a href="<?php echo esc_url( $mp_service['href'] ); ?>"><?php echo esc_html( $mp_service['label'] ); ?></a></li>

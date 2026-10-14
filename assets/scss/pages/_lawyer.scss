@@ -35,6 +35,8 @@
     width: 607px;
     height: 638px;
     object-fit: cover;
+    // Снимки вертикальные: кадр держит лицо, а не середину фигуры.
+    object-position: 50% 15%;
     border-radius: $r-sm;
 
     @include tablet {

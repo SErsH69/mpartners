@@ -8,7 +8,7 @@
 $mp_team = mp_data( 'team' );
 
 // Участники — записи «Адвокаты»; пока их меньше двух, берутся из макета.
-$mp_members = function_exists( 'mp_lawyer_cards' ) ? mp_lawyer_cards() : $mp_team['members'];
+$mp_members = function_exists( 'mp_lawyer_cards' ) ? mp_lawyer_cards( 0, -1 ) : $mp_team['members'];
 ?>
 <section class="team">
 	<div class="team__inner">

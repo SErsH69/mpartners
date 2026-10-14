@@ -593,4 +593,4 @@ function mp_seed_landings_content() {
 
 	update_option( 'mp_landings_seed_version', MP_LANDINGS_SEED_VERSION );
 }
-add_action( 'init', 'mp_seed_landings_content', 20 );
+add_action( 'init', 'mp_seed_landings_content', 13 );

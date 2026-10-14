@@ -1291,8 +1291,10 @@ $stage-height: 403px;
     }
 }
 
-// Содержимое видно только у карточки, поднятой вперёд.
-.ld-stage.is-active .ld-stage__body {
+// Содержимое видно только у карточки, поднятой вперёд. Последняя карточка
+// открыта и без скрипта — иначе в колоде из одного этапа пусто.
+.ld-stage.is-active .ld-stage__body,
+.ld-stage:last-child .ld-stage__body {
     opacity: 1;
 }
 
@@ -1630,9 +1632,16 @@ $stage-height: 403px;
     flex-direction: column;
     gap: 18px;
     min-width: 0;
+    // Панель в макете обрезает плашки: прокручиваем их внутри неё,
+    // иначе до нижних пунктов не добраться.
+    max-height: 100%;
     margin: 0;
     padding: 0;
+    overflow-y: auto;
+    overscroll-behavior: contain;
     list-style: none;
+
+    @include hide-scrollbar;
 
     @include tablet {
         gap: 15px;
@@ -2009,7 +2018,10 @@ $stage-height: 403px;
     align-items: flex-start;
 
     @include tablet {
+        // Без stretch колонка ужимает ленту по содержимому и она не
+        // прокручивается, а вылезает за экран.
         flex-direction: column;
+        align-items: stretch;
         gap: 15px;
     }
 }
