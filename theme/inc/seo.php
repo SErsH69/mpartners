@@ -138,7 +138,9 @@ function mp_favicon_url( $size = 'favicon.ico' ) {
  * @return string
  */
 function mp_site_icon_url( $url, $size = 512 ) {
-	if ( $url ) {
+	// На запрос /favicon.ico WordPress подставляет свой логотип как запасной
+	// адрес — его тоже заменяем, иначе в адресной строке будет логотип WP.
+	if ( $url && false === strpos( $url, 'wp-includes/images/w-logo' ) ) {
 		return $url;
 	}
 
