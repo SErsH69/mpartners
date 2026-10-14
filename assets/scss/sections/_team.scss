@@ -101,7 +101,9 @@
     @include gradient-dark(129deg);
 
     position: relative;
-    height: 243px;
+    // Портретный кадр 3:4 — как в списке адвокатов и на «О компании»:
+    // лицо целиком и одинаковая высота у всех карточек.
+    aspect-ratio: 3 / 4;
     overflow: hidden;
     border-radius: $r-sm;
 }
@@ -120,8 +122,8 @@
     width: 100%;
     height: 100%;
     object-fit: cover;
-    // Кадр шире, чем фотографии: держим в нём лицо, а не середину снимка.
-    object-position: 50% 20%;
+    // Кадр уже, чем фотографии: держим в нём лицо, а не середину снимка.
+    object-position: 50% 15%;
 }
 
 .member__body {
