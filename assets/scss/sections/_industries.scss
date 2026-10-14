@@ -58,6 +58,9 @@
     display: flex;
     gap: 10px;
     overflow-x: auto;
+    // Без явного hidden браузер делает вторую ось прокручиваемой:
+    // на телефоне лента «ездила» вверх-вниз вместе с пальцем.
+    overflow-y: hidden;
     cursor: grab;
 
     &.is-dragging {

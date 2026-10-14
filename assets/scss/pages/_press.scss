@@ -59,6 +59,9 @@
         flex-wrap: nowrap;
         gap: 5px;
         overflow-x: auto;
+        // Без явного hidden браузер делает вторую ось прокручиваемой:
+        // на телефоне лента «ездила» вверх-вниз вместе с пальцем.
+        overflow-y: hidden;
         scrollbar-width: none;
 
         &::-webkit-scrollbar {

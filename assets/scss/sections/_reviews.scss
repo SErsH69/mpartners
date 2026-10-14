@@ -57,6 +57,9 @@
     padding-left: max(#{$gutter-desktop}, calc(50% - #{$container * 0.5}));
     padding-right: $gutter-desktop;
     overflow-x: auto;
+    // Без явного hidden браузер делает вторую ось прокручиваемой:
+    // на телефоне лента «ездила» вверх-вниз вместе с пальцем.
+    overflow-y: hidden;
     cursor: grab;
 
     &.is-dragging {
@@ -79,7 +82,9 @@
     display: flex;
     flex: 0 0 auto;
     gap: 6px;
-    height: 347px;
+    // Высота — минимум из макета: длинный текст карточку растягивает,
+    // а не вылезает за её край.
+    min-height: 347px;
 }
 
 .rating--plain {
@@ -203,7 +208,7 @@
     }
 
     .rating {
-        height: 273px;
+        min-height: 273px;
     }
 
     .rating--plain,

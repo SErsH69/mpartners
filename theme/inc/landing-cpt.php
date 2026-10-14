@@ -594,3 +594,37 @@ function mp_seed_landings_content() {
 	update_option( 'mp_landings_seed_version', MP_LANDINGS_SEED_VERSION );
 }
 add_action( 'init', 'mp_seed_landings_content', 13 );
+
+const MP_LANDINGS_REFRESH_VERSION = '1';
+
+/**
+ * Разовое обновление блоков, которые приехали из макета неполными: в «этапах»
+ * был только последний шаг, в «итогах» — три пункта из шести-семи. Эти два
+ * блока перезаписываем значениями из темы, остальные поля не трогаем.
+ */
+function mp_refresh_landings_blocks() {
+	if ( get_option( 'mp_landings_refresh_version' ) === MP_LANDINGS_REFRESH_VERSION ) {
+		return;
+	}
+
+	if ( ! function_exists( 'update_field' ) || ! function_exists( 'mp_landings_content' ) ) {
+		return;
+	}
+
+	foreach ( mp_landings_content() as $item ) {
+		$post = get_page_by_path( $item['slug'], OBJECT, MP_LANDING_TYPE );
+
+		if ( ! $post ) {
+			continue;
+		}
+
+		foreach ( [ 'stages', 'results' ] as $key ) {
+			if ( isset( $item['content'][ $key ] ) ) {
+				update_field( 'landing_' . $key, mp_content_to_acf( $item['content'][ $key ] ), $post->ID );
+			}
+		}
+	}
+
+	update_option( 'mp_landings_refresh_version', MP_LANDINGS_REFRESH_VERSION );
+}
+add_action( 'init', 'mp_refresh_landings_blocks', 14 );

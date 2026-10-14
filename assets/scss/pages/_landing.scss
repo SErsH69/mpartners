@@ -853,6 +853,9 @@
     margin: 125px 0 0;
     padding: 0 0 0 360px;
     overflow-x: auto;
+    // Без явного hidden браузер делает вторую ось прокручиваемой:
+    // на телефоне лента «ездила» вверх-вниз вместе с пальцем.
+    overflow-y: hidden;
     list-style: none;
 
     @include hide-scrollbar;
@@ -1698,6 +1701,25 @@ $stage-height: 403px;
     }
 }
 
+.ld-result__body {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    min-width: 0;
+}
+
+.ld-result__note {
+    margin: 0;
+    color: $c-muted-light;
+    font-size: 14px;
+    font-weight: 400;
+    line-height: round(nearest, 1.2em, 1px);
+
+    @include mobile {
+        font-size: 12px;
+    }
+}
+
 .ld-result__text {
     margin: 0;
     color: $c-cream;
@@ -2123,6 +2145,9 @@ $stage-height: 403px;
     margin: 0;
     padding: 0;
     overflow-x: auto;
+    // Без явного hidden браузер делает вторую ось прокручиваемой:
+    // на телефоне лента «ездила» вверх-вниз вместе с пальцем.
+    overflow-y: hidden;
     list-style: none;
 
     @include hide-scrollbar;
@@ -2486,6 +2511,9 @@ $stage-height: 403px;
     margin: 25px 0 0 -45px;
     padding: 0;
     overflow-x: auto;
+    // Без явного hidden браузер делает вторую ось прокручиваемой:
+    // на телефоне лента «ездила» вверх-вниз вместе с пальцем.
+    overflow-y: hidden;
     list-style: none;
 
     @include tablet {
