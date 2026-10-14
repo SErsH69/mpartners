@@ -1749,6 +1749,13 @@ $stage-travel: 40vh;
     overscroll-behavior: contain;
     list-style: none;
 
+    // Панель ниже 1024px растягивается по содержимому — прокрутка внутри
+    // неё не нужна и только резала первый пункт.
+    @include tablet {
+        max-height: none;
+        overflow: visible;
+    }
+
     @include hide-scrollbar;
 
     @include tablet {
@@ -1947,8 +1954,10 @@ $stage-travel: 40vh;
     display: flex;
     gap: 5px;
 
+    // В макете иконки и кнопка стоят в одну строку и на мобилке.
     @include mobile {
-        flex-wrap: wrap;
+        flex-wrap: nowrap;
+        align-items: center;
     }
 }
 
@@ -1962,8 +1971,9 @@ $stage-travel: 40vh;
     height: 39px;
 
     @include mobile {
-        flex: 1 1 100%;
+        flex: 1 1 auto;
         min-width: 0;
+        padding-inline: 12px;
     }
 }
 
@@ -2564,17 +2574,25 @@ $stage-travel: 40vh;
 .ld-ratings__link {
     display: inline-flex;
     gap: 8px;
-    align-items: center;
+    align-items: flex-start;
     color: $c-cream;
     font-size: 14px;
     font-weight: 400;
     line-height: round(nearest, 1.1em, 1px);
     text-decoration: none;
 
+    // В макете иконка видео стоит слева, а текст подчёркнут.
     svg {
         display: block;
-        width: 11px;
-        height: 11px;
+        flex: 0 0 auto;
+        width: 12px;
+        height: 12px;
+        margin-top: 1px;
+    }
+
+    span {
+        text-decoration: underline;
+        text-underline-offset: 3px;
     }
 
     &:hover {
@@ -2696,6 +2714,17 @@ $stage-travel: 40vh;
     width: 915px;
     height: 915px;
     pointer-events: none;
+
+    // На узких экранах декор уезжал за панель целиком: ставим его так же,
+    // как в макете — правая половина панели, остальное обрезается.
+    @include tablet {
+        top: 50%;
+        left: 26%;
+        width: 158%;
+        height: auto;
+        aspect-ratio: 1;
+        transform: translateY(-50%);
+    }
 }
 
 .ld-analysis__copy {
@@ -2901,6 +2930,9 @@ $stage-travel: 40vh;
     }
 
     .ld-client-stack .ld-client {
+        // display: contents у стопки отдаёт карточки в колонку-флекс,
+        // где flex-basis: 0 сжимал их до 86px и резал стрелку.
+        flex: 0 0 auto;
         min-height: 86px;
     }
 

@@ -17,15 +17,15 @@ $mp_logos   = (array) $mp_ratings['logos'];
 				<div class="ld-ratings__plate">
 					<p class="ld-ratings__title"><?php echo esc_html( $mp_ratings['title'] ); ?></p>
 					<a class="ld-ratings__link" href="<?php echo esc_url( mp_link( isset( $mp_ratings['href'] ) ? $mp_ratings['href'] : '' ) ); ?>">
+						<?php mp_icon( 'video' ); ?>
 						<span><?php echo esc_html( $mp_ratings['link'] ); ?></span>
-						<?php mp_icon( 'arrow-ne' ); ?>
 					</a>
 				</div>
 
 				<p class="ld-ratings__label"><?php echo esc_html( $mp_ratings['label'] ); ?></p>
 			</div>
 
-			<ul class="ld-ratings__logos" data-drag-scroll>
+			<ul class="ld-ratings__logos" data-drag-scroll data-center-mobile>
 				<?php foreach ( $mp_logos as $mp_logo ) : ?>
 					<li class="ld-logo">
 						<img src="<?php echo esc_url( mp_img( $mp_logo ) ); ?>" alt="" aria-hidden="true" loading="lazy" decoding="async">
