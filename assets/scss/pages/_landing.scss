@@ -1240,6 +1240,8 @@ $stage-travel: 40vh;
     right: 0;
     left: 0;
     z-index: calc(var(--i) + 1);
+    display: flex;
+    flex-direction: column;
     height: $stage-height;
     overflow: hidden;
     border-radius: $r-lg;
@@ -1248,6 +1250,7 @@ $stage-travel: 40vh;
 
     @include tablet {
         position: static;
+        display: block;
         height: auto;
         min-height: 237px;
     }
@@ -1358,9 +1361,13 @@ $stage-travel: 40vh;
     display: flex;
     gap: 12px;
     align-items: flex-start;
+    flex: 0 0 auto;
     width: 557px;
     min-height: 80px;
-    margin: 137px 50px 0; // плашка в макете стоит на 273px от верха карточки
+    // В макете плашка стоит на 273px от верха карточки, то есть на 50px от
+    // её низа. Прижимаем снизу: длинный текст растёт вверх, в пустоту
+    // карточки, а не уезжает за нижний край.
+    margin: auto 50px 50px;
     padding: 13px 15px;
     background-color: rgba($c-white, 0.06);
     border-radius: $r-sm;
