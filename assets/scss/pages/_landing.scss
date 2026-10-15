@@ -1599,6 +1599,10 @@ $stage-travel: 40vh;
 
     @include mobile {
         max-width: 50%;
+        // Левый край картинки растворяется, чтобы длинный заголовок не
+        // ложился прямо на людей.
+        -webkit-mask-image: linear-gradient(90deg, transparent 0, #000 25%);
+        mask-image: linear-gradient(90deg, transparent 0, #000 25%);
     }
 }
 
@@ -1613,6 +1617,8 @@ $stage-travel: 40vh;
     line-height: round(nearest, 1.1em, 1px);
 
     @include mobile {
+        // Картинка занимает правую половину карточки — заголовок до неё.
+        max-width: 58%;
         font-size: 16px;
     }
 }

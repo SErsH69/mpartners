@@ -242,16 +242,17 @@
         width: 212px;
     }
 
+    // Кадр 3:4, как на десктопе: в макете фото было низким, на телефоне
+    // лицо получалось слишком мелким.
     .member__photo {
-        height: 179px;
+        height: auto;
     }
 
-    // В мобильном макете портрет крупнее рамки: 212×188 со сдвигом (−10, −4).
     .member__portrait {
-        width: 212px;
+        width: 100%;
         max-width: none;
-        height: 188px;
-        margin: -4px 0 0 -10px;
+        height: 100%;
+        margin: 0;
     }
 
     .member__name {
