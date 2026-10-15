@@ -229,52 +229,72 @@ function mp_lawyer_people() {
 			'was'   => 'Екатерина Беспалова',
 			'photo' => 'lawyer-bespalova',
 			'role'  => 'Управляющий партнер МКА «M-PARTNERS», адвокат по уголовным делам',
+			'phone' => '+7 913 966 4489',
+			'email' => 'bespalova@mpartners.law',
 			'force' => true, // вместо фотографии из макета ставим настоящую
 		],
 		[
 			'name'  => 'Шелудков Евгений Юрьевич',
 			'photo' => 'lawyer-sheludkov',
 			'role'  => 'Адвокат',
+			'phone' => '+7 913 967 0012',
+			'email' => 'sheludkov@mpartners.law',
 		],
 		[
 			'name'  => 'Задачин Андрей Андреевич',
 			'photo' => 'lawyer-zadachin',
 			'role'  => 'Адвокат',
+			'phone' => '+7 985 172 2203',
+			'email' => 'zadachin@mpartners.law',
 		],
 		[
 			'name'  => 'Павлов Александр Владимирович',
 			'photo' => 'lawyer-pavlov',
 			'role'  => 'Адвокат',
+			'phone' => '+7 925 242 6886',
+			'email' => 'pavlov@mpartners.law',
 		],
 		[
 			'name'  => 'Водолазский Роман Сергеевич',
 			'photo' => 'lawyer-vodolazskiy',
 			'role'  => 'Адвокат',
+			'phone' => '+7 904 584 0797',
+			'email' => 'vodolazskiy@mpartners.law',
 		],
 		[
 			'name'  => 'Левин Владимир Дмитриевич',
 			'photo' => 'lawyer-levin',
 			'role'  => 'Адвокат',
+			'phone' => '+7 913 623 6092',
+			'email' => 'levin@mpartners.law',
 		],
 		[
 			'name'  => 'Мотовилов Андрей Николаевич',
 			'photo' => 'lawyer-motovilov',
 			'role'  => 'Адвокат',
+			'phone' => '+7 913 623 6093',
+			'email' => 'motovilov@mpartners.law',
 		],
 		[
 			'name'  => 'Поташов Александр Сергеевич',
 			'photo' => 'lawyer-potashov',
 			'role'  => 'Адвокат',
+			'phone' => '+7 904 326 4309',
+			'email' => 'potashov@mpartners.law',
 		],
 		[
 			'name'  => 'Кльован Светлана Петровна',
 			'photo' => 'lawyer-klovan',
 			'role'  => 'Адвокат',
+			'phone' => '+7 926 342 9454',
+			'email' => 'klovan@mpartners.law',
 		],
 		[
 			'name'  => 'Майер Амира Ахматовна',
 			'photo' => 'lawyer-majer',
 			'role'  => 'Адвокат',
+			'phone' => '+7 996 923 2652',
+			'email' => 'mayer@mpartners.law',
 		],
 	];
 }
@@ -465,3 +485,113 @@ function mp_lawyer_fields( $post_id ) {
 
 	return $card;
 }
+
+const MP_LAWYER_CONTACTS_VERSION = '1';
+
+/**
+ * Разовая простановка личных контактов адвокатов: раньше в карточках стоял
+ * общий номер и почта коллегии, теперь клиент прислал персональные.
+ */
+function mp_seed_lawyer_contacts() {
+	if ( get_option( 'mp_lawyer_contacts_version' ) === MP_LAWYER_CONTACTS_VERSION ) {
+		return;
+	}
+
+	if ( ! function_exists( 'update_field' ) ) {
+		return;
+	}
+
+	foreach ( mp_lawyer_people() as $person ) {
+		if ( empty( $person['phone'] ) && empty( $person['email'] ) ) {
+			continue;
+		}
+
+		$id = mp_find_lawyer( $person );
+
+		if ( ! $id ) {
+			continue;
+		}
+
+		if ( ! empty( $person['phone'] ) ) {
+			update_field( 'lawyer_phone', $person['phone'], $id );
+		}
+
+		if ( ! empty( $person['email'] ) ) {
+			update_field( 'lawyer_email', $person['email'], $id );
+		}
+	}
+
+	update_option( 'mp_lawyer_contacts_version', MP_LAWYER_CONTACTS_VERSION );
+}
+add_action( 'init', 'mp_seed_lawyer_contacts', 20 );
+
+/**
+ * Адрес, по которому карточка адвоката отдаётся файлом .vcf.
+ *
+ * @param int $post_id Запись адвоката.
+ * @return string
+ */
+function mp_lawyer_vcard_url( $post_id ) {
+	return add_query_arg( 'mp-vcard', (int) $post_id, home_url( '/' ) );
+}
+
+/**
+ * Отдаёт визитку адвоката: имя, должность, телефон, почта и ссылка на
+ * страницу. Файл собирается на лету, хранить его не нужно.
+ */
+function mp_lawyer_vcard_request() {
+	$id = isset( $_GET['mp-vcard'] ) ? (int) $_GET['mp-vcard'] : 0; // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+
+	if ( ! $id ) {
+		return;
+	}
+
+	$post = get_post( $id );
+
+	if ( ! $post || 'mp_lawyer' !== $post->post_type || 'publish' !== $post->post_status ) {
+		return;
+	}
+
+	$fields = mp_lawyer_fields( $id );
+	$name   = get_the_title( $post );
+	$parts  = preg_split( '/\s+/', trim( $name ) );
+	$last   = isset( $parts[0] ) ? $parts[0] : $name;
+	$first  = isset( $parts[1] ) ? $parts[1] : '';
+	$middle = isset( $parts[2] ) ? $parts[2] : '';
+	$phone  = preg_replace( '/[^+\d]/', '', (string) $fields['phone'] );
+
+	$lines = [
+		'BEGIN:VCARD',
+		'VERSION:3.0',
+		'N:' . $last . ';' . $first . ';' . $middle . ';;',
+		'FN:' . trim( $first . ' ' . $middle . ' ' . $last ),
+		'ORG:Московская коллегия адвокатов «M-PARTNERS»',
+	];
+
+	if ( ! empty( $fields['role'] ) ) {
+		$lines[] = 'TITLE:' . $fields['role'];
+	}
+
+	if ( $phone ) {
+		$lines[] = 'TEL;TYPE=CELL:' . $phone;
+	}
+
+	if ( ! empty( $fields['email'] ) ) {
+		$lines[] = 'EMAIL;TYPE=INTERNET:' . $fields['email'];
+	}
+
+	$lines[] = 'URL:' . get_permalink( $post );
+	$lines[] = 'END:VCARD';
+
+	$file = mp_translit_slug( $name );
+	$file = $file ? $file : 'mpartners';
+
+	nocache_headers();
+	header( 'Content-Type: text/vcard; charset=utf-8' );
+	header( 'Content-Disposition: attachment; filename="' . $file . '.vcf"' );
+
+	echo implode( "\r\n", $lines ) . "\r\n"; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+
+	exit;
+}
+add_action( 'template_redirect', 'mp_lawyer_vcard_request' );

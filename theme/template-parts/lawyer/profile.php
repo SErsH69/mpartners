@@ -55,9 +55,17 @@ $mp_has_spec = '' !== trim( (string) $mp_spec['title'] ) || ! empty( $mp_spec['i
 							<?php endif; ?>
 						</div>
 
-						<?php if ( ! empty( $mp_lawyer['card']['label'] ) ) : ?>
-							<a class="lw-card__action" href="<?php echo esc_url( mp_link( $mp_lawyer['card'] ) ); ?>">
-								<span><?php echo esc_html( $mp_lawyer['card']['label'] ); ?></span>
+						<?php
+						// Визитка собирается на лету из полей карточки, поэтому
+						// ссылка есть у каждого адвоката.
+						$mp_card_label = ! empty( $mp_lawyer['card']['label'] ) ? $mp_lawyer['card']['label'] : 'Скачать визитку';
+						$mp_card_href  = is_singular( 'mp_lawyer' ) && function_exists( 'mp_lawyer_vcard_url' )
+							? mp_lawyer_vcard_url( get_the_ID() )
+							: mp_link( $mp_lawyer['card'] );
+						?>
+						<?php if ( $mp_card_href ) : ?>
+							<a class="lw-card__action" href="<?php echo esc_url( $mp_card_href ); ?>" download>
+								<span><?php echo esc_html( $mp_card_label ); ?></span>
 								<?php mp_icon( 'arrow-ne' ); ?>
 							</a>
 						<?php endif; ?>
