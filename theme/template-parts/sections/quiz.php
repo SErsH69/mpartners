@@ -27,7 +27,7 @@ $mp_total  = count( $mp_quiz['steps'] );
 			<div class="quiz__expert-top">
 				<div class="quiz__expert-person">
 					<span class="quiz__expert-avatar">
-						<img src="<?php echo esc_url( mp_img( $mp_expert['photo'] ) ); ?>" alt="<?php echo esc_attr( $mp_expert['name'] ); ?>" loading="lazy" decoding="async">
+						<img src="<?php echo esc_url( mp_img( $mp_expert['photo'], 'jpg' ) ); ?>" alt="<?php echo esc_attr( $mp_expert['name'] ); ?>" loading="lazy" decoding="async">
 						<i class="quiz__expert-status" aria-hidden="true"></i>
 					</span>
 					<span class="quiz__expert-id">
