@@ -479,13 +479,13 @@ function mp_home_data() {
 			'offices' => [
 				[
 					'label'   => 'Офис в Москве',
-					'phone'   => '+7 913 966 4489',
+					'phone'   => '8 913 966 4489',
 					'href'    => 'tel:+79139664489',
 					'address' => "129110, Москва,\nКаланчевская, 47, пом. 6/1",
 				],
 				[
 					'label'   => 'Офис в Омске',
-					'phone'   => '+7 913 623 6093',
+					'phone'   => '8 913 623 6093',
 					'href'    => 'tel:+79136236093',
 					'address' => "644099 Омск,\nИнтернациональная, 14",
 				],
@@ -626,6 +626,23 @@ function mp_img( $name, $ext = 'png' ) {
 	}
 
 	return get_template_directory_uri() . '/dist/img/figma/' . $name . '.' . $ext;
+}
+
+/**
+ * Ссылка для звонка: на сайте номер показываем с восьмёрки, а в tel:
+ * отдаём международный формат — так он набирается и из-за границы.
+ *
+ * @param string $phone Номер как его видит посетитель.
+ * @return string
+ */
+function mp_tel_href( $phone ) {
+	$digits = preg_replace( '/\D/', '', (string) $phone );
+
+	if ( 11 === strlen( $digits ) && ( '8' === $digits[0] || '7' === $digits[0] ) ) {
+		return 'tel:+7' . substr( $digits, 1 );
+	}
+
+	return 'tel:' . $digits;
 }
 
 /**

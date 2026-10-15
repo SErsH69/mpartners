@@ -48,7 +48,7 @@ $mp_has_spec = '' !== trim( (string) $mp_spec['title'] ) || ! empty( $mp_spec['i
 							<?php endif; ?>
 
 							<?php if ( ! empty( $mp_lawyer['phone'] ) ) : ?>
-								<a class="lw-card__link" href="tel:<?php echo esc_attr( preg_replace( '/[^+\d]/', '', $mp_lawyer['phone'] ) ); ?>">
+								<a class="lw-card__link" href="<?php echo esc_url( mp_tel_href( $mp_lawyer['phone'] ) ); ?>">
 									<?php mp_icon( 'messenger' ); ?>
 									<span><?php echo esc_html( $mp_lawyer['phone'] ); ?></span>
 								</a>

@@ -229,7 +229,7 @@ function mp_lawyer_people() {
 			'was'   => 'Екатерина Беспалова',
 			'photo' => 'lawyer-bespalova',
 			'role'  => 'Управляющий партнер МКА «M-PARTNERS», адвокат по уголовным делам',
-			'phone' => '+7 913 966 4489',
+			'phone' => '8 913 966 4489',
 			'email' => 'bespalova@mpartners.law',
 			'force' => true, // вместо фотографии из макета ставим настоящую
 		],
@@ -237,63 +237,63 @@ function mp_lawyer_people() {
 			'name'  => 'Шелудков Евгений Юрьевич',
 			'photo' => 'lawyer-sheludkov',
 			'role'  => 'Адвокат',
-			'phone' => '+7 913 967 0012',
+			'phone' => '8 913 967 0012',
 			'email' => 'sheludkov@mpartners.law',
 		],
 		[
 			'name'  => 'Задачин Андрей Андреевич',
 			'photo' => 'lawyer-zadachin',
 			'role'  => 'Адвокат',
-			'phone' => '+7 985 172 2203',
+			'phone' => '8 985 172 2203',
 			'email' => 'zadachin@mpartners.law',
 		],
 		[
 			'name'  => 'Павлов Александр Владимирович',
 			'photo' => 'lawyer-pavlov',
 			'role'  => 'Адвокат',
-			'phone' => '+7 925 242 6886',
+			'phone' => '8 925 242 6886',
 			'email' => 'pavlov@mpartners.law',
 		],
 		[
 			'name'  => 'Водолазский Роман Сергеевич',
 			'photo' => 'lawyer-vodolazskiy',
 			'role'  => 'Адвокат',
-			'phone' => '+7 904 584 0797',
+			'phone' => '8 904 584 0797',
 			'email' => 'vodolazskiy@mpartners.law',
 		],
 		[
 			'name'  => 'Левин Владимир Дмитриевич',
 			'photo' => 'lawyer-levin',
 			'role'  => 'Адвокат',
-			'phone' => '+7 913 623 6092',
+			'phone' => '8 913 623 6092',
 			'email' => 'levin@mpartners.law',
 		],
 		[
 			'name'  => 'Мотовилов Андрей Николаевич',
 			'photo' => 'lawyer-motovilov',
 			'role'  => 'Адвокат',
-			'phone' => '+7 913 623 6093',
+			'phone' => '8 913 623 6093',
 			'email' => 'motovilov@mpartners.law',
 		],
 		[
 			'name'  => 'Поташов Александр Сергеевич',
 			'photo' => 'lawyer-potashov',
 			'role'  => 'Адвокат',
-			'phone' => '+7 904 326 4309',
+			'phone' => '8 904 326 4309',
 			'email' => 'potashov@mpartners.law',
 		],
 		[
 			'name'  => 'Кльован Светлана Петровна',
 			'photo' => 'lawyer-klovan',
 			'role'  => 'Адвокат',
-			'phone' => '+7 926 342 9454',
+			'phone' => '8 926 342 9454',
 			'email' => 'klovan@mpartners.law',
 		],
 		[
 			'name'  => 'Майер Амира Ахматовна',
 			'photo' => 'lawyer-majer',
 			'role'  => 'Адвокат',
-			'phone' => '+7 996 923 2652',
+			'phone' => '8 996 923 2652',
 			'email' => 'mayer@mpartners.law',
 		],
 	];
@@ -486,7 +486,7 @@ function mp_lawyer_fields( $post_id ) {
 	return $card;
 }
 
-const MP_LAWYER_CONTACTS_VERSION = '1';
+const MP_LAWYER_CONTACTS_VERSION = '2';
 
 /**
  * Разовая простановка личных контактов адвокатов: раньше в карточках стоял
@@ -558,7 +558,7 @@ function mp_lawyer_vcard_request() {
 	$last   = isset( $parts[0] ) ? $parts[0] : $name;
 	$first  = isset( $parts[1] ) ? $parts[1] : '';
 	$middle = isset( $parts[2] ) ? $parts[2] : '';
-	$phone  = preg_replace( '/[^+\d]/', '', (string) $fields['phone'] );
+	$phone  = str_replace( 'tel:', '', mp_tel_href( (string) $fields['phone'] ) );
 
 	$lines = [
 		'BEGIN:VCARD',

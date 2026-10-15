@@ -16,7 +16,7 @@ function mp_contacts_data() {
 		'offices' => [
 			[
 				'title'   => 'Офис в Москве',
-				'phone'   => '+7 913 966 4489',
+				'phone'   => '8 913 966 4489',
 				'email'   => 'partners@mpartners.law',
 				'address' => '129110, Москва, Каланчевская, 47, пом. 6/1',
 				'map'     => 'https://yandex.ru/map-widget/v1/?ll=37.646022%2C55.778613&z=17&pt=37.646022%2C55.778613%2Cpm2rdm',
@@ -24,7 +24,7 @@ function mp_contacts_data() {
 			],
 			[
 				'title'   => 'Офис в Омске',
-				'phone'   => '+7 913 623 6093',
+				'phone'   => '8 913 623 6093',
 				'email'   => 'partners@mpartners.law',
 				'address' => '644099, Омск, Интернациональная, 14',
 				'map'     => 'https://yandex.ru/map-widget/v1/?ll=73.369452%2C54.990679&z=17&pt=73.369452%2C54.990679%2Cpm2rdm',

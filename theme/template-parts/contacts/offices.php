@@ -20,7 +20,7 @@ $mp_page = mp_contacts();
 						<?php if ( ! empty( $mp_office['phone'] ) ) : ?>
 							<li class="ct-office__line ct-office__line--phone">
 								<span class="ct-office__icon"><?php mp_icon( 'phone' ); ?></span>
-								<a href="tel:<?php echo esc_attr( preg_replace( '~[^\d+]~', '', $mp_office['phone'] ) ); ?>"><?php echo esc_html( $mp_office['phone'] ); ?></a>
+								<a href="<?php echo esc_url( mp_tel_href( $mp_office['phone'] ) ); ?>"><?php echo esc_html( $mp_office['phone'] ); ?></a>
 							</li>
 						<?php endif; ?>
 
