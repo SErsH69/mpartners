@@ -101,7 +101,7 @@ function mp_import_news() {
 		}
 
 		if ( $count >= MP_NEWS_BATCH ) {
-			return; // остальное — следующим запросом
+			break; // остальное — следующим запросом, прогресс сохраняем ниже
 		}
 
 		++$count;
