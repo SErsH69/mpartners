@@ -493,7 +493,7 @@ function mp_lawyer_fields( $post_id ) {
 	return $card;
 }
 
-const MP_LAWYER_PHOTOS_VERSION = '1';
+const MP_LAWYER_PHOTOS_VERSION = '2';
 
 /**
  * Разовая замена фотографий: портреты пересобраны в едином стиле —
@@ -511,11 +511,12 @@ function mp_seed_lawyer_photos() {
 			continue;
 		}
 
+		// Фото пересобраны: старый файл из медиатеки убираем, чтобы
+		// не плодить portrait-name-1.jpg и не оставлять прежний кадр.
 		$current = (int) get_post_thumbnail_id( $id );
-		$url     = $current ? (string) wp_get_attachment_url( $current ) : '';
 
-		if ( $url && false !== strpos( $url, $person['photo'] ) ) {
-			continue;
+		if ( $current ) {
+			wp_delete_attachment( $current, true );
 		}
 
 		$attachment = mp_sideload_theme_image( $person['photo'], $person['name'] );

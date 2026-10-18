@@ -112,3 +112,25 @@
         background-color: inherit;
     }
 }
+
+// --- Бесконечная лента логотипов -----------------------------
+.logo-marquee {
+    overflow: hidden;
+}
+
+.logo-marquee .is-marquee {
+    width: max-content;
+    padding-left: 0;
+    overflow: visible;
+    // Набор логотипов продублирован: сдвиг на половину ленты — это
+    // ровно один круг, поэтому стык не виден.
+    animation: mp-marquee 60s linear infinite;
+
+    &:hover {
+        animation-play-state: paused;
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+        animation: none;
+    }
+}

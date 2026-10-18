@@ -37,11 +37,13 @@ $mp_intro = mp_about( 'intro' );
 		</div>
 	</div>
 
-	<ul class="ab-intro__logos" data-drag-scroll>
-		<?php foreach ( (array) $mp_intro['logos'] as $mp_logo ) : ?>
+	<div class="logo-marquee">
+		<ul class="ab-intro__logos is-marquee">
+		<?php foreach ( array_merge( (array) $mp_intro['logos'], (array) $mp_intro['logos'] ) as $mp_logo ) : ?>
 			<li class="ld-logo">
 				<img src="<?php echo esc_url( mp_img( $mp_logo ) ); ?>" alt="" aria-hidden="true" loading="lazy" decoding="async">
 			</li>
 		<?php endforeach; ?>
-	</ul>
+		</ul>
+	</div>
 </section>

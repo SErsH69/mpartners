@@ -261,3 +261,80 @@
         }
     }
 }
+
+// --- Перечень публикаций в печатных изданиях -----------------
+.pubs-list {
+    padding-top: 100px;
+
+    @include tablet {
+        padding-top: 80px;
+    }
+
+    @include mobile {
+        padding-top: 50px;
+    }
+}
+
+.pubs-list__head {
+    display: flex;
+    gap: 92px;
+    align-items: flex-start;
+    margin-bottom: 25px;
+
+    @include tablet {
+        flex-direction: column;
+        gap: 15px;
+    }
+}
+
+.pubs-list__note {
+    flex: 0 0 auto;
+    width: 593px;
+
+    @include tablet {
+        width: 100%;
+    }
+}
+
+.pubs-list__grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px 30px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+
+    @include mobile {
+        grid-template-columns: 1fr;
+    }
+}
+
+.pubs-list__item {
+    display: flex;
+    gap: 10px;
+    align-items: flex-start;
+    padding: 14px 16px;
+    color: $c-dark;
+    font-size: 15px;
+    font-weight: 400;
+    line-height: round(nearest, 1.3em, 1px);
+    background-color: $c-surface;
+    border-radius: $r-sm;
+
+    @include mobile {
+        font-size: 14px;
+    }
+}
+
+.pubs-list__marker {
+    display: flex;
+    flex: 0 0 auto;
+    margin-top: 5px;
+    color: $c-muted;
+
+    svg {
+        display: block;
+        width: 8px;
+        height: 8px;
+    }
+}

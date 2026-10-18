@@ -8,6 +8,7 @@
 get_header();
 
 get_template_part( 'template-parts/press/list', null, [ 'section' => 'media' ] );
+get_template_part( 'template-parts/press/pubs-list' );
 get_template_part( 'template-parts/sections/form' );
 
 get_footer();

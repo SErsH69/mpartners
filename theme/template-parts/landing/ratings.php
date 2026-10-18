@@ -25,13 +25,15 @@ $mp_logos   = (array) $mp_ratings['logos'];
 				<p class="ld-ratings__label"><?php echo esc_html( $mp_ratings['label'] ); ?></p>
 			</div>
 
-			<ul class="ld-ratings__logos" data-drag-scroll data-center-mobile>
-				<?php foreach ( $mp_logos as $mp_logo ) : ?>
+			<div class="logo-marquee">
+		<ul class="ld-ratings__logos is-marquee">
+				<?php foreach ( array_merge( $mp_logos, $mp_logos ) as $mp_logo ) : ?>
 					<li class="ld-logo">
 						<img src="<?php echo esc_url( mp_img( $mp_logo ) ); ?>" alt="" aria-hidden="true" loading="lazy" decoding="async">
 					</li>
 				<?php endforeach; ?>
 			</ul>
+			</div>
 		</div>
 	</div>
 </section>

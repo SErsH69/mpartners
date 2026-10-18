@@ -22,11 +22,13 @@ $mp_logos = (array) mp_partners( 'logos', [] );
 		</div>
 	</div>
 
-	<ul class="pn__logos" data-drag-scroll>
-		<?php foreach ( $mp_logos as $mp_logo ) : ?>
+	<div class="logo-marquee">
+		<ul class="pn__logos is-marquee">
+		<?php foreach ( array_merge( $mp_logos, $mp_logos ) as $mp_logo ) : ?>
 			<li class="ld-logo">
 				<img src="<?php echo esc_url( mp_img( $mp_logo ) ); ?>" alt="" aria-hidden="true" loading="lazy" decoding="async">
 			</li>
 		<?php endforeach; ?>
-	</ul>
+		</ul>
+	</div>
 </section>
