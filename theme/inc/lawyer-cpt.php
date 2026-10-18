@@ -212,7 +212,7 @@ function mp_seed_lawyers() {
 }
 add_action( 'init', 'mp_seed_lawyers', 18 );
 
-const MP_LAWYER_PEOPLE_VERSION = '4';
+const MP_LAWYER_PEOPLE_VERSION = '5';
 
 /**
  * Состав коллегии: порядок карточек и файлы фотографий в теме.
@@ -297,7 +297,9 @@ function mp_lawyer_people() {
 			'email' => 'klovan@mpartners.law',
 		],
 		[
-			'name'  => 'Мязин Андрей',
+			// Отчество нашлось в материалах дел на прежнем сайте коллегии.
+			'name'  => 'Мязин Андрей Владимирович',
+			'was'   => 'Мязин Андрей',
 			'photo' => 'portrait-myazin',
 			'role'  => 'Адвокат',
 			'phone' => '8 913 672 5199',

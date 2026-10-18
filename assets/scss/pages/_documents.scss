@@ -1,0 +1,151 @@
+@use '../abstracts/variables' as *;
+@use '../abstracts/mixins' as *;
+
+// =============================================================
+// Правоустанавливающие документы: страница со списком файлов.
+// Оформление повторяет списки разделов — баннер, пояснение, карточки.
+// =============================================================
+
+.docs {
+    padding-top: 15px;
+    padding-bottom: 100px;
+
+    @include tablet {
+        padding-top: 20px;
+        padding-bottom: 80px;
+    }
+
+    @include mobile {
+        padding-bottom: 50px;
+    }
+}
+
+.docs__head {
+    display: flex;
+    align-items: center;
+    min-height: 174px;
+    margin-bottom: 25px;
+    padding: 60px;
+    border-radius: $r-sm;
+
+    @include gradient-dark(97.6deg);
+
+    @include tablet {
+        min-height: 114px;
+        margin-bottom: 20px;
+        padding: 30px;
+
+        @include gradient-dark(109.4deg);
+    }
+
+    @include mobile {
+        min-height: 71px;
+        margin-bottom: 15px;
+        padding: 20px;
+
+        @include gradient-dark(119.4deg);
+    }
+}
+
+.docs__note {
+    margin-bottom: 25px;
+
+    @include mobile {
+        margin-bottom: 15px;
+    }
+}
+
+.docs__grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px 30px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+
+    @include mobile {
+        grid-template-columns: 1fr;
+        gap: 10px;
+    }
+}
+
+.docs__link {
+    display: flex;
+    gap: 16px;
+    align-items: flex-start;
+    min-height: 100%;
+    padding: 24px;
+    color: $c-dark;
+    background-color: $c-surface;
+    border-radius: $r-sm;
+    transition: background-color .2s ease;
+
+    &:hover {
+        background-color: #dfd8ca; // на три шага темнее плашки
+    }
+
+    @include mobile {
+        gap: 12px;
+        padding: 16px;
+    }
+}
+
+.docs__icon {
+    display: flex;
+    flex: 0 0 auto;
+    margin-top: 2px;
+    color: $c-muted;
+
+    svg {
+        display: block;
+        width: 20px;
+        height: 20px;
+    }
+}
+
+.docs__text {
+    display: flex;
+    flex: 1 1 auto;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.docs__name {
+    font-size: 16px;
+    line-height: round(nearest, 1.3em, 1px);
+
+    @include mobile {
+        font-size: 15px;
+    }
+}
+
+.docs__meta {
+    color: $c-muted;
+    font-size: 13px;
+    line-height: 1;
+}
+
+.docs__arrow {
+    display: flex;
+    flex: 0 0 auto;
+    margin-top: 4px;
+    color: $c-muted;
+
+    svg {
+        display: block;
+        width: 10px;
+        height: 10px;
+    }
+}
+
+// Ссылка на документы в подвале — строкой под реквизитами.
+.footer__docs-link {
+    display: inline-block;
+    margin-top: 6px;
+    text-decoration: underline;
+    text-underline-offset: 3px;
+
+    &:hover {
+        color: $c-cream;
+    }
+}

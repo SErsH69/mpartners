@@ -11,7 +11,7 @@
  */
 
 const MP_MENUS_VERSION = '16';
-const MP_PAGES_VERSION = '7';
+const MP_PAGES_VERSION = '8';
 
 /**
  * Места для меню.
@@ -349,6 +349,7 @@ function mp_seed_pages() {
 		'partnership' => [ 'Партнерство', 'page-partnership.php' ],
 		'press'     => [ 'Пресс-центр', 'page-press.php' ],
 		'cases'     => [ 'Выигранные дела', 'page-cases.php' ],
+		'documents' => [ 'Правоустанавливающие документы', 'page-documents.php' ],
 		'events'    => [ 'Мероприятия', 'page-events.php' ],
 	];
 

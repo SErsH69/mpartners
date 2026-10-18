@@ -171,7 +171,7 @@ function mp_import_news() {
 }
 add_action( 'init', 'mp_import_news', 25 );
 
-const MP_CASES_VERSION = '1';
+const MP_CASES_VERSION = '2';
 
 /**
  * Переносит выигранные дела со страницы «Проекты» старого сайта.

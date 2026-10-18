@@ -88,6 +88,10 @@ $mp_menu     = (array) mp_data( 'menu', [] );
 				<?php if ( ! empty( $mp_footer['requisites'] ) ) : ?>
 					<span class="footer__requisites"><?php echo esc_html( $mp_footer['requisites'] ); ?></span>
 				<?php endif; ?>
+				<?php $mp_docs_page = get_page_by_path( 'documents' ); ?>
+				<?php if ( $mp_docs_page && 'publish' === $mp_docs_page->post_status ) : ?>
+					<a class="footer__docs-link" href="<?php echo esc_url( get_permalink( $mp_docs_page ) ); ?>">Правоустанавливающие документы</a>
+				<?php endif; ?>
 			</p>
 		</div>
 	</footer>
