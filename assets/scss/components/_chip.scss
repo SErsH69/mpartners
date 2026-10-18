@@ -103,3 +103,12 @@
     height: 32px;
     color: $c-dark;
 }
+
+// Услуга без отдельной страницы: тот же чип, но не ссылка.
+.chip-link--static {
+    cursor: default;
+
+    &:hover {
+        background-color: inherit;
+    }
+}

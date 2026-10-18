@@ -409,7 +409,7 @@ function mp_title_words( $title ) {
  * @param string $title Название услуги.
  * @return string
  */
-function mp_service_link( $title ) {
+function mp_service_link( $title, $fallback = true ) {
 	$posts = get_posts(
 		[
 			'post_type'        => MP_LANDING_TYPE,
@@ -446,6 +446,12 @@ function mp_service_link( $title ) {
 		if ( $best >= 0.6 && $href ) {
 			return $href;
 		}
+	}
+
+	// Для услуг без своей страницы ссылки нет: клик по ним уводил на хаб,
+	// то есть на ту же страницу, откуда человек кликнул.
+	if ( ! $fallback ) {
+		return '';
 	}
 
 	$hub = mp_primary_hub();
