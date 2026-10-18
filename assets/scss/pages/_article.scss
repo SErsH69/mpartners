@@ -567,7 +567,7 @@
         margin-bottom: 8px;
     }
 
-    a {
+    a:not(.btn) {
         color: $c-dark;
         text-decoration: underline;
         text-underline-offset: 3px;

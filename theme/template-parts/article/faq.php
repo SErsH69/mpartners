@@ -6,6 +6,12 @@
  */
 
 $mp_faq = mp_article( 'faq' );
+
+// У перенесённых материалов свой текст: вопросы из макета к ним не
+// относятся, поэтому блок показываем только там, где текста нет.
+if ( is_singular() && '' !== trim( (string) get_post_field( 'post_content', get_the_ID() ) ) ) {
+	return;
+}
 ?>
 <section class="art-faq">
 	<div class="shell shell--wide">
