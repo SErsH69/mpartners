@@ -83,7 +83,12 @@ $mp_menu     = (array) mp_data( 'menu', [] );
 			<?php foreach ( $mp_footer['legal'] as $mp_legal ) : ?>
 				<a class="footer__legal-link" href="<?php echo esc_url( mp_link( $mp_legal, isset( $mp_legal['slug'] ) ? $mp_legal['slug'] : 'privacy-policy' ) ); ?>"><?php echo esc_html( $mp_legal['label'] ); ?></a>
 			<?php endforeach; ?>
-			<p class="footer__copyright"><?php echo esc_html( $mp_footer['copyright'] ); ?></p>
+			<p class="footer__copyright">
+				<?php echo esc_html( $mp_footer['copyright'] ); ?>
+				<?php if ( ! empty( $mp_footer['requisites'] ) ) : ?>
+					<span class="footer__requisites"><?php echo esc_html( $mp_footer['requisites'] ); ?></span>
+				<?php endif; ?>
+			</p>
 		</div>
 	</footer>
 </div>
