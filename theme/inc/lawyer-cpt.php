@@ -679,6 +679,74 @@ function mp_lawyer_vcard_request() {
 add_action( 'template_redirect', 'mp_lawyer_vcard_request' );
 
 /**
+ * Основа фамилии для поиска: «Беспалова» встречается в текстах и как
+ * «Беспаловой», поэтому женское окончание отбрасываем.
+ *
+ * @param string $name ФИО адвоката.
+ * @return string
+ */
+function mp_lawyer_stem( $name ) {
+	$surname = explode( ' ', trim( (string) $name ) )[0];
+
+	if ( in_array( mb_substr( $surname, -1 ), [ 'а', 'я' ], true ) ) {
+		$surname = mb_substr( $surname, 0, -1 );
+	}
+
+	return $surname;
+}
+
+/**
+ * Материалы, где адвокат упомянут по фамилии.
+ *
+ * @param int $lawyer_id Адвокат.
+ * @param int $count     Сколько карточек нужно.
+ * @return array Карточки материалов.
+ */
+function mp_lawyer_posts( $lawyer_id, $count = 3 ) {
+	$stem = mp_lawyer_stem( get_the_title( $lawyer_id ) );
+
+	if ( mb_strlen( $stem ) < 4 ) {
+		return [];
+	}
+
+	$posts = get_posts(
+		[
+			'post_type'        => 'post',
+			'posts_per_page'   => max( (int) $count * 3, 9 ),
+			's'                => $stem,
+			'suppress_filters' => false,
+		]
+	);
+
+	$cards = [];
+	$seen  = [];
+
+	foreach ( $posts as $post ) {
+		$title = get_the_title( $post );
+
+		if ( in_array( $title, $seen, true ) ) {
+			continue;
+		}
+
+		$seen[] = $title;
+
+		if ( count( $cards ) >= (int) $count ) {
+			break;
+		}
+
+		$cards[] = [
+			'category' => function_exists( 'mp_search_label' ) ? mp_search_label( $post ) : '',
+			'title'    => $title,
+			'excerpt'  => wp_trim_words( wp_strip_all_tags( get_the_excerpt( $post ) ), 18 ),
+			'date'     => get_the_date( 'd.m.Y', $post ),
+			'href'     => get_permalink( $post ),
+		];
+	}
+
+	return $cards;
+}
+
+/**
  * Автор материала: адвокат, чья фамилия встречается в тексте, иначе
  * управляющий партнёр. Под карточкой статьи стояло фото из макета.
  *

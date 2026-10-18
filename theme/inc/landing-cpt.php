@@ -497,7 +497,7 @@ function mp_cleanup_practices() {
 }
 add_action( 'init', 'mp_cleanup_practices', 19 );
 
-const MP_LANDINGS_SEED_VERSION = '2';
+const MP_LANDINGS_SEED_VERSION = '3';
 
 /**
  * Значение поля пустое: пустая строка, пустой массив или структура из них.
@@ -648,6 +648,7 @@ function mp_landing_deck_file( $slug ) {
 		'ekspress-audit-riskov-moshennichestva'             => 'prez-audit.pdf',
 		'sovetnik-pervogo-licza'                            => 'prez-sovetnik.pdf',
 		'predstavlenie-interesov-svidetelej-i-poterpevshih' => 'prez-predstavlenie.pdf',
+		'treningi-po-vzaimodejstviyu-s-pravoohranitelnymi-organami' => 'prez-kollegiya.pdf',
 	];
 
 	$file = isset( $map[ $slug ] ) ? $map[ $slug ] : 'prez-zashchita.pdf';
