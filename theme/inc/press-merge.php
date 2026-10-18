@@ -124,6 +124,52 @@ function mp_merge_press_sections() {
 }
 add_action( 'init', 'mp_merge_press_sections', 18 );
 
+const MP_EVENTS_RUBRICS_VERSION = '1';
+
+/**
+ * Семинары и вебинары лежали в «Конференциях»: раскладываем их по своим
+ * рубрикам, иначе два таба раздела всегда пустые.
+ */
+function mp_fix_events_rubrics() {
+	if ( get_option( 'mp_events_rubrics_version' ) === MP_EVENTS_RUBRICS_VERSION ) {
+		return;
+	}
+
+	$root = get_term_by( 'slug', 'events', 'category' );
+
+	if ( ! $root ) {
+		return;
+	}
+
+	$rubrics = [
+		'вебинар' => get_term_by( 'slug', 'vebinary', 'category' ),
+		'семинар' => get_term_by( 'slug', 'seminary', 'category' ),
+	];
+
+	$conf = get_term_by( 'slug', 'konferenczii', 'category' );
+
+	foreach ( mp_merge_term_posts( $root->term_id ) as $id ) {
+		$text = mb_strtolower( get_post_field( 'post_title', $id ) . ' ' . get_post_field( 'post_content', $id ) );
+
+		foreach ( $rubrics as $word => $term ) {
+			if ( ! $term || false === mb_strpos( $text, $word ) ) {
+				continue;
+			}
+
+			wp_set_post_terms( $id, [ (int) $term->term_id ], 'category', true );
+
+			if ( $conf ) {
+				wp_remove_object_terms( $id, [ (int) $conf->term_id ], 'category' );
+			}
+
+			break;
+		}
+	}
+
+	update_option( 'mp_events_rubrics_version', MP_EVENTS_RUBRICS_VERSION );
+}
+add_action( 'init', 'mp_fix_events_rubrics', 19 );
+
 /**
  * Старый адрес «СМИ о нас» ведёт в пресс-центр.
  */
