@@ -168,3 +168,83 @@ function mp_import_news() {
 	}
 }
 add_action( 'init', 'mp_import_news', 25 );
+
+const MP_CASES_VERSION = '1';
+
+/**
+ * Переносит выигранные дела со страницы «Проекты» старого сайта.
+ *
+ * Они живут в пресс-центре отдельной рубрикой, чтобы их можно было
+ * отфильтровать и при желании вынести на свою страницу.
+ */
+function mp_import_cases() {
+	if ( get_option( 'mp_cases_version' ) === MP_CASES_VERSION ) {
+		return;
+	}
+
+	if ( ! function_exists( 'mp_cases_content' ) || ! function_exists( 'mp_section_term' ) ) {
+		return;
+	}
+
+	$root = mp_section_term( 'press' );
+
+	if ( ! $root ) {
+		return;
+	}
+
+	$rubric = mp_news_rubric( 'Выигранные дела', (int) $root->term_id );
+	$done   = (array) get_option( 'mp_cases_done', [] );
+	$items  = mp_cases_content();
+	$count  = 0;
+
+	foreach ( $items as $index => $item ) {
+		if ( in_array( (string) $index, $done, true ) ) {
+			continue;
+		}
+
+		if ( $count >= 8 ) {
+			break;
+		}
+
+		++$count;
+		$done[] = (string) $index;
+
+		if ( mp_news_existing( $item['title'] ) ) {
+			continue;
+		}
+
+		$args = [
+			'post_type'    => 'post',
+			'post_status'  => 'publish',
+			'post_title'   => $item['title'],
+			'post_content' => $item['content'],
+			'post_excerpt' => $item['excerpt'],
+		];
+
+		if ( ! empty( $item['date'] ) ) {
+			$args['post_date']     = $item['date'];
+			$args['post_date_gmt'] = get_gmt_from_date( $item['date'] );
+		}
+
+		$id = wp_insert_post( $args );
+
+		if ( ! $id || is_wp_error( $id ) ) {
+			continue;
+		}
+
+		$categories = [ (int) $root->term_id ];
+
+		if ( $rubric ) {
+			$categories[] = $rubric;
+		}
+
+		wp_set_post_categories( $id, $categories );
+	}
+
+	update_option( 'mp_cases_done', $done );
+
+	if ( count( $done ) >= count( $items ) ) {
+		update_option( 'mp_cases_version', MP_CASES_VERSION );
+	}
+}
+add_action( 'init', 'mp_import_cases', 26 );
