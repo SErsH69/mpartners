@@ -18,7 +18,7 @@ $mp_intro = mp_about( 'intro' );
 	<ul class="ab-intro__photos" data-drag-scroll>
 		<?php foreach ( (array) $mp_intro['photos'] as $mp_photo ) : ?>
 			<li class="ab-intro__photo">
-				<img src="<?php echo esc_url( mp_img( $mp_photo ) ); ?>" alt="" aria-hidden="true" loading="lazy" decoding="async">
+				<img src="<?php echo esc_url( mp_img( $mp_photo, 'jpg' ) ); ?>" alt="" aria-hidden="true" loading="lazy" decoding="async">
 			</li>
 		<?php endforeach; ?>
 	</ul>

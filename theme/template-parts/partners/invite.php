@@ -32,7 +32,7 @@ $mp_invite = mp_partners( 'invite' );
 				<?php endforeach; ?>
 			</div>
 
-			<a class="btn btn--light pn-invite__button" href="#form"><?php echo esc_html( $mp_invite['label'] ); ?></a>
+			<a class="btn btn--light pn-invite__button" href="#partner-form"><?php echo esc_html( $mp_invite['label'] ); ?></a>
 		</div>
 	</div>
 </section>

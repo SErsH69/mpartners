@@ -1023,3 +1023,108 @@
         margin-top: 20px;
     }
 }
+
+// --- С кем сотрудничаем --------------------------------------
+.pn-list {
+    padding-top: 100px;
+
+    @include tablet {
+        padding-top: 80px;
+    }
+
+    @include mobile {
+        padding-top: 50px;
+    }
+}
+
+.pn-list__head {
+    display: flex;
+    gap: 92px;
+    align-items: flex-start;
+    margin-bottom: 25px;
+
+    @include tablet {
+        flex-direction: column;
+        gap: 15px;
+    }
+}
+
+.pn-list__note {
+    flex: 0 0 auto;
+    width: 593px;
+
+    @include tablet {
+        width: 100%;
+    }
+}
+
+.pn-list__grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+
+    @include tablet {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    @include mobile {
+        grid-template-columns: 1fr;
+    }
+}
+
+.pn-partner__body {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    height: 100%;
+    padding: 25px 20px;
+    text-decoration: none;
+    background-color: $c-surface;
+    border-radius: $r-sm;
+    transition: background-color 0.2s ease;
+}
+
+a.pn-partner__body:hover,
+a.pn-partner__body:focus-visible {
+    background-color: $c-beige-deep;
+}
+
+.pn-partner__name {
+    margin: 0;
+    color: $c-dark;
+    font-size: 18px;
+    font-weight: 500;
+    line-height: round(nearest, 1.1em, 1px);
+
+    @include mobile {
+        font-size: 16px;
+    }
+}
+
+.pn-partner__text {
+    margin: 0;
+    color: $c-muted;
+    font-size: 14px;
+    font-weight: 400;
+    line-height: round(nearest, 1.2em, 1px);
+}
+
+.pn-partner__link {
+    display: inline-flex;
+    gap: 6px;
+    align-items: center;
+    margin-top: auto;
+    padding-top: 12px;
+    color: $c-dark;
+    font-size: 14px;
+    font-weight: 500;
+
+    svg {
+        display: block;
+        width: 10px;
+        height: 10px;
+    }
+}

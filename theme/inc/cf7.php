@@ -8,7 +8,7 @@
  * @package MPartners
  */
 
-const MP_CF7_VERSION = '4';
+const MP_CF7_VERSION = '5';
 
 /**
  * Inline SVG as a string (иконки нужны внутри тела формы).
@@ -233,6 +233,25 @@ function mp_cf7_definitions() {
 		esc_attr( $modal['consent'] )
 	);
 
+	// --- Заявка на партнерство -----------------------------------------
+	$partner_mail = array_merge(
+		$mail,
+		[
+			'subject' => 'Заявка на партнерство с сайта M-PARTNERS',
+			'body'    => "Компания: [company]\nКонтактное лицо: [name]\nТелефон: [phone]\nПочта: [email]\nПрактика: [practice]\nСайт: [site]\nОборот: [turnover]\n\nСтраница: [_post_title]\n[_url]\n",
+		]
+	);
+
+	$partner_form = '<span class="field ld-form__field">[text* company placeholder "Компания"]</span>
+<span class="field ld-form__field">[text* name placeholder "Контактное лицо"]</span>
+<span class="field ld-form__field">[tel* phone placeholder "Телефон"]</span>
+<span class="field ld-form__field">[email email placeholder "Почта"]</span>
+<span class="field ld-form__field">[text practice placeholder "Практика или направление работы"]</span>
+<span class="field ld-form__field">[text site placeholder "Сайт компании"]</span>
+<span class="field ld-form__field">[text turnover placeholder "Оборот компании за год"]</span>
+[submit class:btn class:btn--light class:ld-form__submit "Отправить заявку"]
+<span class="consent ld-form__consent">[acceptance consent "Я соглашаюсь с политикой конфиденциальности"]</span>';
+
 	return [
 		'modal'     => [
 			'title' => 'M-PARTNERS — попап',
@@ -258,6 +277,11 @@ function mp_cf7_definitions() {
 			'title' => 'M-PARTNERS — консультация на лендинге',
 			'form'  => $consult,
 			'mail'  => $mail,
+		],
+		'partner'   => [
+			'title' => 'M-PARTNERS — заявка на партнерство',
+			'form'  => $partner_form,
+			'mail'  => $partner_mail,
 		],
 	];
 }
