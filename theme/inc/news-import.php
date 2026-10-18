@@ -290,17 +290,12 @@ function mp_import_pubs() {
 			continue;
 		}
 
-		$content = sprintf(
-			'<p>Материал опубликован в издании «%s».</p>',
-			esc_html( $item['outlet'] )
-		);
-
 		$args = [
 			'post_type'    => 'post',
 			'post_status'  => 'publish',
 			'post_title'   => $item['title'],
-			'post_content' => $content,
-			'post_excerpt' => sprintf( 'Публикация в издании «%s»', $item['outlet'] ),
+			'post_content' => mp_pub_content( $item ),
+			'post_excerpt' => ! empty( $item['lead'] ) ? $item['lead'] : sprintf( 'Публикация в издании «%s»', $item['outlet'] ),
 		];
 
 		if ( ! empty( $item['date'] ) ) {
@@ -323,6 +318,7 @@ function mp_import_pubs() {
 
 		wp_set_post_categories( $id, $categories );
 		update_post_meta( $id, '_mp_source_url', esc_url_raw( $item['url'] ) );
+		mp_pub_cover( $id, $item );
 	}
 
 	update_option( 'mp_pubs_done', $done );
@@ -332,3 +328,104 @@ function mp_import_pubs() {
 	}
 }
 add_action( 'init', 'mp_import_pubs', 27 );
+
+
+/**
+ * Текст карточки публикации: лид материала и строка издания.
+ *
+ * @param array $item Публикация.
+ * @return string
+ */
+function mp_pub_content( $item ) {
+	$parts = [];
+
+	if ( ! empty( $item['lead'] ) ) {
+		$parts[] = '<p>' . esc_html( $item['lead'] ) . '</p>';
+	}
+
+	$parts[] = sprintf(
+		'<p>Материал опубликован в издании «%s»%s.</p>',
+		esc_html( $item['outlet'] ),
+		! empty( $item['date'] ) ? ', ' . esc_html( date_i18n( 'j F Y', strtotime( $item['date'] ) ) ) : ''
+	);
+
+	return implode( "\n", $parts );
+}
+
+/**
+ * Обложка публикации: тянем картинку со страницы издания.
+ *
+ * @param int   $post_id Запись.
+ * @param array $item    Публикация.
+ */
+function mp_pub_cover( $post_id, $item ) {
+	if ( empty( $item['image'] ) || get_post_thumbnail_id( $post_id ) ) {
+		return;
+	}
+
+	require_once ABSPATH . 'wp-admin/includes/file.php';
+	require_once ABSPATH . 'wp-admin/includes/media.php';
+	require_once ABSPATH . 'wp-admin/includes/image.php';
+
+	$attachment = media_sideload_image( $item['image'], $post_id, $item['title'], 'id' );
+
+	if ( ! is_wp_error( $attachment ) ) {
+		set_post_thumbnail( $post_id, (int) $attachment );
+	}
+}
+
+const MP_PUBS_FILL_VERSION = '1';
+
+/**
+ * Разовое наполнение уже созданных публикаций: сперва они были почти
+ * пустыми — только строка с названием издания.
+ */
+function mp_fill_pubs() {
+	if ( get_option( 'mp_pubs_fill_version' ) === MP_PUBS_FILL_VERSION ) {
+		return;
+	}
+
+	if ( ! function_exists( 'mp_pubs_content' ) ) {
+		return;
+	}
+
+	$done  = (array) get_option( 'mp_pubs_fill_done', [] );
+	$items = mp_pubs_content();
+	$count = 0;
+
+	foreach ( $items as $index => $item ) {
+		if ( in_array( (string) $index, $done, true ) ) {
+			continue;
+		}
+
+		if ( $count >= 5 ) {
+			break;
+		}
+
+		++$count;
+		$done[] = (string) $index;
+
+		$id = mp_news_existing( $item['title'] );
+
+		if ( ! $id ) {
+			continue;
+		}
+
+		wp_update_post(
+			[
+				'ID'           => $id,
+				'post_content' => mp_pub_content( $item ),
+				'post_excerpt' => ! empty( $item['lead'] ) ? $item['lead'] : sprintf( 'Публикация в издании «%s»', $item['outlet'] ),
+			]
+		);
+
+		mp_pub_cover( $id, $item );
+	}
+
+	update_option( 'mp_pubs_fill_done', $done );
+
+	if ( count( $done ) >= count( $items ) ) {
+		update_option( 'mp_pubs_fill_version', MP_PUBS_FILL_VERSION );
+	}
+}
+add_action( 'init', 'mp_fill_pubs', 28 );
