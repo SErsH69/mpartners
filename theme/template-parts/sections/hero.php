@@ -13,12 +13,6 @@ $mp_note = mp_data( 'advantages.note' );
 		<img class="hero__pattern" src="<?php echo esc_url( mp_img( 'hero-bg' ) ); ?>" alt="" width="3064" height="1121" fetchpriority="high" decoding="async">
 		<canvas class="hero__trail"></canvas>
 		<span class="hero__fade"></span>
-		<span class="hero__dots">
-			<i class="hero__dot hero__dot--1"></i>
-			<i class="hero__dot hero__dot--2"></i>
-			<i class="hero__dot hero__dot--3"></i>
-			<i class="hero__dot hero__dot--4"></i>
-		</span>
 	</div>
 
 	<div class="hero__inner">

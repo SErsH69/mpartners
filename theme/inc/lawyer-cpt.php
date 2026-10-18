@@ -227,7 +227,7 @@ function mp_lawyer_people() {
 		[
 			'name'  => 'Беспалова Екатерина Сергеевна',
 			'was'   => 'Екатерина Беспалова',
-			'photo' => 'lawyer-bespalova',
+			'photo' => 'portrait-bespalova',
 			'role'  => 'Управляющий партнер МКА «M-PARTNERS», адвокат по уголовным делам',
 			'phone' => '8 913 966 4489',
 			'email' => 'bespalova@mpartners.law',
@@ -235,66 +235,71 @@ function mp_lawyer_people() {
 		],
 		[
 			'name'  => 'Левин Владимир Дмитриевич',
-			'photo' => 'lawyer-levin',
+			'photo' => 'portrait-levin',
 			'role'  => 'Сооснователь, адвокат',
 			'phone' => '8 913 623 6092',
 			'email' => 'levin@mpartners.law',
 		],
 		[
 			'name'  => 'Мотовилов Андрей Николаевич',
-			'photo' => 'lawyer-motovilov',
+			'photo' => 'portrait-motovilov',
 			'role'  => 'Сооснователь, руководитель филиала в Омске, адвокат',
 			'phone' => '8 913 623 6093',
 			'email' => 'motovilov@mpartners.law',
 		],
 		[
 			'name'  => 'Майер Амира Ахматовна',
-			'photo' => 'lawyer-majer',
+			'photo' => 'portrait-majer',
 			'role'  => 'Директор по развитию',
 			'phone' => '8 996 923 2652',
 			'email' => 'mayer@mpartners.law',
 		],
 		[
 			'name'  => 'Шелудков Евгений Юрьевич',
-			'photo' => 'lawyer-sheludkov',
+			'photo' => 'portrait-sheludkov',
 			'role'  => 'Адвокат',
 			'phone' => '8 913 967 0012',
 			'email' => 'sheludkov@mpartners.law',
 		],
 		[
 			'name'  => 'Задачин Андрей Андреевич',
-			'photo' => 'lawyer-zadachin',
+			'photo' => 'portrait-zadachin',
 			'role'  => 'Адвокат',
 			'phone' => '8 985 172 2203',
 			'email' => 'zadachin@mpartners.law',
 		],
 		[
 			'name'  => 'Павлов Александр Владимирович',
-			'photo' => 'lawyer-pavlov',
+			'photo' => 'portrait-pavlov',
 			'role'  => 'Адвокат',
 			'phone' => '8 925 242 6886',
 			'email' => 'pavlov@mpartners.law',
 		],
 		[
 			'name'  => 'Водолазский Роман Сергеевич',
-			'photo' => 'lawyer-vodolazskiy',
+			'photo' => 'portrait-vodolazskiy',
 			'role'  => 'Адвокат',
 			'phone' => '8 904 584 0797',
 			'email' => 'vodolazskiy@mpartners.law',
 		],
 		[
 			'name'  => 'Поташов Александр Сергеевич',
-			'photo' => 'lawyer-potashov',
+			'photo' => 'portrait-potashov',
 			'role'  => 'Адвокат',
 			'phone' => '8 904 326 4309',
 			'email' => 'potashov@mpartners.law',
 		],
 		[
 			'name'  => 'Кльован Светлана Петровна',
-			'photo' => 'lawyer-klovan',
+			'photo' => 'portrait-klovan',
 			'role'  => 'Адвокат',
 			'phone' => '8 926 342 9454',
 			'email' => 'klovan@mpartners.law',
+		],
+		[
+			'name'  => 'Мязин Андрей',
+			'photo' => 'portrait-myazin',
+			'role'  => 'Адвокат',
 		],
 	];
 }
@@ -485,6 +490,42 @@ function mp_lawyer_fields( $post_id ) {
 
 	return $card;
 }
+
+const MP_LAWYER_PHOTOS_VERSION = '1';
+
+/**
+ * Разовая замена фотографий: портреты пересобраны в едином стиле —
+ * фигура с общего съёмочного дня на фирменном тёмном фоне.
+ */
+function mp_seed_lawyer_photos() {
+	if ( get_option( 'mp_lawyer_photos_version' ) === MP_LAWYER_PHOTOS_VERSION ) {
+		return;
+	}
+
+	foreach ( mp_lawyer_people() as $person ) {
+		$id = mp_find_lawyer( $person );
+
+		if ( ! $id ) {
+			continue;
+		}
+
+		$current = (int) get_post_thumbnail_id( $id );
+		$url     = $current ? (string) wp_get_attachment_url( $current ) : '';
+
+		if ( $url && false !== strpos( $url, $person['photo'] ) ) {
+			continue;
+		}
+
+		$attachment = mp_sideload_theme_image( $person['photo'], $person['name'] );
+
+		if ( $attachment ) {
+			set_post_thumbnail( $id, $attachment );
+		}
+	}
+
+	update_option( 'mp_lawyer_photos_version', MP_LAWYER_PHOTOS_VERSION );
+}
+add_action( 'init', 'mp_seed_lawyer_photos', 22 );
 
 const MP_LAWYER_ORDER_VERSION = '1';
 
