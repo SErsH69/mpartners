@@ -58,7 +58,7 @@ function mp_news_drop_demo() {
 		return;
 	}
 
-	foreach ( [ 'press', 'events', 'media' ] as $section ) {
+	foreach ( [ 'press', 'events', 'media', 'cases' ] as $section ) {
 		$data = mp_press( $section );
 
 		foreach ( (array) $data['items'] as $item ) {
@@ -130,7 +130,9 @@ function mp_import_news() {
 			continue;
 		}
 
-		$root     = mp_section_term( $item['section'] );
+		// Раздела «СМИ о нас» больше нет — его материалы в пресс-центре.
+		$section  = 'media' === $item['section'] ? 'press' : $item['section'];
+		$root     = mp_section_term( $section );
 		$category = [];
 
 		if ( $root ) {
@@ -186,13 +188,13 @@ function mp_import_cases() {
 		return;
 	}
 
-	$root = mp_section_term( 'press' );
+	$root = mp_section_term( 'cases' );
 
 	if ( ! $root ) {
 		return;
 	}
 
-	$rubric = mp_news_rubric( 'Выигранные дела', (int) $root->term_id );
+	$rubric = 0;
 	$done   = (array) get_option( 'mp_cases_done', [] );
 	$items  = mp_cases_content();
 	$count  = 0;
@@ -263,7 +265,7 @@ function mp_import_pubs() {
 		return;
 	}
 
-	$root = mp_section_term( 'media' );
+	$root = mp_section_term( 'press' );
 
 	if ( ! $root ) {
 		return;

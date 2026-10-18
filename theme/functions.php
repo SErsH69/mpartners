@@ -31,6 +31,7 @@ require_once get_template_directory() . '/inc/cases-content.php';
 require_once get_template_directory() . '/inc/pubs-content.php';
 require_once get_template_directory() . '/inc/pubs-list.php';
 require_once get_template_directory() . '/inc/news-import.php';
+require_once get_template_directory() . '/inc/press-merge.php';
 require_once get_template_directory() . '/inc/cf7.php';
 require_once get_template_directory() . '/inc/contact.php';
 

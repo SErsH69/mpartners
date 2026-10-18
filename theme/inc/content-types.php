@@ -14,10 +14,17 @@ const MP_SECTIONS_VERSION = '5';
 /**
  * Раздел → слаг корневой рубрики.
  *
+ * «Дела» идут первыми: материал о выигранном деле лежит и в пресс-центре,
+ * и в делах, а подписывать его нужно делом.
+ *
  * @return array
  */
 function mp_section_types() {
 	return [
+		'cases'  => [
+			'slug'  => 'dela',
+			'title' => 'Выигранные дела',
+		],
 		'press'  => [
 			'slug'  => 'press',
 			'title' => 'Пресс-центр',
@@ -25,10 +32,6 @@ function mp_section_types() {
 		'events' => [
 			'slug'  => 'events',
 			'title' => 'Мероприятия',
-		],
-		'media'  => [
-			'slug'  => 'media',
-			'title' => 'СМИ о нас',
 		],
 	];
 }
@@ -130,7 +133,7 @@ function mp_section_cards( $section ) {
 	$posts = get_posts(
 		[
 			'post_type'      => 'post',
-			'posts_per_page' => 10,
+			'posts_per_page' => 90,
 			'cat'            => $term->term_id,
 		]
 	);
@@ -189,7 +192,7 @@ function mp_section_filters( $section ) {
 		[
 			'taxonomy'   => 'category',
 			'parent'     => $term->term_id,
-			'hide_empty' => false,
+			'hide_empty' => true,
 		]
 	);
 

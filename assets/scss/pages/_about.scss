@@ -118,8 +118,10 @@
 .ab-intro__photos {
     display: flex;
     gap: 13px;
-    margin: 45px 0 0 -102px;
-    padding: 0;
+    // Лента начинается от края контейнера и уходит вправо: со сдвигом
+    // влево первая фотография обрезалась.
+    margin: 45px 0 0;
+    padding: 0 0 0 max(#{$gutter-desktop}, calc((100% - #{$container}) / 2));
     overflow-x: auto;
     // Без явного hidden браузер делает вторую ось прокручиваемой:
     // на телефоне лента «ездила» вверх-вниз вместе с пальцем.
@@ -130,11 +132,13 @@
 
     @include tablet {
         gap: 9px;
-        margin: 45px 0 0 $gutter-tablet;
+        margin: 45px 0 0;
+        padding-left: $gutter-tablet;
     }
 
     @include mobile {
-        margin: 20px 0 0 $gutter-mobile;
+        margin: 20px 0 0;
+        padding-left: $gutter-mobile;
     }
 }
 

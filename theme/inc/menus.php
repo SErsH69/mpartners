@@ -10,8 +10,8 @@
  * @package MPartners
  */
 
-const MP_MENUS_VERSION = '14';
-const MP_PAGES_VERSION = '6';
+const MP_MENUS_VERSION = '15';
+const MP_PAGES_VERSION = '7';
 
 /**
  * Места для меню.
@@ -103,8 +103,8 @@ function mp_menu_url_for( $label, $fallback = '' ) {
 		'Партнерство' => 'partnership',
 		'Адвокаты'    => 'lawyers',
 		'Мероприятия' => 'events',
-		'СМИ о нас'   => 'media',
 		'Пресс-центр' => 'press',
+		'Дела'        => 'cases',
 	];
 
 	if ( isset( $map[ $label ] ) ) {
@@ -141,7 +141,9 @@ function mp_seed_menus() {
 		return;
 	}
 
-	$items = [ 'Услуги', 'О компании', 'Адвокаты', 'Пресс-центр', 'Мероприятия', 'СМИ о нас', 'Партнерство', 'Контакты' ];
+	// «СМИ о нас» переехало в пресс-центр: в меню это выглядело как два
+	// одинаковых раздела.
+	$items = [ 'Услуги', 'О компании', 'Адвокаты', 'Пресс-центр', 'Дела', 'Мероприятия', 'Партнерство', 'Контакты' ];
 
 	$sets = [
 		'mp-header'   => [
@@ -198,7 +200,7 @@ function mp_seed_menus() {
 
 	// Приводим уже созданные меню к актуальному составу: лишние пункты
 	// убираем, у остальных проставляем адреса.
-	$stale = [ 'О коллегии', 'Дела', 'Партнеры', 'Партнёры', 'Блог', 'Практики' ];
+	$stale = [ 'О коллегии', 'СМИ о нас', 'Партнеры', 'Партнёры', 'Блог', 'Практики' ];
 
 	foreach ( $locations as $location => $menu_id ) {
 		if ( ! isset( $sets[ $location ] ) || ! $menu_id ) {
@@ -346,8 +348,8 @@ function mp_seed_pages() {
 		'contacts'  => [ 'Контакты', 'page-contacts.php' ],
 		'partnership' => [ 'Партнерство', 'page-partnership.php' ],
 		'press'     => [ 'Пресс-центр', 'page-press.php' ],
+		'cases'     => [ 'Выигранные дела', 'page-cases.php' ],
 		'events'    => [ 'Мероприятия', 'page-events.php' ],
-		'media'     => [ 'СМИ о нас', 'page-media.php' ],
 	];
 
 	foreach ( $pages as $slug => $page ) {

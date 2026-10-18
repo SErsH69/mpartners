@@ -17,11 +17,11 @@ while ( have_posts() ) :
 
 	get_template_part( 'template-parts/article/body' );
 
-	if ( 'press' === $mp_section ) {
+	if ( 'events' === $mp_section ) {
+		get_template_part( 'template-parts/article/strip', null, [ 'section' => $mp_section ] );
+	} else {
 		get_template_part( 'template-parts/article/faq' );
 		get_template_part( 'template-parts/article/author' );
-	} else {
-		get_template_part( 'template-parts/article/strip', null, [ 'section' => $mp_section ] );
 	}
 
 	get_template_part( 'template-parts/article/related' );

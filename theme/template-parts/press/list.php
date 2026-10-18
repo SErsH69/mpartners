@@ -36,6 +36,8 @@ foreach ( $mp_terms ? $mp_terms : array_slice( (array) $mp_section['filters'], 1
 				<h1 class="h-pr pr__title"><?php echo esc_html( $mp_section['title'] ); ?></h1>
 			</div>
 
+			<?php // Один таб — не выбор: у раздела без рубрик полосу не рисуем. ?>
+			<?php if ( count( $mp_filters ) > 1 ) : ?>
 			<ul class="pr__filters" data-rubric-tabs>
 				<?php foreach ( $mp_filters as $mp_index => $mp_filter ) : ?>
 					<li class="pr-chip<?php echo 0 === $mp_index ? ' pr-chip--active' : ''; ?>">
@@ -43,6 +45,7 @@ foreach ( $mp_terms ? $mp_terms : array_slice( (array) $mp_section['filters'], 1
 					</li>
 				<?php endforeach; ?>
 			</ul>
+			<?php endif; ?>
 		</div>
 
 		<?php // Шаг показа — столько карточек, сколько в макете на первом экране. ?>

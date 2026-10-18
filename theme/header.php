@@ -56,17 +56,7 @@ $mp_contacts = mp_data( 'contacts' );
 							<?php endforeach; ?>
 						</ul>
 						<hr class="nav-drop__divider nav-drop__item">
-						<p class="nav-drop__label nav-drop__item">Контакты</p>
-						<ul class="nav-drop__contacts">
-							<?php foreach ( $mp_contacts['phones'] as $mp_phone ) : ?>
-								<li class="nav-drop__item">
-									<a href="<?php echo esc_url( $mp_phone['href'] ); ?>">
-										<span><?php echo esc_html( $mp_phone['label'] ); ?></span>
-										<b><?php echo esc_html( $mp_phone['value'] ); ?></b>
-									</a>
-								</li>
-							<?php endforeach; ?>
-						</ul>
+						<?php // Телефон уже есть в шапке: в меню дублировать не нужно. ?>
 						<a class="btn btn--block nav-drop__cta nav-drop__item" href="#form">Заказать звонок</a>
 					</div>
 				</div>

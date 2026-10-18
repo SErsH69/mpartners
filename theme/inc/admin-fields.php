@@ -71,10 +71,10 @@ function mp_content_groups() {
 			'data'      => 'mp_events_section_data',
 			'templates' => [ 'page-events.php' ],
 		],
-		'media'     => [
+		'cases'     => [
 			'title'     => 'Контент раздела',
-			'data'      => 'mp_media_section_data',
-			'templates' => [ 'page-media.php' ],
+			'data'      => 'mp_cases_section_data',
+			'templates' => [ 'page-cases.php' ],
 		],
 		'article'   => [
 			'title'      => 'Контент материала',
