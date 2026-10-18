@@ -29,6 +29,10 @@ function mp_partners_data() {
 			'rating-09',
 			'rating-10',
 			'rating-11',
+			'rating-12',
+			'rating-13',
+			'rating-14',
+			'rating-15',
 		],
 		'invite' => [
 			'title'   => 'Приглашаем стать партнером коллегии!',

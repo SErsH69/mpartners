@@ -676,3 +676,36 @@ function mp_lawyer_vcard_request() {
 	exit;
 }
 add_action( 'template_redirect', 'mp_lawyer_vcard_request' );
+
+/**
+ * Автор материала: адвокат, чья фамилия встречается в тексте, иначе
+ * управляющий партнёр. Под карточкой статьи стояло фото из макета.
+ *
+ * @param int $post_id Материал.
+ * @return int ID записи адвоката.
+ */
+function mp_article_author_id( $post_id = 0 ) {
+	$post_id = $post_id ? (int) $post_id : (int) get_the_ID();
+	$text    = $post_id ? get_post_field( 'post_title', $post_id ) . ' ' . get_post_field( 'post_content', $post_id ) : '';
+	$first   = 0;
+
+	foreach ( mp_lawyer_people() as $person ) {
+		$id = mp_find_lawyer( $person );
+
+		if ( ! $id ) {
+			continue;
+		}
+
+		if ( ! $first ) {
+			$first = $id;
+		}
+
+		$surname = explode( ' ', $person['name'] )[0];
+
+		if ( $text && false !== mb_strpos( $text, $surname ) ) {
+			return $id;
+		}
+	}
+
+	return $first;
+}
