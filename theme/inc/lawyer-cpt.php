@@ -212,7 +212,7 @@ function mp_seed_lawyers() {
 }
 add_action( 'init', 'mp_seed_lawyers', 18 );
 
-const MP_LAWYER_PEOPLE_VERSION = '3';
+const MP_LAWYER_PEOPLE_VERSION = '4';
 
 /**
  * Состав коллегии: порядок карточек и файлы фотографий в теме.
