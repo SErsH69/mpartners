@@ -124,11 +124,14 @@ function mp_merge_press_sections() {
 }
 add_action( 'init', 'mp_merge_press_sections', 18 );
 
-const MP_EVENTS_RUBRICS_VERSION = '1';
+const MP_EVENTS_RUBRICS_VERSION = '2';
 
 /**
  * Семинары и вебинары лежали в «Конференциях»: раскладываем их по своим
  * рубрикам, иначе два таба раздела всегда пустые.
+ *
+ * Смотрим только на заголовок: в тексте анонса конференции нередко
+ * упоминается и семинар, из-за чего материал уходил не в ту рубрику.
  */
 function mp_fix_events_rubrics() {
 	if ( get_option( 'mp_events_rubrics_version' ) === MP_EVENTS_RUBRICS_VERSION ) {
@@ -141,28 +144,36 @@ function mp_fix_events_rubrics() {
 		return;
 	}
 
-	$rubrics = [
-		'вебинар' => get_term_by( 'slug', 'vebinary', 'category' ),
-		'семинар' => get_term_by( 'slug', 'seminary', 'category' ),
-	];
+	$rubrics = [];
 
-	$conf = get_term_by( 'slug', 'konferenczii', 'category' );
+	foreach ( [ 'konferenczii', 'seminary', 'vebinary' ] as $slug ) {
+		$term = get_term_by( 'slug', $slug, 'category' );
+
+		if ( $term ) {
+			$rubrics[ $slug ] = (int) $term->term_id;
+		}
+	}
 
 	foreach ( mp_merge_term_posts( $root->term_id ) as $id ) {
-		$text = mb_strtolower( get_post_field( 'post_title', $id ) . ' ' . get_post_field( 'post_content', $id ) );
+		$title = mb_strtolower( get_post_field( 'post_title', $id ) );
+		$slug  = 'konferenczii';
 
-		foreach ( $rubrics as $word => $term ) {
-			if ( ! $term || false === mb_strpos( $text, $word ) ) {
-				continue;
-			}
+		if ( false !== mb_strpos( $title, 'вебинар' ) ) {
+			$slug = 'vebinary';
+		} elseif ( false !== mb_strpos( $title, 'семинар' ) ) {
+			$slug = 'seminary';
+		}
 
-			wp_set_post_terms( $id, [ (int) $term->term_id ], 'category', true );
+		if ( ! isset( $rubrics[ $slug ] ) ) {
+			continue;
+		}
 
-			if ( $conf ) {
-				wp_remove_object_terms( $id, [ (int) $conf->term_id ], 'category' );
-			}
+		wp_set_post_terms( $id, [ $rubrics[ $slug ] ], 'category', true );
 
-			break;
+		$extra = array_values( array_diff( $rubrics, [ $rubrics[ $slug ] ] ) );
+
+		if ( $extra ) {
+			wp_remove_object_terms( $id, $extra, 'category' );
 		}
 	}
 
