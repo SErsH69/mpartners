@@ -7,6 +7,10 @@
 
 $mp_deck = mp_landing( 'deck' );
 $mp_file = isset( $mp_deck['file'] ) ? $mp_deck['file'] : '';
+
+if ( '' === $mp_file && function_exists( 'mp_landing_deck_file' ) && is_singular( 'mp_landing' ) ) {
+	$mp_file = mp_landing_deck_file( (string) get_post_field( 'post_name', get_the_ID() ) );
+}
 ?>
 <section class="ld-deck">
 	<div class="shell">

@@ -30,11 +30,12 @@
 
 .award {
     display: grid;
-    // Figma: «Право 300» (по содержимому) + 101px + заголовок; год справа.
-    // Строка 80px: 30 + 20 + 29 + 1px линия.
-    grid-template-columns: max-content 1fr auto;
+    // Колонка издания фиксированная: иначе заголовки в строках начинаются
+    // на разном расстоянии — от длины названия издания.
+    // Figma: «Право 300» + 101px до заголовка, то есть 165px от края.
+    grid-template-columns: 125px 1fr auto;
     align-items: center;
-    column-gap: 101px;
+    column-gap: 40px;
     padding: 30px 15.5px 29px;
     border-bottom: 1px solid rgba($c-dark, 0.15);
 
@@ -97,8 +98,8 @@
 // ---------------------------------------------------------------
 @media (min-width: #{$bp-mobile + 1}) and (max-width: $bp-tablet) {
     .award {
-        grid-template-columns: max-content 1fr auto;
-        column-gap: 40px;
+        grid-template-columns: 110px 1fr auto;
+        column-gap: 30px;
         padding: 25.5px 0 25px; // заголовок на планшете в 3 строки — строки чуть ниже
     }
 }

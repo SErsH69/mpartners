@@ -35,6 +35,7 @@ $mp_count  = count( $mp_items );
 
 							<button class="ld-stage__head" type="button" data-stage-open>
 								<span class="ld-stage__title"><?php echo esc_html( $mp_stage['title'] ); ?></span>
+								<span class="ld-stage__next" aria-hidden="true"><?php mp_icon( 'caret' ); ?></span>
 								<span class="ld-stage__step">
 									<?php echo esc_html( sprintf( '%02d', $mp_index + 1 ) ); ?>
 									<span class="ld-stage__step-all">/ <?php echo esc_html( sprintf( '%02d', $mp_count ) ); ?></span>

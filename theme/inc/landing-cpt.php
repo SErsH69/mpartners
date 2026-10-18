@@ -628,3 +628,23 @@ function mp_refresh_landings_blocks() {
 	update_option( 'mp_landings_refresh_version', MP_LANDINGS_REFRESH_VERSION );
 }
 add_action( 'init', 'mp_refresh_landings_blocks', 14 );
+
+/**
+ * Презентация для страницы услуги: у аудита, советника и представления
+ * интересов она своя, у остальных — общая по уголовной защите.
+ *
+ * @param string $slug Адрес лендинга.
+ * @return string
+ */
+function mp_landing_deck_file( $slug ) {
+	$map = [
+		'ugolovno-pravovoj-audit-biznesa'                   => 'prez-audit.pdf',
+		'ekspress-audit-riskov-moshennichestva'             => 'prez-audit.pdf',
+		'sovetnik-pervogo-licza'                            => 'prez-sovetnik.pdf',
+		'predstavlenie-interesov-svidetelej-i-poterpevshih' => 'prez-predstavlenie.pdf',
+	];
+
+	$file = isset( $map[ $slug ] ) ? $map[ $slug ] : 'prez-zashchita.pdf';
+
+	return get_template_directory_uri() . '/files/' . $file;
+}

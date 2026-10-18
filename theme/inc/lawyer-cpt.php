@@ -234,6 +234,27 @@ function mp_lawyer_people() {
 			'force' => true, // вместо фотографии из макета ставим настоящую
 		],
 		[
+			'name'  => 'Левин Владимир Дмитриевич',
+			'photo' => 'lawyer-levin',
+			'role'  => 'Сооснователь, адвокат',
+			'phone' => '8 913 623 6092',
+			'email' => 'levin@mpartners.law',
+		],
+		[
+			'name'  => 'Мотовилов Андрей Николаевич',
+			'photo' => 'lawyer-motovilov',
+			'role'  => 'Сооснователь, руководитель филиала в Омске, адвокат',
+			'phone' => '8 913 623 6093',
+			'email' => 'motovilov@mpartners.law',
+		],
+		[
+			'name'  => 'Майер Амира Ахматовна',
+			'photo' => 'lawyer-majer',
+			'role'  => 'Директор по развитию',
+			'phone' => '8 996 923 2652',
+			'email' => 'mayer@mpartners.law',
+		],
+		[
 			'name'  => 'Шелудков Евгений Юрьевич',
 			'photo' => 'lawyer-sheludkov',
 			'role'  => 'Адвокат',
@@ -262,20 +283,6 @@ function mp_lawyer_people() {
 			'email' => 'vodolazskiy@mpartners.law',
 		],
 		[
-			'name'  => 'Левин Владимир Дмитриевич',
-			'photo' => 'lawyer-levin',
-			'role'  => 'Адвокат',
-			'phone' => '8 913 623 6092',
-			'email' => 'levin@mpartners.law',
-		],
-		[
-			'name'  => 'Мотовилов Андрей Николаевич',
-			'photo' => 'lawyer-motovilov',
-			'role'  => 'Адвокат',
-			'phone' => '8 913 623 6093',
-			'email' => 'motovilov@mpartners.law',
-		],
-		[
 			'name'  => 'Поташов Александр Сергеевич',
 			'photo' => 'lawyer-potashov',
 			'role'  => 'Адвокат',
@@ -288,13 +295,6 @@ function mp_lawyer_people() {
 			'role'  => 'Адвокат',
 			'phone' => '8 926 342 9454',
 			'email' => 'klovan@mpartners.law',
-		],
-		[
-			'name'  => 'Майер Амира Ахматовна',
-			'photo' => 'lawyer-majer',
-			'role'  => 'Адвокат',
-			'phone' => '8 996 923 2652',
-			'email' => 'mayer@mpartners.law',
 		],
 	];
 }
@@ -485,6 +485,44 @@ function mp_lawyer_fields( $post_id ) {
 
 	return $card;
 }
+
+const MP_LAWYER_ORDER_VERSION = '1';
+
+/**
+ * Порядок карточек и должности — как в презентации коллегии: управляющий
+ * партнёр, сооснователи, директор по развитию, затем адвокаты.
+ */
+function mp_seed_lawyer_order() {
+	if ( get_option( 'mp_lawyer_order_version' ) === MP_LAWYER_ORDER_VERSION ) {
+		return;
+	}
+
+	if ( ! function_exists( 'update_field' ) ) {
+		return;
+	}
+
+	foreach ( mp_lawyer_people() as $index => $person ) {
+		$id = mp_find_lawyer( $person );
+
+		if ( ! $id ) {
+			continue;
+		}
+
+		wp_update_post(
+			[
+				'ID'         => $id,
+				'menu_order' => $index + 1,
+			]
+		);
+
+		if ( ! empty( $person['role'] ) ) {
+			update_field( 'lawyer_role', $person['role'], $id );
+		}
+	}
+
+	update_option( 'mp_lawyer_order_version', MP_LAWYER_ORDER_VERSION );
+}
+add_action( 'init', 'mp_seed_lawyer_order', 21 );
 
 const MP_LAWYER_CONTACTS_VERSION = '2';
 

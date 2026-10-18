@@ -1293,6 +1293,38 @@ $stage-travel: 40vh;
     opacity: 0;
 }
 
+// Стрелка в полоске: подсказывает, что по карточке можно кликнуть.
+.ld-stage__next {
+    position: absolute;
+    top: 22px;
+    right: 50px;
+    z-index: 2;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 26px;
+    height: 26px;
+    color: $c-cream;
+    background-color: rgba($c-white, 0.1);
+    border-radius: 50%;
+    transition: opacity 0.25s ease;
+
+    svg {
+        display: block;
+        width: 10px;
+        height: 6px;
+    }
+
+    @include tablet {
+        display: none;
+    }
+}
+
+// У раскрытой карточки подсказка не нужна.
+.ld-stages__deck.is-scrolly .ld-stage.is-front .ld-stage__next {
+    opacity: 0;
+}
+
 .ld-stage__decor {
     position: absolute;
     top: -42px;

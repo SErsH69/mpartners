@@ -9,5 +9,6 @@ get_header();
 
 get_template_part( 'template-parts/partners/lead' );
 get_template_part( 'template-parts/partners/invite' );
+get_template_part( 'template-parts/partners/deck' );
 
 get_footer();
