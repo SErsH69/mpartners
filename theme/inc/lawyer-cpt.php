@@ -300,6 +300,8 @@ function mp_lawyer_people() {
 			'name'  => 'Мязин Андрей',
 			'photo' => 'portrait-myazin',
 			'role'  => 'Адвокат',
+			'phone' => '8 913 672 5199',
+			'email' => 'miazin@mpartners.law',
 		],
 	];
 }
@@ -565,7 +567,7 @@ function mp_seed_lawyer_order() {
 }
 add_action( 'init', 'mp_seed_lawyer_order', 21 );
 
-const MP_LAWYER_CONTACTS_VERSION = '2';
+const MP_LAWYER_CONTACTS_VERSION = '3';
 
 /**
  * Разовая простановка личных контактов адвокатов: раньше в карточках стоял

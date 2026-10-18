@@ -24,6 +24,7 @@ require_once get_template_directory() . '/inc/landing-cpt.php';
 require_once get_template_directory() . '/inc/legal-data.php';
 require_once get_template_directory() . '/inc/menus.php';
 require_once get_template_directory() . '/inc/lawyer-cpt.php';
+require_once get_template_directory() . '/inc/lawyer-bios.php';
 require_once get_template_directory() . '/inc/content-types.php';
 require_once get_template_directory() . '/inc/news-content.php';
 require_once get_template_directory() . '/inc/news-import.php';
