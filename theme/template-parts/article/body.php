@@ -21,6 +21,11 @@ if ( is_singular() ) {
 	}
 }
 $mp_date  = is_singular() ? get_the_date( 'j F Y' ) . 'г' : $mp_art['date'];
+
+// У перенесённых материалов текст лежит в самой записи: тогда показываем
+// его, а не рыбу из макета.
+$mp_own   = is_singular() && '' !== trim( (string) get_post_field( 'post_content', get_the_ID() ) );
+$mp_cover = is_singular() ? get_the_post_thumbnail_url( get_the_ID(), 'large' ) : '';
 ?>
 <section class="art">
 	<div class="shell">
@@ -47,16 +52,25 @@ $mp_date  = is_singular() ? get_the_date( 'j F Y' ) . 'г' : $mp_art['date'];
 
 		<div class="art__cols">
 			<div class="art__main">
-				<ul class="art__toc">
-					<?php foreach ( $mp_art['toc'] as $mp_point ) : ?>
-						<li class="lw-spec__item art__toc-item">
-							<span class="lw-spec__marker" aria-hidden="true"><?php mp_icon( 'polygon' ); ?></span>
-							<span><?php echo esc_html( $mp_point ); ?></span>
-						</li>
-					<?php endforeach; ?>
-				</ul>
+				<?php if ( ! $mp_own ) : ?>
+					<ul class="art__toc">
+						<?php foreach ( $mp_art['toc'] as $mp_point ) : ?>
+							<li class="lw-spec__item art__toc-item">
+								<span class="lw-spec__marker" aria-hidden="true"><?php mp_icon( 'polygon' ); ?></span>
+								<span><?php echo esc_html( $mp_point ); ?></span>
+							</li>
+						<?php endforeach; ?>
+					</ul>
+				<?php endif; ?>
 
-				<article class="art__body">
+				<?php if ( $mp_cover ) : ?>
+					<img class="art__cover" src="<?php echo esc_url( $mp_cover ); ?>" alt="<?php echo esc_attr( $mp_title ); ?>" loading="lazy" decoding="async">
+				<?php endif; ?>
+
+				<article class="art__body<?php echo $mp_own ? ' art__body--rich' : ''; ?>">
+					<?php if ( $mp_own ) : ?>
+						<?php the_content(); ?>
+					<?php else : ?>
 					<?php foreach ( $mp_art['sections'] as $mp_section ) : ?>
 						<div class="art-sec">
 							<p class="case-block__label art-sec__label">
@@ -73,6 +87,7 @@ $mp_date  = is_singular() ? get_the_date( 'j F Y' ) . 'г' : $mp_art['date'];
 							<?php endforeach; ?>
 						</div>
 					<?php endforeach; ?>
+					<?php endif; ?>
 				</article>
 			</div>
 

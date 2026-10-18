@@ -523,3 +523,80 @@
         margin-top: 50px;
     }
 }
+
+// Текст перенесённого материала: обычная типографика внутри плашки.
+.art__cover {
+    display: block;
+    width: 100%;
+    height: auto;
+    margin-top: 40px;
+    border-radius: $r-sm;
+}
+
+.art__body--rich {
+    display: block;
+
+    p,
+    ul,
+    ol,
+    blockquote {
+        margin: 0 0 16px;
+        color: $c-dark;
+        font-size: 16px;
+        font-weight: 400;
+        line-height: round(nearest, 1.4em, 1px);
+    }
+
+    h2,
+    h3,
+    h4 {
+        margin: 28px 0 12px;
+        color: $c-dark;
+        font-family: $font-display;
+        font-size: 24px;
+        font-weight: 400;
+        line-height: 1.2;
+    }
+
+    ul,
+    ol {
+        padding-left: 20px;
+    }
+
+    li {
+        margin-bottom: 8px;
+    }
+
+    a {
+        color: $c-dark;
+        text-decoration: underline;
+        text-underline-offset: 3px;
+    }
+
+    img {
+        display: block;
+        width: 100%;
+        height: auto;
+        margin: 20px 0;
+        border-radius: $r-sm;
+    }
+
+    > *:last-child {
+        margin-bottom: 0;
+    }
+
+    @include mobile {
+        p,
+        ul,
+        ol,
+        blockquote {
+            font-size: 14px;
+        }
+
+        h2,
+        h3,
+        h4 {
+            font-size: 20px;
+        }
+    }
+}
