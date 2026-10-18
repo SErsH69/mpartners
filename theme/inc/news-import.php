@@ -248,3 +248,87 @@ function mp_import_cases() {
 	}
 }
 add_action( 'init', 'mp_import_cases', 26 );
+
+const MP_PUBS_VERSION = '1';
+
+/**
+ * Публикации адвокатов в СМИ: карточка со ссылкой на материал издания.
+ */
+function mp_import_pubs() {
+	if ( get_option( 'mp_pubs_version' ) === MP_PUBS_VERSION ) {
+		return;
+	}
+
+	if ( ! function_exists( 'mp_pubs_content' ) || ! function_exists( 'mp_section_term' ) ) {
+		return;
+	}
+
+	$root = mp_section_term( 'media' );
+
+	if ( ! $root ) {
+		return;
+	}
+
+	$rubric = mp_news_rubric( 'Публикации в СМИ', (int) $root->term_id );
+	$done   = (array) get_option( 'mp_pubs_done', [] );
+	$items  = mp_pubs_content();
+	$count  = 0;
+
+	foreach ( $items as $index => $item ) {
+		if ( in_array( (string) $index, $done, true ) ) {
+			continue;
+		}
+
+		if ( $count >= 8 ) {
+			break;
+		}
+
+		++$count;
+		$done[] = (string) $index;
+
+		if ( mp_news_existing( $item['title'] ) ) {
+			continue;
+		}
+
+		$content = sprintf(
+			'<p>Материал опубликован в издании «%s».</p>',
+			esc_html( $item['outlet'] )
+		);
+
+		$args = [
+			'post_type'    => 'post',
+			'post_status'  => 'publish',
+			'post_title'   => $item['title'],
+			'post_content' => $content,
+			'post_excerpt' => sprintf( 'Публикация в издании «%s»', $item['outlet'] ),
+		];
+
+		if ( ! empty( $item['date'] ) ) {
+			$date                  = $item['date'] . ' 12:00:00';
+			$args['post_date']     = $date;
+			$args['post_date_gmt'] = get_gmt_from_date( $date );
+		}
+
+		$id = wp_insert_post( $args );
+
+		if ( ! $id || is_wp_error( $id ) ) {
+			continue;
+		}
+
+		$categories = [ (int) $root->term_id ];
+
+		if ( $rubric ) {
+			$categories[] = $rubric;
+		}
+
+		wp_set_post_categories( $id, $categories );
+		update_post_meta( $id, '_mp_source_url', esc_url_raw( $item['url'] ) );
+	}
+
+	update_option( 'mp_pubs_done', $done );
+
+	if ( count( $done ) >= count( $items ) ) {
+		update_option( 'mp_pubs_version', MP_PUBS_VERSION );
+	}
+}
+add_action( 'init', 'mp_import_pubs', 27 );

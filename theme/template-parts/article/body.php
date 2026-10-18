@@ -25,6 +25,13 @@ $mp_date  = is_singular() ? get_the_date( 'j F Y' ) . 'г' : $mp_art['date'];
 // У перенесённых материалов текст лежит в самой записи: тогда показываем
 // его, а не рыбу из макета.
 $mp_own   = is_singular() && '' !== trim( (string) get_post_field( 'post_content', get_the_ID() ) );
+
+// У публикаций в СМИ материал лежит на сайте издания — даём на него ссылку.
+$mp_source = is_singular() ? (string) get_post_meta( get_the_ID(), '_mp_source_url', true ) : '';
+
+if ( $mp_source && false !== strpos( $mp_source, 'mpartners.law' ) ) {
+	$mp_source = '';
+}
 $mp_cover = is_singular() ? get_the_post_thumbnail_url( get_the_ID(), 'large' ) : '';
 ?>
 <section class="art">
@@ -87,6 +94,12 @@ $mp_cover = is_singular() ? get_the_post_thumbnail_url( get_the_ID(), 'large' ) 
 							<?php endforeach; ?>
 						</div>
 					<?php endforeach; ?>
+					<?php endif; ?>
+
+					<?php if ( $mp_source ) : ?>
+						<a class="btn art__source" href="<?php echo esc_url( $mp_source ); ?>" target="_blank" rel="noopener noreferrer">
+							Читать материал на сайте издания
+						</a>
 					<?php endif; ?>
 				</article>
 			</div>
